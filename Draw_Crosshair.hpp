@@ -74,11 +74,11 @@ void Redirected_Draw_Crosshair()
 		Surface_Draw_Line((unsigned __int32)Surface_Draw_Line_Location)(Surface, X + Points[12], Y - Points[13], X + Points[14], Y - Points[15]);
 	};
 
-	using Screen_Size = __int32(__cdecl*)();
+	using Get_Screen_Size_Type = __int32(__cdecl*)();
 
-	__int32 Screen_Width = Screen_Size(604542880)() / 2;
+	__int32 Screen_Width = Get_Screen_Size_Type(604542880)() / 2;
 
-	__int32 Screen_Height = Screen_Size(604542848)() / 2;
+	__int32 Screen_Height = Get_Screen_Size_Type(604542848)() / 2;
 
 	Uber_Alles(Screen_Width - 1, 0, Screen_Height);
 
