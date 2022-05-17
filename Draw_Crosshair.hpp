@@ -1,6 +1,6 @@
 #pragma once
 
-void __thiscall Redirected_Draw_Crosshair(void* Unknown_Parameter)
+void Redirected_Draw_Crosshair()
 {
 	*(__int8*)608051340 = 0;
 
