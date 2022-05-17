@@ -2,9 +2,9 @@
 
 #include <cstdio>
 
-#include "Byte_Manager/Byte_Manager.hpp"
-
 #define Bits_32
+
+#include "Byte_Manager/Byte_Manager.hpp"
 
 #include "Redirection_Manager/Redirection_Manager.hpp"
 
