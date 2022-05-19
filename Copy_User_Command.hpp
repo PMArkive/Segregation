@@ -460,11 +460,11 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 																{
 																	Target_Tick_Number = (*(float*)((unsigned __int32)Optimal_Target + 104) + Interpolation_Time) / Global_Variables->Interval_Per_Tick + 0.5f;
 
-																	__int32 Tick_Number_Difference = Global_Variables->Tick_Number + 1 + Total_Latency / Global_Variables->Interval_Per_Tick + 0.5f - Target_Tick_Number;
-
-																	if (Tick_Number_Difference * -1 <= 7)
+																	__int32 Tick_Number_Difference = Target_Tick_Number - (__int32)(Global_Variables->Tick_Number + 1 + Total_Latency / Global_Variables->Interval_Per_Tick + 0.5f);
+																	
+																	if (Tick_Number_Difference <= 8)
 																	{
-																		if (Absolute(Corrected_Interpolation_Time - Tick_Number_Difference * Global_Variables->Interval_Per_Tick) <= 0.2f)
+																		if (Absolute(Corrected_Interpolation_Time + Tick_Number_Difference * Global_Variables->Interval_Per_Tick) <= 0.2f)
 																		{
 																			float Origin_Difference[3] =
 																			{
