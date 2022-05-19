@@ -326,11 +326,11 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 										void* Optimal_Target;
 
-										using Eye_Position = void(__thiscall*)(void* Player, float* Eye_Position);
+										using Get_Eye_Position_Type = void(__thiscall*)(void* Player, float* Eye_Position);
 
 										float Local_Player_Eye_Position[3];
 
-										Eye_Position(604058320)(Local_Player, Local_Player_Eye_Position);
+										Get_Eye_Position_Type(604058320)(Local_Player, Local_Player_Eye_Position);
 
 										__int32 Target_Tick_Number;
 
