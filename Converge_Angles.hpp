@@ -28,30 +28,33 @@ void __thiscall Redirected_Converge_Angles(void* Animation_State, float Goal, vo
 					{
 						if (*(__int8*)((unsigned __int32)Entity + 135) == 0)
 						{
-							Player_Data_Structure* Player_Data = &Players_Data[Entity_Number - 1];
-
-							if (Player_Data->Priority != -2)
+							if (*(__int8*)((unsigned __int32)Entity + 320) == 0)
 							{
-								if (Player_Data->Animation_State == Animation_State)
+								Player_Data_Structure* Player_Data = &Players_Data[Entity_Number - 1];
+
+								if (Player_Data->Priority != -2)
 								{
-									if (Console_Variable_Bruteforce_Memory.Integer == 0)
+									if (Player_Data->Animation_State == Animation_State)
 									{
+										if (Console_Variable_Bruteforce_Memory.Integer == 0)
+										{
 										Bruteforce_Label:
-										{
-											Goal = Player_Data->Y + Bruteforce_Angles[Player_Data->Shots_Fired];
+											{
+												Goal = Player_Data->Y + Bruteforce_Angles[Player_Data->Shots_Fired];
+											}
 										}
-									}
-									else
-									{
-										if (Player_Data->Memorized == 0)
+										else
 										{
-											goto Bruteforce_Label;
+											if (Player_Data->Memorized == 0)
+											{
+												goto Bruteforce_Label;
+											}
+
+											Goal = Player_Data->Y + Player_Data->Memorized_Y;
 										}
 
-										Goal = Player_Data->Y + Player_Data->Memorized_Y;
+										Instant = 1;
 									}
-
-									Instant = 1;
 								}
 							}
 						}
