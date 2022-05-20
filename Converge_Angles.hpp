@@ -10,9 +10,7 @@ void __thiscall Redirected_Converge_Angles(void* Animation_State, float Goal, vo
 	{
 		void* Entity = *(void**)((unsigned __int32)Animation_State + 20);
 
-		void* Local_Player = *(void**)607867332;
-
-		if (Entity != Local_Player)
+		if (Entity != *(void**)607867332)
 		{
 			Player_Data_Structure* Player_Data = &Players_Data[*(__int32*)((unsigned __int32)Entity + 80) - 1];
 
