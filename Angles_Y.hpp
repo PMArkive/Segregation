@@ -9,6 +9,4 @@ void Redirected_Angles_Y(void* Packet, void* Entity, void* Data)
 	__int32 Entity_Number = *(__int32*)((unsigned __int32)Entity + 80) - 1;
 
 	Players_Data[Entity_Number].Y = Y;
-
-	Players_Data[Entity_Number].Animation_State = (void*)(*(unsigned __int32*)((unsigned __int32)Entity + 3968) - 148);
 }

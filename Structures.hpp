@@ -28,8 +28,6 @@ struct Player_Data_Structure
 	float Memorized_Y;
 
 	float Y;
-
-	void* Animation_State;
 };
 
 struct Global_Variables_Structure
