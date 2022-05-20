@@ -460,29 +460,26 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 																{
 																	Target_Tick_Number = (*(float*)((unsigned __int32)Optimal_Target + 104) + Interpolation_Time) / Global_Variables->Interval_Per_Tick + 0.5f;
 
-																	__int32 Tick_Number_Difference = Target_Tick_Number - (__int32)(Global_Variables->Tick_Number + 1 + Total_Latency / Global_Variables->Interval_Per_Tick + 0.5f);
+																	__int32 Tick_Number_Difference = Global_Variables->Tick_Number + 1 + Total_Latency / Global_Variables->Interval_Per_Tick + 0.5f - Target_Tick_Number;
 																	
-																	if (Tick_Number_Difference <= 8)
+																	if (Absolute(Corrected_Interpolation_Time - Tick_Number_Difference * Global_Variables->Interval_Per_Tick) <= 0.2f)
 																	{
-																		if (Absolute(Corrected_Interpolation_Time + Tick_Number_Difference * Global_Variables->Interval_Per_Tick) <= 0.2f)
+																		float Origin_Difference[3] =
 																		{
-																			float Origin_Difference[3] =
-																			{
-																				Optimal_Target_Origin[0] - Local_Player_Eye_Position[0],
+																			Optimal_Target_Origin[0] - Local_Player_Eye_Position[0],
 
-																				Optimal_Target_Origin[1] - Local_Player_Eye_Position[1],
+																			Optimal_Target_Origin[1] - Local_Player_Eye_Position[1],
 
-																				Optimal_Target_Origin[2] - Local_Player_Eye_Position[2]
-																			};
+																			Optimal_Target_Origin[2] - Local_Player_Eye_Position[2]
+																		};
 
-																			Aim_Angles[0] = Arc_Tangent_2(Square_Root(__builtin_powf(Origin_Difference[0], 2) + __builtin_powf(Origin_Difference[1], 2)), -Origin_Difference[2]) * 180 / 3.1415927f;
+																		Aim_Angles[0] = Arc_Tangent_2(Square_Root(__builtin_powf(Origin_Difference[0], 2) + __builtin_powf(Origin_Difference[1], 2)), -Origin_Difference[2]) * 180 / 3.1415927f;
 
-																			Aim_Angles[1] = Arc_Tangent_2(Origin_Difference[0], Origin_Difference[1]) * 180 / 3.1415927f;
+																		Aim_Angles[1] = Arc_Tangent_2(Origin_Difference[0], Origin_Difference[1]) * 180 / 3.1415927f;
 
-																			User_Command->Buttons_State |= 1;
+																		User_Command->Buttons_State |= 1;
 
-																			goto Found_Optimal_Target_Label;
-																		}
+																		goto Found_Optimal_Target_Label;
 																	}
 																}
 															}
