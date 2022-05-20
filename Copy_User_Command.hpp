@@ -427,8 +427,6 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 																float* Bounding_Box_Minimum = (float*)((unsigned __int32)Hitbox_Set + 836);
 
-																float* Bounding_Box_Maximum = (float*)((unsigned __int32)Hitbox_Set + 848);
-
 																float Hitbox_Minimum[3] =
 																{
 																	Bounding_Box_Minimum[0] * Bones[14][0][0] + Bounding_Box_Minimum[1] * Bones[14][0][1] + Bounding_Box_Minimum[2] * Bones[14][0][2] + Bones[14][0][3],
@@ -437,6 +435,8 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 																	Bounding_Box_Minimum[0] * Bones[14][2][0] + Bounding_Box_Minimum[1] * Bones[14][2][1] + Bounding_Box_Minimum[2] * Bones[14][2][2] + Bones[14][2][3]
 																};
+
+																float* Bounding_Box_Maximum = (float*)((unsigned __int32)Hitbox_Set + 848);
 
 																float Hitbox_Maximum[3] =
 																{
