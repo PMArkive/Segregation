@@ -43,23 +43,26 @@ void __stdcall Event_Processor(void* Event)
 					{
 						if (Console_Variable_Bruteforce.Integer == 1)
 						{
-							void* Weapon = *(void**)((unsigned __int32)607973860 + (((*(unsigned __int32*)((unsigned __int32)Local_Player + 2872) & 4095) - 4097) << 4));
-
-							if (Weapon != nullptr)
+							if (Console_Variable_Bruteforce_Memory.Integer == 1)
 							{
-								Player_Data_Structure* Player_Data = &Players_Data[Victim_Number - 1];
+								void* Weapon = *(void**)((unsigned __int32)607973860 + (((*(unsigned __int32*)((unsigned __int32)Local_Player + 2872) & 4095) - 4097) << 4));
 
-								if (Player_Data->Priority != -2)
+								if (Weapon != nullptr)
 								{
-									using Get_Primary_Ammo_Capacity_Type = __int32(__thiscall**)(void* Weapon);
+									Player_Data_Structure* Player_Data = &Players_Data[Victim_Number - 1];
 
-									Player_Data->Memorized = (*Get_Primary_Ammo_Capacity_Type(*(unsigned __int32*)Weapon + 1000))(Weapon);
+									if (Player_Data->Priority != -2)
+									{
+										using Get_Primary_Ammo_Capacity_Type = __int32(__thiscall**)(void* Weapon);
 
-									Player_Data->Tolerance = 0;
+										Player_Data->Memorized = (*Get_Primary_Ammo_Capacity_Type(*(unsigned __int32*)Weapon + 1000))(Weapon);
 
-									constexpr __int32 Bruteforce_Angles_Modulo = sizeof(Bruteforce_Angles) / sizeof(float);
+										Player_Data->Tolerance = 0;
 
-									Player_Data->Memorized_Y = Bruteforce_Angles[((Player_Data->Shots_Fired - 1) % Bruteforce_Angles_Modulo + Bruteforce_Angles_Modulo) % Bruteforce_Angles_Modulo];
+										constexpr __int32 Bruteforce_Angles_Modulo = sizeof(Bruteforce_Angles) / sizeof(float);
+
+										Player_Data->Memorized_Y = Bruteforce_Angles[((Player_Data->Shots_Fired - 1) % Bruteforce_Angles_Modulo + Bruteforce_Angles_Modulo) % Bruteforce_Angles_Modulo];
+									}
 								}
 							}
 						}
