@@ -180,11 +180,11 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 				}
 				else
 				{
-					Previous_Networked_Origin[0] = *(float*)((unsigned __int32)Local_Player + 668);
+					Previous_Networked_Origin[0] = Local_Player_Origin[0];
 
-					Previous_Networked_Origin[1] = *(float*)((unsigned __int32)Local_Player + 672);
+					Previous_Networked_Origin[1] = Local_Player_Origin[1];
 
-					Previous_Networked_Origin[2] = *(float*)((unsigned __int32)Local_Player + 676);
+					Previous_Networked_Origin[2] = Local_Player_Origin[2];
 
 					Send_Packet = 1;
 				}
@@ -216,11 +216,11 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			}
 			else
 			{
-				Previous_Networked_Origin[0] = *(float*)((unsigned __int32)Local_Player + 668);
+				Previous_Networked_Origin[0] = Local_Player_Origin[0];
 
-				Previous_Networked_Origin[1] = *(float*)((unsigned __int32)Local_Player + 672);
+				Previous_Networked_Origin[1] = Local_Player_Origin[1];
 
-				Previous_Networked_Origin[2] = *(float*)((unsigned __int32)Local_Player + 676);
+				Previous_Networked_Origin[2] = Local_Player_Origin[2];
 
 				Send_Packet = 1;
 
