@@ -8,11 +8,9 @@ __int8 __thiscall Redirected_Is_Error_Material(void* Material)
 
 	if (Is_Error_Material == 0)
 	{
-		using Get_Group_Type = char*(__thiscall*)(void* Material);
+		using Get_Group_Type = char* (__thiscall**)(void* Material);
 
-		static void* Get_Group_Location = (void*)((unsigned __int32)GetModuleHandleW(L"MaterialSystem.dll") + 18224);
-
-		char* Group = Get_Group_Type(Get_Group_Location)(Material);
+		char* Group = (*Get_Group_Type(*(unsigned __int32*)Material + 4))(Material);
 
 		using Color_Modulate_Type = void(__thiscall**)(void* Material, float Red, float Green, float Blue);
 
