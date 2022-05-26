@@ -6,7 +6,5 @@ void Redirected_Angles_Y(void* Packet, void* Entity, void* Data)
 
 	*(float*)Data = Y;
 
-	__int32 Entity_Number = *(__int32*)((unsigned __int32)Entity + 80) - 1;
-
-	Players_Data[Entity_Number].Y = Y;
+	Players_Data[*(__int32*)((unsigned __int32)Entity + 80) - 1].Y = Y;
 }
