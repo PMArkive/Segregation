@@ -8,13 +8,11 @@ void Redirected_Draw_Crosshair()
 
 	auto Uber_Alles = [&](__int32 X, __int8 Red, __int32 Y)
 	{
-		using Set_Color_Type = void(__thiscall*)(void* Surface, unsigned __int8 Red, unsigned __int8 Green, unsigned __int8 Blue, unsigned __int8 Alpha);
+		using Set_Color_Type = void(__thiscall**)(void* Surface, unsigned __int8 Red, unsigned __int8 Green, unsigned __int8 Blue, unsigned __int8 Alpha);
 
-		static void* Surface = *(void**)608279384;
+		void* Surface = *(void**)608279384;
 
-		static void* Set_Color_Location = *(void**)(*(unsigned __int32*)Surface + 44);
-
-		Set_Color_Type((unsigned __int32)Set_Color_Location)(Surface, Red * 255, 0, 0, 255);
+		(*Set_Color_Type(*(unsigned __int32*)Surface + 44))(Surface, Red * 255, 0, 0, 255);
 
 		float Uber_Alles = 2 * Console_Variable_Uber_Alles_Scale.Integer;
 
@@ -55,7 +53,7 @@ void Redirected_Draw_Crosshair()
 
 		using Draw_Line_Type = void(__thiscall*)(void* Surface, __int32 From_X, __int32 From_Y, __int32 To_X, __int32 To_Y);
 
-		static void* Draw_Line_Location = *(void**)(*(unsigned __int32*)Surface + 60);
+		void* Draw_Line_Location = *(void**)(*(unsigned __int32*)Surface + 60);
 
 		Draw_Line_Type((unsigned __int32)Draw_Line_Location)(Surface, X, Y, X + Points[0], Y - Points[1]);
 
@@ -98,7 +96,5 @@ void Redirected_Draw_Crosshair()
 
 	Uber_Alles(Screen_Width, 1, Screen_Height);
 
-	static Global_Variables_Structure* Global_Variables = *(Global_Variables_Structure**)607726732;
-
-	Rotation_Angle = __builtin_remainderf(Rotation_Angle - (Global_Variables->Absolute_Frame_Time * Console_Variable_Uber_Alles_Speed.Integer), 360);
+	Rotation_Angle = __builtin_remainderf(Rotation_Angle - ((*(Global_Variables_Structure**)607726732)->Absolute_Frame_Time * Console_Variable_Uber_Alles_Speed.Integer), 360);
 }

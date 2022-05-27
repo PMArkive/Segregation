@@ -4,9 +4,7 @@ Player_Data_Structure Players_Data[64];
 
 void Get_Priorities()
 {
-	static Global_Variables_Structure* Global_Variables = *(Global_Variables_Structure**)607726732;
-
-	__int32 Maximum_Clients = Global_Variables->Maximum_Clients;
+	__int32 Maximum_Clients = (*(Global_Variables_Structure**)607726732)->Maximum_Clients;
 
 	if (Maximum_Clients != 0)
 	{

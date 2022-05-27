@@ -159,8 +159,6 @@ __int32 __stdcall DllMain(void* This_Module_Location, unsigned __int32 Call_Reas
 
 				void* Event_Listener_Table = malloc(sizeof(void*) * 2);
 
-				*(void**)Event_Listener_Table = nullptr;
-
 				*(void**)((unsigned __int32)Event_Listener_Table + 4) = (void*)Event_Processor;
 
 				*(void**)Event_Listener = Event_Listener_Table;

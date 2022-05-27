@@ -49,8 +49,6 @@ void __thiscall Redirected_Converge_Angles(void* Animation_State, float Goal, vo
 			*(float*)Current = __builtin_remainderf(Goal, 360);
 		}
 
-		static Global_Variables_Structure* Global_Variables = *(Global_Variables_Structure**)607726732;
-
-		*(float*)((unsigned __int32)Animation_State + 52) = Global_Variables->Current_Time;
+		*(float*)((unsigned __int32)Animation_State + 52) = (*(Global_Variables_Structure**)607726732)->Current_Time;
 	}
 }

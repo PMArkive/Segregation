@@ -43,7 +43,11 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 	if (*(__int8*)((unsigned __int32)Local_Player + 135) == 0)
 	{
-		Redirected_Run_Prediction();
+		using Update_Type = void(__thiscall*)(void* Prediction, void* Unknown_Parameter_1, __int8 Unknown_Parameter_2, void* Unknown_Parameter_3, __int32 Unknown_Parameter_4);
+
+		void* Prediction = *(void**)540494880;
+
+		Update_Type(605209536)(Prediction, *(void**)540609292, 1, *(void**)540627876, *(__int32*)540627868 + *(__int32*)540627872);
 
 		float Local_Player_Previous_Velocity[2] =
 		{
@@ -66,8 +70,6 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 		User_Command->Buttons_State &= ~1;
 
 		using Run_Command_Type = void(__thiscall*)(void* Prediction, void* Local_Player, User_Command_Structure* User_Command, void* Move_Helper);
-
-		static void* Prediction = *(void**)540494880;
 
 		Run_Command_Type(605207600)(Prediction, Local_Player, User_Command, (void*)607735532);
 
@@ -245,7 +247,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		Sorted_Target_List.clear();
 
-		static Global_Variables_Structure* Global_Variables = *(Global_Variables_Structure**)607726732;
+		Global_Variables_Structure* Global_Variables = *(Global_Variables_Structure**)607726732;
 
 		__int32 Maximum_Clients = Global_Variables->Maximum_Clients;
 
