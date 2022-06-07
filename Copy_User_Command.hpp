@@ -46,8 +46,12 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 		using Update_Type = void(__thiscall*)(void* Prediction, void* Unknown_Parameter_1, __int8 Unknown_Parameter_2, void* Unknown_Parameter_3, __int32 Unknown_Parameter_4);
 
 		void* Prediction = *(void**)540494880;
-
+		
 		Update_Type(605209536)(Prediction, *(void**)540609292, 1, *(void**)540627876, *(__int32*)540627868 + *(__int32*)540627872);
+		
+		__int32 Previous_Buttons_State = User_Command->Buttons_State;
+
+		User_Command->Buttons_State &= ~1;
 
 		float Local_Player_Previous_Velocity[2] =
 		{
@@ -64,14 +68,12 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 			*(float*)((unsigned __int32)Local_Player + 676),
 		};
-		
-		__int32 Previous_Buttons_State = User_Command->Buttons_State;
 
-		User_Command->Buttons_State &= ~1;
+		__int32 Previous_Ground_Entity = *(__int32*)((unsigned __int32)Local_Player + 456);
 
 		using Run_Command_Type = void(__thiscall*)(void* Prediction, void* Local_Player, User_Command_Structure* User_Command, void* Move_Helper);
 
-		Run_Command_Type(605207600)(Prediction, Local_Player, User_Command, (void*)607735532);
+		Run_Command_Type(605207600)(Prediction, Local_Player, (User_Command_Structure*)(*(unsigned __int32*)608162508 + ((User_Command->Command_Number - 1) % 90 << 6)), (void*)607735532);
 
 		User_Command->Buttons_State = Previous_Buttons_State;
 		
@@ -90,7 +92,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 		{
 			User_Command->Move[0] = 0;
 
-			if (*(__int32*)((unsigned __int32)Local_Player + 456) != -1)
+			if (Previous_Ground_Entity == -1)
 			{
 				User_Command->Buttons_State &= ~2;
 			}
@@ -361,128 +363,125 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 											else
 											{
 												Optimal_Target = Sorted_Target_List.at(Target_Number).Target;
-													
-												if (*(float*)((unsigned __int32)Local_Player + 100) == *(float*)((unsigned __int32)Optimal_Target + 100))
+												
+												using Setup_Bones_Type = __int8(__thiscall*)(void* Entity, void* Bones, __int32 Maximum_Bones, __int32 Mask, float Current_Time);
+
+												float Bones[128][3][4];
+
+												if (Setup_Bones_Type(604209888)((void*)((unsigned __int32)Optimal_Target + 4), Bones, 128, 524032, Global_Variables->Current_Time) == 1)
 												{
-													using Setup_Bones_Type = __int8(__thiscall*)(void* Entity, void* Bones, __int32 Maximum_Bones, __int32 Mask, float Current_Time);
+													void* Model = *(void**)((unsigned __int32)Optimal_Target + 92);
 
-													float Bones[128][3][4];
-
-													if (Setup_Bones_Type(604209888)((void*)((unsigned __int32)Optimal_Target + 4), Bones, 128, 524032, Global_Variables->Current_Time) == 1)
+													if (Model != nullptr)
 													{
-														void* Model = *(void**)((unsigned __int32)Optimal_Target + 92);
+														using Get_Studio_Model_Type = void*(__thiscall*)(void* Model_Cache, void* Model);
 
-														if (Model != nullptr)
+														static void* Get_Studio_Model_Location = (void*)((unsigned __int32)GetModuleHandleW(L"datacache.dll") + 46416);
+
+														static void* Model_Cache = (void*)((unsigned __int32)GetModuleHandleW(L"datacache.dll") + 125464);
+
+														void* Studio_Model = Get_Studio_Model_Type((unsigned __int32)Get_Studio_Model_Location)(Model_Cache, *(void**)((unsigned __int32)Model + 144));
+
+														if (Studio_Model != nullptr)
 														{
-															using Get_Studio_Model_Type = void*(__thiscall*)(void* Model_Cache, void* Model);
-
-															static void* Get_Studio_Model_Location = (void*)((unsigned __int32)GetModuleHandleW(L"datacache.dll") + 46416);
-
-															static void* Model_Cache = (void*)((unsigned __int32)GetModuleHandleW(L"datacache.dll") + 125464);
-
-															void* Studio_Model = Get_Studio_Model_Type((unsigned __int32)Get_Studio_Model_Location)(Model_Cache, *(void**)((unsigned __int32)Model + 144));
-
-															if (Studio_Model != nullptr)
+															auto Trace_Ray = [&](float* End) -> __int8
 															{
-																auto Trace_Ray = [&](float* End) -> __int8
+																struct Ray_Structure
 																{
-																	struct Ray_Structure
-																	{
-																		__int8 Additional_Bytes[50];
-																	};
-
-																	struct Trace_Structure
-																	{
-																		__int8 Additional_Bytes_1[76];
-
-																		void* Entity;
-
-																		__int8 Additional_Bytes_2[4];
-																	};
-
-																	using Trace_Ray_Type = void(__cdecl*)(Ray_Structure* Ray, __int32 Mask, void* Skip, __int32 Group, Trace_Structure* Trace);
-
-																	using Initialize_Ray_Type = void(__thiscall*)(Ray_Structure* Ray, float* Start, float* End);
-
-																	Ray_Structure Ray;
-
-																	Initialize_Ray_Type(537380224)(&Ray, Local_Player_Eye_Position, End);
-
-																	Trace_Structure Trace;
-
-																	Trace_Ray_Type(604317152)(&Ray, 1174421515, Local_Player, 0, &Trace);
-
-																	if (Trace.Entity == nullptr)
-																	{
-																		return 1;
-																	}
-
-																	if (Trace.Entity == Optimal_Target)
-																	{
-																		return 1;
-																	}
-
-																	return 0;
+																	__int8 Additional_Bytes[50];
 																};
 
-																void* Hitbox_Set = (void*)((unsigned __int32)Studio_Model + *(__int32*)((unsigned __int32)Studio_Model + 176));
-
-																float* Bounding_Box_Minimum = (float*)((unsigned __int32)Hitbox_Set + 836);
-
-																float Hitbox_Minimum[3] =
+																struct Trace_Structure
 																{
-																	Bounding_Box_Minimum[0] * Bones[14][0][0] + Bounding_Box_Minimum[1] * Bones[14][0][1] + Bounding_Box_Minimum[2] * Bones[14][0][2] + Bones[14][0][3],
+																	__int8 Additional_Bytes_1[76];
 
-																	Bounding_Box_Minimum[0] * Bones[14][1][0] + Bounding_Box_Minimum[1] * Bones[14][1][1] + Bounding_Box_Minimum[2] * Bones[14][1][2] + Bones[14][1][3],
+																	void* Entity;
 
-																	Bounding_Box_Minimum[0] * Bones[14][2][0] + Bounding_Box_Minimum[1] * Bones[14][2][1] + Bounding_Box_Minimum[2] * Bones[14][2][2] + Bones[14][2][3]
+																	__int8 Additional_Bytes_2[4];
 																};
 
-																float* Bounding_Box_Maximum = (float*)((unsigned __int32)Hitbox_Set + 848);
+																using Trace_Ray_Type = void(__cdecl*)(Ray_Structure* Ray, __int32 Mask, void* Skip, __int32 Group, Trace_Structure* Trace);
 
-																float Hitbox_Maximum[3] =
+																using Initialize_Ray_Type = void(__thiscall*)(Ray_Structure* Ray, float* Start, float* End);
+
+																Ray_Structure Ray;
+
+																Initialize_Ray_Type(537380224)(&Ray, Local_Player_Eye_Position, End);
+
+																Trace_Structure Trace;
+
+																Trace_Ray_Type(604317152)(&Ray, 1174421515, Local_Player, 0, &Trace);
+
+																if (Trace.Entity == nullptr)
 																{
-																	Bounding_Box_Maximum[0] * Bones[14][0][0] + Bounding_Box_Maximum[1] * Bones[14][0][1] + Bounding_Box_Maximum[2] * Bones[14][0][2] + Bones[14][0][3],
+																	return 1;
+																}
 
-																	Bounding_Box_Maximum[0] * Bones[14][1][0] + Bounding_Box_Maximum[1] * Bones[14][1][1] + Bounding_Box_Maximum[2] * Bones[14][1][2] + Bones[14][1][3],
-
-																	Bounding_Box_Maximum[0] * Bones[14][2][0] + Bounding_Box_Maximum[1] * Bones[14][2][1] + Bounding_Box_Maximum[2] * Bones[14][2][2] + Bones[14][2][3]
-																};
-
-																float Optimal_Target_Origin[3] =
+																if (Trace.Entity == Optimal_Target)
 																{
-																	(Hitbox_Minimum[0] + Hitbox_Maximum[0]) / 2,
+																	return 1;
+																}
 
-																	(Hitbox_Minimum[1] + Hitbox_Maximum[1]) / 2,
+																return 0;
+															};
 
-																	Hitbox_Minimum[2] + (Hitbox_Maximum[2] - Hitbox_Minimum[2]) * Console_Variable_Aim_Height.Floating_Point
-																};
+															void* Hitbox_Set = (void*)((unsigned __int32)Studio_Model + *(__int32*)((unsigned __int32)Studio_Model + 176));
+
+															float* Bounding_Box_Minimum = (float*)((unsigned __int32)Hitbox_Set + 836);
+
+															float Hitbox_Minimum[3] =
+															{
+																Bounding_Box_Minimum[0] * Bones[14][0][0] + Bounding_Box_Minimum[1] * Bones[14][0][1] + Bounding_Box_Minimum[2] * Bones[14][0][2] + Bones[14][0][3],
+
+																Bounding_Box_Minimum[0] * Bones[14][1][0] + Bounding_Box_Minimum[1] * Bones[14][1][1] + Bounding_Box_Minimum[2] * Bones[14][1][2] + Bones[14][1][3],
+
+																Bounding_Box_Minimum[0] * Bones[14][2][0] + Bounding_Box_Minimum[1] * Bones[14][2][1] + Bounding_Box_Minimum[2] * Bones[14][2][2] + Bones[14][2][3]
+															};
+
+															float* Bounding_Box_Maximum = (float*)((unsigned __int32)Hitbox_Set + 848);
+
+															float Hitbox_Maximum[3] =
+															{
+																Bounding_Box_Maximum[0] * Bones[14][0][0] + Bounding_Box_Maximum[1] * Bones[14][0][1] + Bounding_Box_Maximum[2] * Bones[14][0][2] + Bones[14][0][3],
+
+																Bounding_Box_Maximum[0] * Bones[14][1][0] + Bounding_Box_Maximum[1] * Bones[14][1][1] + Bounding_Box_Maximum[2] * Bones[14][1][2] + Bones[14][1][3],
+
+																Bounding_Box_Maximum[0] * Bones[14][2][0] + Bounding_Box_Maximum[1] * Bones[14][2][1] + Bounding_Box_Maximum[2] * Bones[14][2][2] + Bones[14][2][3]
+															};
+
+															float Optimal_Target_Origin[3] =
+															{
+																(Hitbox_Minimum[0] + Hitbox_Maximum[0]) / 2,
+
+																(Hitbox_Minimum[1] + Hitbox_Maximum[1]) / 2,
+
+																Hitbox_Minimum[2] + (Hitbox_Maximum[2] - Hitbox_Minimum[2]) * Console_Variable_Aim_Height.Floating_Point
+															};
 																
-																if (Trace_Ray(Optimal_Target_Origin) == 1)
-																{
-																	Target_Tick_Number = (*(float*)((unsigned __int32)Optimal_Target + 104) + Interpolation_Time) / Global_Variables->Interval_Per_Tick + 0.5f;
+															if (Trace_Ray(Optimal_Target_Origin) == 1)
+															{
+																Target_Tick_Number = (*(float*)((unsigned __int32)Optimal_Target + 104) + Interpolation_Time) / Global_Variables->Interval_Per_Tick + 0.5f;
 
-																	__int32 Tick_Number_Difference = Global_Variables->Tick_Number + 1 + Total_Latency / Global_Variables->Interval_Per_Tick + 0.5f - Target_Tick_Number;
+																__int32 Tick_Number_Difference = Global_Variables->Tick_Number + 1 + Total_Latency / Global_Variables->Interval_Per_Tick + 0.5f - Target_Tick_Number;
 																	
-																	if (Absolute(Corrected_Interpolation_Time - Tick_Number_Difference * Global_Variables->Interval_Per_Tick) <= 0.2f)
+																if (Absolute(Corrected_Interpolation_Time - Tick_Number_Difference * Global_Variables->Interval_Per_Tick) <= 0.2f)
+																{
+																	float Origin_Difference[3] =
 																	{
-																		float Origin_Difference[3] =
-																		{
-																			Optimal_Target_Origin[0] - Local_Player_Eye_Position[0],
+																		Optimal_Target_Origin[0] - Local_Player_Eye_Position[0],
 
-																			Optimal_Target_Origin[1] - Local_Player_Eye_Position[1],
+																		Optimal_Target_Origin[1] - Local_Player_Eye_Position[1],
 
-																			Optimal_Target_Origin[2] - Local_Player_Eye_Position[2]
-																		};
+																		Optimal_Target_Origin[2] - Local_Player_Eye_Position[2]
+																	};
 
-																		Aim_Angles[0] = Arc_Tangent_2(Square_Root(__builtin_powf(Origin_Difference[0], 2) + __builtin_powf(Origin_Difference[1], 2)), -Origin_Difference[2]) * 180 / 3.1415927f;
+																	Aim_Angles[0] = Arc_Tangent_2(Square_Root(__builtin_powf(Origin_Difference[0], 2) + __builtin_powf(Origin_Difference[1], 2)), -Origin_Difference[2]) * 180 / 3.1415927f;
 
-																		Aim_Angles[1] = Arc_Tangent_2(Origin_Difference[0], Origin_Difference[1]) * 180 / 3.1415927f;
+																	Aim_Angles[1] = Arc_Tangent_2(Origin_Difference[0], Origin_Difference[1]) * 180 / 3.1415927f;
 
-																		User_Command->Buttons_State |= 1;
+																	User_Command->Buttons_State |= 1;
 
-																		goto Found_Optimal_Target_Label;
-																	}
+																	goto Found_Optimal_Target_Label;
 																}
 															}
 														}
