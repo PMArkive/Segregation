@@ -46,9 +46,9 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 		using Update_Type = void(__thiscall*)(void* Prediction, void* Unknown_Parameter_1, __int8 Unknown_Parameter_2, void* Unknown_Parameter_3, __int32 Unknown_Parameter_4);
 
 		void* Prediction = *(void**)540494880;
-		
+
 		Update_Type(605209536)(Prediction, *(void**)540609292, 1, *(void**)540627876, *(__int32*)540627868 + *(__int32*)540627872);
-		
+
 		__int32 Previous_Buttons_State = User_Command->Buttons_State;
 
 		User_Command->Buttons_State &= ~1;
@@ -76,7 +76,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 		Run_Command_Type(605207600)(Prediction, Local_Player, (User_Command_Structure*)(*(unsigned __int32*)608162508 + ((User_Command->Command_Number - 1) % 90 << 6)), (void*)607735532);
 
 		User_Command->Buttons_State = Previous_Buttons_State;
-		
+
 		float Move_Angles[3] =
 		{
 			User_Command->View_Angles[0],

@@ -82,5 +82,8 @@
     <ClInclude Include="Setup_Move.hpp">
       <Filter>Header++</Filter>
     </ClInclude>
+    <ClInclude Include="Fire_Events.hpp">
+      <Filter>Header++</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
