@@ -69,11 +69,9 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			*(float*)((unsigned __int32)Local_Player + 676),
 		};
 
-		__int32 Previous_Ground_Entity = *(__int32*)((unsigned __int32)Local_Player + 456);
-
 		using Run_Command_Type = void(__thiscall*)(void* Prediction, void* Local_Player, User_Command_Structure* User_Command, void* Move_Helper);
 
-		Run_Command_Type(605207600)(Prediction, Local_Player, (User_Command_Structure*)(*(unsigned __int32*)608162508 + ((User_Command->Command_Number - 1) % 90 << 6)), (void*)607735532);
+		Run_Command_Type(605207600)(Prediction, Local_Player, User_Command, (void*)607735532);
 
 		User_Command->Buttons_State = Previous_Buttons_State;
 
@@ -92,7 +90,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 		{
 			User_Command->Move[0] = 0;
 
-			if (Previous_Ground_Entity == -1)
+			if (*(__int32*)((unsigned __int32)Local_Player + 456) != -1)
 			{
 				User_Command->Buttons_State &= ~2;
 			}
