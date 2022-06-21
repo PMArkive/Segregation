@@ -137,7 +137,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		__int32 Predicted_Choked_Commands_Count = Choked_Commands_Count + 1;
 
-		__int8 Predicted_Send_Packet;
+		__int8 Predicted_Send_Packet = -1;
 
 		float* Local_Player_Origin = (float*)((unsigned __int32)Local_Player + 668);
 
@@ -156,10 +156,6 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 					Predicted_Send_Packet = 1;
 				}
 			}
-			else
-			{
-				Predicted_Send_Packet = -1;
-			}
 		}
 		else
 		{
@@ -167,26 +163,13 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 			if (Choked_Commands_Count < Console_Variable_Maximum_Choked_Commands.Integer)
 			{
-				float Difference[3] =
-				{
-					Previous_Networked_Origin[0] - Local_Player_Previous_Origin[0],
-
-					Previous_Networked_Origin[1] - Local_Player_Previous_Origin[1],
-
-					Previous_Networked_Origin[2] - Local_Player_Previous_Origin[2]
-				};
-
-				if (__builtin_powf(Difference[0], 2) + __builtin_powf(Difference[1], 2) + __builtin_powf(Difference[2], 2) <= 4096)
+				if (__builtin_powf(Previous_Networked_Origin[0] - Local_Player_Previous_Origin[0], 2) + __builtin_powf(Previous_Networked_Origin[1] - Local_Player_Previous_Origin[1], 2) + __builtin_powf(Previous_Networked_Origin[2] - Local_Player_Previous_Origin[2], 2) <= 4096)
 				{
 					Send_Packet = 0;
 				}
 				else
 				{
-					Previous_Networked_Origin[0] = Local_Player_Origin[0];
-
-					Previous_Networked_Origin[1] = Local_Player_Origin[1];
-
-					Previous_Networked_Origin[2] = Local_Player_Origin[2];
+					__builtin_memcpy(Previous_Networked_Origin, Local_Player_Origin, sizeof(Previous_Networked_Origin));
 
 					Send_Packet = 1;
 				}
@@ -199,17 +182,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 					}
 					else
 					{
-						Difference[0] = Previous_Networked_Origin[0] - Local_Player_Origin[0];
-
-						Difference[1] = Previous_Networked_Origin[1] - Local_Player_Origin[1];
-
-						Difference[2] = Previous_Networked_Origin[2] - Local_Player_Origin[2];
-
-						if (__builtin_powf(Difference[0], 2) + __builtin_powf(Difference[1], 2) + __builtin_powf(Difference[2], 2) <= 4096)
-						{
-							Predicted_Send_Packet = -1;
-						}
-						else
+						if (__builtin_powf(Previous_Networked_Origin[0] - Local_Player_Origin[0], 2) + __builtin_powf(Previous_Networked_Origin[1] - Local_Player_Origin[1], 2) + __builtin_powf(Previous_Networked_Origin[2] - Local_Player_Origin[2], 2) > 4096)
 						{
 							Predicted_Send_Packet = 1;
 						}
@@ -218,15 +191,9 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			}
 			else
 			{
-				Previous_Networked_Origin[0] = Local_Player_Origin[0];
-
-				Previous_Networked_Origin[1] = Local_Player_Origin[1];
-
-				Previous_Networked_Origin[2] = Local_Player_Origin[2];
+				__builtin_memcpy(Previous_Networked_Origin, Local_Player_Origin, sizeof(Previous_Networked_Origin));
 
 				Send_Packet = 1;
-
-				Predicted_Send_Packet = -1;
 			}
 		}
 
@@ -267,15 +234,16 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 						{
 							if (*(__int8*)((unsigned __int32)Entity + 320) == 0)
 							{
-								Target_Structure Target;
-
-								Target.Priority = Player_Data->Priority;
-
 								float* Entity_Origin = (float*)((unsigned __int32)Entity + 668);
 
-								Target.Distance = Square_Root(__builtin_powf(Local_Player_Origin[0] - Entity_Origin[0], 2) + __builtin_powf(Local_Player_Origin[1] - Entity_Origin[1], 2) + __builtin_powf(Local_Player_Origin[2] - Entity_Origin[2], 2));
+								Target_Structure Target =
+								{
+									Player_Data->Priority,
 
-								Target.Target = Entity;
+									Square_Root(__builtin_powf(Local_Player_Origin[0] - Entity_Origin[0], 2) + __builtin_powf(Local_Player_Origin[1] - Entity_Origin[1], 2) + __builtin_powf(Local_Player_Origin[2] - Entity_Origin[2], 2)),
+
+									Entity
+								};
 
 								Sorted_Target_List.push_back(Target);
 							}
@@ -507,9 +475,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 											{
 												User_Command->Tick_Number = Target_Tick_Number;
 
-												User_Command->View_Angles[0] = Aim_Angles[0];
-
-												User_Command->View_Angles[1] = Aim_Angles[1];
+												__builtin_memcpy(User_Command->View_Angles, Aim_Angles, sizeof(Aim_Angles));
 
 												Player_Data_Structure* Player_Data = &Players_Data[*(__int32*)((unsigned __int32)Optimal_Target + 80) - 1];
 
@@ -568,13 +534,13 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 											float Random_X = Random_Float_Type(Random_Float_Location)(-0.5f, 0.5f) + Random_Float_Type(Random_Float_Location)(-0.5f, 0.5f);
 
-											float Random_Y = Random_Float_Type(Random_Float_Location)(-0.5f, 0.5f) + Random_Float_Type(Random_Float_Location)(-0.5f, 0.5f);
+											Weapon_Spread = -1;
 
 											using Primary_Attack_Type = void(__thiscall**)(void* Weapon);
 
-											Weapon_Spread = -1;
-
 											(*Primary_Attack_Type(*(unsigned __int32*)Weapon + 856))(Weapon);
+
+											float Random_Y = Random_Float_Type(Random_Float_Location)(-0.5f, 0.5f) + Random_Float_Type(Random_Float_Location)(-0.5f, 0.5f);
 
 											float Direction[3] =
 											{
@@ -625,8 +591,6 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			{
 				User_Command->View_Angles[0] = Console_Variable_Angle_X.Floating_Point;
 
-				Update_Animation_Angle[0] = User_Command->View_Angles[0];
-
 				float* Optimal_Target_Origin = (float*)((unsigned __int32)Sorted_Target_List.at(0).Target + 668);
 				
 				float Origin_Difference[2] =
@@ -650,15 +614,12 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 				else
 				{
 					User_Command->View_Angles[1] = Arc_Tangent_2(Origin_Difference[0], Origin_Difference[1]) * 180 / 3.1415927f + Console_Variable_Angle_Y.Floating_Point;
-
-					Update_Animation_Angle[1] = User_Command->View_Angles[1];
 				}
 			}
-			else
+			
+			if (Send_Packet == 1)
 			{
-				Update_Animation_Angle[0] = User_Command->View_Angles[0];
-
-				Update_Animation_Angle[1] = User_Command->View_Angles[1];
+				__builtin_memcpy(Update_Animation_Angle, User_Command->View_Angles, sizeof(Update_Animation_Angle));
 			}
 		}
 

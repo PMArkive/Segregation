@@ -53,3 +53,10 @@ void Bruteforce_Reset_Tolerance()
 		}
 	}
 }
+
+void Bruteforce_Reset()
+{
+	Bruteforce_Reset_Memory();
+
+	Bruteforce_Reset_Tolerance();
+}

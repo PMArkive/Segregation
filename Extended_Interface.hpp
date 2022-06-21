@@ -62,7 +62,7 @@ void Implement_Extended_Interface()
 
 	wprintf(L"[ + ] Bruteforce_Tolerance %p\n", &Console_Variable_Bruteforce_Tolerance);
 
-	Create_Console_Variable_Type(539130656)(&Console_Variable_Bruteforce, (char*)"Bruteforce", (char*)"1", nullptr);
+	Create_Console_Variable_Type(539130656)(&Console_Variable_Bruteforce, (char*)"Bruteforce", (char*)"1", (void*)Bruteforce_Reset);
 
 	wprintf(L"[ + ] Bruteforce %p\n", &Console_Variable_Bruteforce);
 
