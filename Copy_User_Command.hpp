@@ -169,7 +169,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 				}
 				else
 				{
-					__builtin_memcpy(Previous_Networked_Origin, Local_Player_Origin, sizeof(Previous_Networked_Origin));
+					Byte_Manager::Copy_Bytes(0, Previous_Networked_Origin, sizeof(Previous_Networked_Origin), Local_Player_Origin);
 
 					Send_Packet = 1;
 				}
@@ -191,7 +191,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			}
 			else
 			{
-				__builtin_memcpy(Previous_Networked_Origin, Local_Player_Origin, sizeof(Previous_Networked_Origin));
+				Byte_Manager::Copy_Bytes(0, Previous_Networked_Origin, sizeof(Previous_Networked_Origin), Local_Player_Origin);
 
 				Send_Packet = 1;
 			}
@@ -475,7 +475,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 											{
 												User_Command->Tick_Number = Target_Tick_Number;
 
-												__builtin_memcpy(User_Command->View_Angles, Aim_Angles, sizeof(Aim_Angles));
+												Byte_Manager::Copy_Bytes(0, User_Command->View_Angles, sizeof(Aim_Angles), Aim_Angles);
 
 												Player_Data_Structure* Player_Data = &Players_Data[*(__int32*)((unsigned __int32)Optimal_Target + 80) - 1];
 
@@ -619,7 +619,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			
 			if (Send_Packet == 1)
 			{
-				__builtin_memcpy(Update_Animation_Angle, User_Command->View_Angles, sizeof(Update_Animation_Angle));
+				Byte_Manager::Copy_Bytes(0, Update_Animation_Angle, sizeof(Update_Animation_Angle), User_Command->View_Angles);
 			}
 		}
 

@@ -41,7 +41,7 @@ void Predicton_Copy_Compare(char* Class, void* Unknown_Parameter_1, void* Unknow
 	{
 		Prediction_Copy_Structure::Field_Structure* Field = Predicton_Copy.Field;
 
-		__builtin_memcpy((void*)(*(unsigned __int32*)607867332 + 2884 * (Class[1] == 'P') + Field->Offset[0]), (void*)((unsigned __int32)Predicton_Copy.Source + Field->Offset[1]), Field->Bytes);
+		Byte_Manager::Copy_Bytes(0, (void*)(*(unsigned __int32*)607867332 + 2884 * (Class[1] == 'P') + Field->Offset[0]), Field->Bytes, (void*)((unsigned __int32)Predicton_Copy.Source + Field->Offset[1]));
 	}
 }
 
