@@ -16,6 +16,8 @@ Interface_Structure Console_Variable_Bruteforce_Tolerance;
 
 Interface_Structure Console_Variable_Bruteforce;
 
+Interface_Structure Console_Variable_Lazy;
+
 Interface_Structure Console_Variable_Minimum_Choked_Commands;
 
 Interface_Structure Console_Variable_Maximum_Choked_Commands;
@@ -65,6 +67,10 @@ void Implement_Extended_Interface()
 	Create_Console_Variable_Type(539130656)(&Console_Variable_Bruteforce, (char*)"Bruteforce", (char*)"1", (void*)Bruteforce_Reset);
 
 	wprintf(L"[ + ] Bruteforce %p\n", &Console_Variable_Bruteforce);
+
+	Create_Console_Variable_Type(539130656)(&Console_Variable_Lazy, (char*)"Lazy", (char*)"1", nullptr);
+
+	wprintf(L"[ + ] Lazy %p\n", &Console_Variable_Lazy);
 
 	Create_Console_Variable_Type(539130656)(&Console_Variable_Minimum_Choked_Commands, (char*)"Minimum_Choked_Commands", (char*)"2", nullptr);
 
