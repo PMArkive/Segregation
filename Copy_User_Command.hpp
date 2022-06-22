@@ -49,144 +49,6 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		Update_Type(605209536)(Prediction, *(void**)540609292, 1, *(void**)540627876, *(__int32*)540627868 + *(__int32*)540627872);
 
-		float Local_Player_Previous_Origin[3] =
-		{
-			*(float*)((unsigned __int32)Local_Player + 668),
-
-			*(float*)((unsigned __int32)Local_Player + 672),
-
-			*(float*)((unsigned __int32)Local_Player + 676),
-		};
-
-		if (Console_Variable_Lazy.Integer == 1)
-		{
-			User_Command->Buttons_State |= 2;
-
-			//TODO: Automatic Buy
-
-			//Development Scope
-			{
-				Local_Player_Previous_Origin[2] += 16;
-
-				struct Trace_Structure
-				{
-					__int8 Additional_Bytes_1[12];
-
-					float End[3];
-
-					__int8 Additional_Bytes_2[60];
-				};
-
-				Trace_Structure Trace;
-
-				auto Trace_Ray = [&](float* End) -> void //TODO: Ignore Players
-				{
-					struct Ray_Structure
-					{
-						__int8 Additional_Bytes[50];
-					};
-
-					using Trace_Ray_Type = void(__cdecl*)(Ray_Structure* Ray, __int32 Mask, void* Skip, __int32 Group, Trace_Structure* Trace);
-
-					using Initialize_Ray_Type = void(__thiscall*)(Ray_Structure* Ray, float* Start, float* End);
-
-					Ray_Structure Ray;
-
-					Initialize_Ray_Type(537380224)(&Ray, Local_Player_Previous_Origin, End);
-
-					Trace_Ray_Type(604317152)(&Ray, 1174421515, Local_Player, 0, &Trace);
-				};
-
-				//TODO: Optimize Sine Cosine
-
-				float End[4][3] =
-				{
-					{
-						Local_Player_Previous_Origin[0] + 8192 * __builtin_cosf(-90 * 3.1415927f / 180),
-
-						Local_Player_Previous_Origin[1] + 8192 * __builtin_sinf(-90 * 3.1415927f / 180),
-
-						Local_Player_Previous_Origin[2]
-					},
-
-					{
-						Local_Player_Previous_Origin[0] + 8192 * __builtin_cosf(0),
-
-						Local_Player_Previous_Origin[1] + 8192 * __builtin_sinf(0),
-
-						Local_Player_Previous_Origin[2]
-					},
-
-					{
-						Local_Player_Previous_Origin[0] + 8192 * __builtin_cosf(90 * 3.1415927f / 180),
-
-						Local_Player_Previous_Origin[1] + 8192 * __builtin_sinf(90 * 3.1415927f / 180),
-
-						Local_Player_Previous_Origin[2]
-					},
-
-					{
-						Local_Player_Previous_Origin[0] + 8192 * __builtin_cosf(180 * 3.1415927f / 180),
-
-						Local_Player_Previous_Origin[1] + 8192 * __builtin_sinf(180 * 3.1415927f / 180),
-
-						Local_Player_Previous_Origin[2]
-					}
-				};
-
-				float Distances[3];
-
-				for (int i = 0; i < 4; i++)
-				{
-					Trace_Ray(End[i]);
-
-					Distances[i] = Square_Root(__builtin_powf(Local_Player_Previous_Origin[0] - Trace.End[0], 2) + __builtin_powf(Local_Player_Previous_Origin[1] - Trace.End[1], 2));
-				}
-
-				static unsigned __int8 Current_Pilot_Direction;
-
-				if (Distances[Current_Pilot_Direction] <= 256)
-				{
-					float Greatest_Distance = 0;
-
-					__int8 Initial_Pilot_Direction = Current_Pilot_Direction;
-
-					for (int i = 0; i < 4; i++)
-					{
-						__int8 Rotation = Initial_Pilot_Direction - i;
-
-						if (Rotation < 0)
-						{
-							Rotation *= -1;
-						}
-
-						if (Rotation == 2)
-						{
-							continue;
-						}
-
-						Trace_Ray(End[i]);
-
-						if (Greatest_Distance <= Distances[i])
-						{
-							Greatest_Distance = Distances[i];
-
-							Current_Pilot_Direction = i;
-						}
-					}
-				}
-
-				//TODO: No Linear Interpolation
-				//TODO: Sides
-
-				User_Command->View_Angles[1] -= __builtin_remainderf(User_Command->View_Angles[1] - Arc_Tangent_2(End[Current_Pilot_Direction][0] - Local_Player_Previous_Origin[0], End[Current_Pilot_Direction][1] - Local_Player_Previous_Origin[1]) * 180 / 3.1415927f, 360) / 16;
-
-				(*(void (__thiscall **)(int, float*))(**(DWORD **)0x243BEA64 + 80))(*(DWORD *)0x243BEA64, User_Command->View_Angles);
-
-				Local_Player_Previous_Origin[2] -= 16;
-			}
-		}
-
 		__int32 Previous_Buttons_State = User_Command->Buttons_State;
 
 		User_Command->Buttons_State &= ~1;
@@ -196,6 +58,15 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			*(float*)((unsigned __int32)Local_Player + 224),
 
 			*(float*)((unsigned __int32)Local_Player + 228)
+		};
+
+		float Local_Player_Previous_Origin[3] =
+		{
+			*(float*)((unsigned __int32)Local_Player + 668),
+
+			*(float*)((unsigned __int32)Local_Player + 672),
+
+			*(float*)((unsigned __int32)Local_Player + 676),
 		};
 
 		using Run_Command_Type = void(__thiscall*)(void* Prediction, void* Local_Player, User_Command_Structure* User_Command, void* Move_Helper);
