@@ -8,7 +8,7 @@ __int8 __thiscall Redirected_Is_Error_Material(void* Material)
 
 	if (Is_Error_Material == 0)
 	{
-		using Get_Group_Type = char* (__thiscall**)(void* Material);
+		using Get_Group_Type = char*(__thiscall**)(void* Material);
 
 		char* Group = (*Get_Group_Type(*(unsigned __int32*)Material + 4))(Material);
 

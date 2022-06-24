@@ -16,8 +16,6 @@
 
 #include "Angles_Y.hpp"
 
-#include "Fire_Events.hpp"
-
 #pragma comment(lib, "WinMM.Lib")
 
 #include "Sounds.hpp"
@@ -151,8 +149,6 @@ __int32 __stdcall DllMain(void* This_Module_Location, unsigned __int32 Call_Reas
 				Redirection_Manager::Redirect_Function(Original_Frame_Stage_Notify_Caller_Location, 1, (void*)604538592, 1, (void*)Redirected_Frame_Stage_Notify);
 
 				*(void**)608149676 = (void*)Redirected_Angles_Y;
-
-				Redirection_Manager::Redirect_Function(Original_Fire_Events_Caller_Location, 1, (void*)537149456, 1, (void*)Redirected_Fire_Events);
 
 				Byte_Manager::Set_Bytes(1, (void*)537149578, 1, 235);
 			}

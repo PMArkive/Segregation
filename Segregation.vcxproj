@@ -80,7 +80,6 @@
     <ClInclude Include="Converge_Angles.hpp" />
     <ClInclude Include="Draw_Crosshair.hpp" />
     <ClInclude Include="Event_Listener.hpp" />
-    <ClInclude Include="Fire_Events.hpp" />
     <ClInclude Include="Interpolate.hpp" />
     <ClInclude Include="Is_Error_Material.hpp" />
     <ClInclude Include="Copy_User_Command.hpp" />
