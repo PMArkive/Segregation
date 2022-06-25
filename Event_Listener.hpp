@@ -45,11 +45,30 @@ void __stdcall Event_Processor(void* Event)
 						{
 							if (Console_Variable_Bruteforce.Integer == 1)
 							{
-								if (Console_Variable_Bruteforce_Memory.Integer == 1)
-								{
-									Player_Data_Structure* Player_Data = &Players_Data[Victim_Number - 1];
+								Player_Data_Structure* Player_Data = &Players_Data[Victim_Number - 1];
 
-									if (Player_Data->Priority != -2)
+								if (Player_Data->Priority != -2)
+								{
+									if (Console_Variable_Bruteforce_Memory.Integer == 0)
+									{
+										/*
+										* TODO
+										* reorder first player_* last bullet_* (if needed)
+										* revert on player_hurt (body hits aren't necessarily meaning miss)
+										*/
+
+										if (Player_Data->Tolerance == Console_Variable_Bruteforce_Tolerance.Integer)
+										{
+											constexpr __int32 Bruteforce_Angles_Modulo = sizeof(Bruteforce_Angles) / sizeof(float);
+
+											Player_Data->Shots_Fired = ((Player_Data->Shots_Fired - 1) % Bruteforce_Angles_Modulo + Bruteforce_Angles_Modulo) % Bruteforce_Angles_Modulo;
+										}
+										else
+										{
+											Player_Data->Tolerance = Console_Variable_Bruteforce_Tolerance.Integer;
+										}
+									}
+									else
 									{
 										void* Weapon = *(void**)((unsigned __int32)607973860 + (((*(unsigned __int32*)((unsigned __int32)Local_Player + 2872) & 4095) - 4097) << 4));
 
