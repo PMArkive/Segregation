@@ -642,10 +642,6 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 												Angle_Vectors_Transpose_Type(574033968)(Spread_Angles, Forward, nullptr, Up);
 
-												Vector_Normalize(Forward);
-
-												Vector_Normalize(Up);
-
 												float* Recoil = (float*)((unsigned __int32)Local_Player + 2992);
 
 												User_Command->View_Angles[0] += Arc_Tangent_2(Square_Root(__builtin_powf(Forward[0], 2) + __builtin_powf(Forward[1], 2)), -Forward[2]) * 180 / 3.1415927f - Recoil[0] * 2;
