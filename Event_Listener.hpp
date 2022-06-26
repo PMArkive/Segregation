@@ -1,6 +1,6 @@
 #pragma once
 
-Player_Data_Structure* Previous_Player_Data_Location;
+__int32 Latest_Player_Data_Number;
 
 __int32 Primary_Ammo_Capacity_Snapshot;
 
@@ -52,7 +52,7 @@ void __stdcall Event_Processor(void* Event)
 						{
 							if (Console_Variable_Bruteforce.Integer == 1)
 							{
-								if (Previous_Player_Data_Location != nullptr)
+								if (Victim_Number - 1 == Latest_Player_Data_Number)
 								{
 									Player_Data_Structure* Player_Data = &Players_Data[Victim_Number - 1];
 

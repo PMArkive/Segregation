@@ -35,7 +35,7 @@ void Vector_Normalize(float* Vector)
 	Vector_Normalize_Type(606378096)(Vector);
 }
 
-Player_Data_Structure Previous_Player_Data;
+Player_Data_Structure Latest_Player_Data;
 
 void* Original_Copy_User_Command_Caller_Location;
 
@@ -527,7 +527,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 											{
 												Shot_Time = Global_Variables->Current_Time;
 
-												Previous_Player_Data_Location = nullptr;
+												Latest_Player_Data_Number = 0;
 
 												In_Attack = 1;
 											
@@ -539,17 +539,19 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 													if (Console_Variable_Bruteforce.Integer == 1)
 													{
-														Player_Data_Structure* Player_Data = &Players_Data[*(__int32*)((unsigned __int32)Optimal_Target + 80) - 1];
+														__int32 Optimal_Target_Number = *(__int32*)((unsigned __int32)Optimal_Target + 80) - 1;
+
+														Player_Data_Structure* Player_Data = &Players_Data[Optimal_Target_Number];
 
 														if (Player_Data->Priority != -2)
 														{
-															Previous_Player_Data_Location = Player_Data;
+															Latest_Player_Data_Number = Optimal_Target_Number;
 
 															using Get_Primary_Ammo_Capacity_Type = __int32(__thiscall**)(void* Weapon);
 															
 															Primary_Ammo_Capacity_Snapshot = (*Get_Primary_Ammo_Capacity_Type(*(unsigned __int32*)Weapon + 1000))(Weapon) - 1;
 
-															Byte_Manager::Copy_Bytes(0, &Previous_Player_Data, sizeof(Previous_Player_Data), Player_Data);
+															Byte_Manager::Copy_Bytes(0, &Latest_Player_Data, sizeof(Latest_Player_Data), Player_Data);
 
 															if (Console_Variable_Bruteforce_Memory.Integer == 0)
 															{
@@ -660,9 +662,9 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			}
 			else
 			{
-				if (Previous_Player_Data_Location != nullptr)
+				if (Latest_Player_Data_Number != 0)
 				{
-					Byte_Manager::Copy_Bytes(0, Previous_Player_Data_Location, sizeof(Previous_Player_Data), &Previous_Player_Data);
+					Byte_Manager::Copy_Bytes(0, &Players_Data[Latest_Player_Data_Number], sizeof(Latest_Player_Data), &Latest_Player_Data);
 				}
 
 				Shot_Time = 0;
