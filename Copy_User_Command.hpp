@@ -21,8 +21,6 @@ float Square_Root(float X)
 	return X;
 }
 
-Player_Data_Structure* Previous_Player_Data_Location;
-
 Player_Data_Structure Previous_Player_Data;
 
 void Angle_Vectors(float* Angles, float* Forward, float* Right, float* Up)
@@ -52,6 +50,8 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 		void* Prediction = *(void**)540494880;
 
 		Update_Type(605209536)(Prediction, *(void**)540609292, 1, *(void**)540627876, *(__int32*)540627868 + *(__int32*)540627872);
+
+		User_Command->Buttons_State &= ~2048;
 
 		__int32 Previous_Buttons_State = User_Command->Buttons_State;
 
@@ -492,6 +492,10 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 														if (Player_Data->Priority != -2)
 														{
 															Previous_Player_Data_Location = Player_Data;
+
+															using Get_Primary_Ammo_Capacity_Type = __int32(__thiscall**)(void* Weapon);
+															
+															Primary_Ammo_Capacity_Snapshot = (*Get_Primary_Ammo_Capacity_Type(*(unsigned __int32*)Weapon + 1000))(Weapon) - 1;
 
 															Byte_Manager::Copy_Bytes(0, &Previous_Player_Data, sizeof(Previous_Player_Data), Previous_Player_Data_Location);
 
