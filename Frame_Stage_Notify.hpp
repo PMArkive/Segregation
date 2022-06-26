@@ -47,11 +47,11 @@ void Predicton_Copy_Compare(char* Class, void* Unknown_Parameter_1, void* Unknow
 
 void __thiscall Redirected_Frame_Stage_Notify(void* Unknown_Parameter, __int32 Stage)
 {
-	if (Stage == 2)
+	if (Stage == 3)
 	{
 		void* Local_Player = *(void**)607867332;
 
-		if (Local_Player ? *(__int8*)((unsigned __int32)Local_Player + 135) == 0 : 0)
+		if (*(__int8*)((unsigned __int32)Local_Player + 135) == 0)
 		{
 			__int32 Stored_Result_Number = 0;
 
