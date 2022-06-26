@@ -68,10 +68,8 @@ void __stdcall Event_Processor(void* Event)
 
 													Player_Data->Shots_Fired = ((Player_Data->Shots_Fired - 1) % Bruteforce_Angles_Modulo + Bruteforce_Angles_Modulo) % Bruteforce_Angles_Modulo;
 												}
-												else
-												{
-													Player_Data->Tolerance = Console_Variable_Bruteforce_Tolerance.Integer;
-												}
+
+												Player_Data->Tolerance = Console_Variable_Bruteforce_Tolerance.Integer;
 											}
 											else
 											{
