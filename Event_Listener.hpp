@@ -12,7 +12,7 @@ void __stdcall Event_Processor(void* Event)
 
 	if (Local_Player != nullptr)
 	{
-		using Get_Name_Type = char* (__thiscall*)(void* Event);
+		using Get_Name_Type = char*(__thiscall*)(void* Event);
 
 		char* Name = Get_Name_Type((unsigned __int32)537579280)(Event);
 
