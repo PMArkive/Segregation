@@ -47,13 +47,11 @@ void Predicton_Copy_Compare(char* Class, void* Unknown_Parameter_1, void* Unknow
 
 void __thiscall Redirected_Frame_Stage_Notify(void* Unknown_Parameter, __int32 Stage)
 {
-	(decltype(&Redirected_Frame_Stage_Notify)(Original_Frame_Stage_Notify_Caller_Location))(Unknown_Parameter, Stage);
-
-	if (Stage == 4)
+	if (Stage == 2)
 	{
 		void* Local_Player = *(void**)607867332;
 
-		if (*(__int8*)((unsigned __int32)Local_Player + 135) == 0)
+		if (Local_Player ? *(__int8*)((unsigned __int32)Local_Player + 135) == 0 : 0)
 		{
 			__int32 Stored_Result_Number = 0;
 
@@ -98,4 +96,6 @@ void __thiscall Redirected_Frame_Stage_Notify(void* Unknown_Parameter, __int32 S
 			}
 		}
 	}
+
+	(decltype(&Redirected_Frame_Stage_Notify)(Original_Frame_Stage_Notify_Caller_Location))(Unknown_Parameter, Stage);
 }

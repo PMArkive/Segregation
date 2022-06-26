@@ -21,8 +21,6 @@ float Square_Root(float X)
 	return X;
 }
 
-Player_Data_Structure Previous_Player_Data;
-
 void Angle_Vectors(float* Angles, float* Forward, float* Right, float* Up)
 {
 	using Angle_Vectors_Type = void(__cdecl*)(float* Angles, float* Forward, float* Right, float* Up);
@@ -37,6 +35,8 @@ void Vector_Normalize(float* Vector)
 	Vector_Normalize_Type(606378096)(Vector);
 }
 
+Player_Data_Structure Previous_Player_Data;
+
 void* Original_Copy_User_Command_Caller_Location;
 
 void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Command_Structure* User_Command)
@@ -50,32 +50,6 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 		void* Prediction = *(void**)540494880;
 
 		Update_Type(605209536)(Prediction, *(void**)540609292, 1, *(void**)540627876, *(__int32*)540627868 + *(__int32*)540627872);
-
-		__int32 Previous_Buttons_State = User_Command->Buttons_State;
-
-		User_Command->Buttons_State &= ~1;
-
-		float Local_Player_Previous_Velocity[2] =
-		{
-			*(float*)((unsigned __int32)Local_Player + 224),
-
-			*(float*)((unsigned __int32)Local_Player + 228)
-		};
-
-		float Local_Player_Previous_Origin[3] =
-		{
-			*(float*)((unsigned __int32)Local_Player + 668),
-
-			*(float*)((unsigned __int32)Local_Player + 672),
-
-			*(float*)((unsigned __int32)Local_Player + 676),
-		};
-
-		using Run_Command_Type = void(__thiscall*)(void* Prediction, void* Local_Player, User_Command_Structure* User_Command, void* Move_Helper);
-
-		Run_Command_Type(605207600)(Prediction, Local_Player, User_Command, (void*)607735532);
-
-		User_Command->Buttons_State = Previous_Buttons_State;
 
 		float Move_Angles[3] =
 		{
@@ -92,7 +66,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 		{
 			User_Command->Move[0] = 0;
 
-			if (*(__int32*)((unsigned __int32)Local_Player + 456) != -1)
+			if (*(__int32*)((unsigned __int32)Local_Player + 456) == -1)
 			{
 				User_Command->Buttons_State &= ~2;
 			}
@@ -101,9 +75,11 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 			Previous_Move_Angle_Y = User_Command->View_Angles[1];
 
-			if (Absolute(Difference) < Arc_Tangent_2(Square_Root(__builtin_powf(Local_Player_Previous_Velocity[0], 2) + __builtin_powf(Local_Player_Previous_Velocity[1], 2)), 30) * 180 / 3.1415927f)
+			float* Velocity = (float*)((unsigned __int32)Local_Player + 224);
+
+			if (Absolute(Difference) < Arc_Tangent_2(Square_Root(__builtin_powf(Velocity[0], 2) + __builtin_powf(Velocity[1], 2)), 30) * 180 / 3.1415927f)
 			{
-				float Strafe_Angle = __builtin_remainderf(User_Command->View_Angles[1] - Arc_Tangent_2(Local_Player_Previous_Velocity[0], Local_Player_Previous_Velocity[1]) * 180 / 3.1415927f, 360);
+				float Strafe_Angle = __builtin_remainderf(User_Command->View_Angles[1] - Arc_Tangent_2(Velocity[0], Velocity[1]) * 180 / 3.1415927f, 360);
 
 				if (__builtin_signbitf(Strafe_Angle) == 0)
 				{
@@ -132,7 +108,85 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 		{
 			Previous_Move_Angle_Y = User_Command->View_Angles[1];
 		}
+
+		float Previous_Move[2] =
+		{
+			User_Command->Move[0],
+
+			User_Command->Move[1]
+		};
+
+		auto Correct_Movement = [&]() -> void
+		{
+			float Desired_Move_Forward[3];
+
+			float Desired_Move_Right[3];
+
+			Angle_Vectors(Move_Angles, Desired_Move_Forward, Desired_Move_Right, nullptr);
+
+			Desired_Move_Forward[2] = 0;
+
+			Desired_Move_Right[2] = 0;
+
+			Vector_Normalize(Desired_Move_Forward);
+
+			Vector_Normalize(Desired_Move_Right);
+
+			float Desired_Move[2] =
+			{
+				Desired_Move_Forward[0] * User_Command->Move[0] + Desired_Move_Right[0] * User_Command->Move[1],
+
+				Desired_Move_Forward[1] * User_Command->Move[0] + Desired_Move_Right[1] * User_Command->Move[1]
+			};
+
+			float Move_Forward[3];
+
+			float Move_Right[3];
+
+			Angle_Vectors(User_Command->View_Angles, Move_Forward, Move_Right, nullptr);
+
+			Move_Forward[2] = 0;
+
+			Move_Right[2] = 0;
+
+			Vector_Normalize(Move_Forward);
+
+			Vector_Normalize(Move_Right);
+
+			float Divider = Move_Forward[0] * Move_Right[1] - Move_Right[0] * Move_Forward[1];
+
+			User_Command->Move[0] = __builtin_roundf((Desired_Move[0] * Move_Right[1] - Move_Right[0] * Desired_Move[1]) / Divider);
+
+			User_Command->Move[1] = __builtin_roundf((Move_Forward[0] * Desired_Move[1] - Desired_Move[0] * Move_Forward[1]) / Divider);
+		};
+
+		Correct_Movement();
+
+		__int32 Previous_Buttons_State = User_Command->Buttons_State;
+
+		User_Command->Buttons_State &= ~1;
+
+		User_Command->Buttons_State &= ~2048;
+
+		float Local_Player_Previous_Origin[3] =
+		{
+			*(float*)((unsigned __int32)Local_Player + 668),
+
+			*(float*)((unsigned __int32)Local_Player + 672),
+
+			*(float*)((unsigned __int32)Local_Player + 676),
+		};
+
+		using Run_Command_Type = void(__thiscall*)(void* Prediction, void* Local_Player, User_Command_Structure* User_Command, void* Move_Helper);
+
+		Run_Command_Type(605207600)(Prediction, Local_Player, User_Command, (void*)607735532);
+
+		User_Command->Buttons_State = Previous_Buttons_State;
 		
+		User_Command->Move[0] = Previous_Move[0];
+
+		User_Command->Move[1] = Previous_Move[1];
+
 		__int32 Choked_Commands_Count = *(__int32*)540627872;
 
 		__int8 Send_Packet;
@@ -571,6 +625,8 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 													Forward[2] + Random_X * Weapon_Spread * Right[2] + Random_Y * Weapon_Spread * Up[2]
 												};
 
+												Vector_Normalize(Direction);
+
 												Weapon_Spread = 0;
 
 												float Spread_Angles[3] =
@@ -585,6 +641,10 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 												using Angle_Vectors_Transpose_Type = void(__cdecl*)(float* Angles, float* Forward, float* Right, float* Up);
 
 												Angle_Vectors_Transpose_Type(574033968)(Spread_Angles, Forward, nullptr, Up);
+
+												Vector_Normalize(Forward);
+
+												Vector_Normalize(Up);
 
 												float* Recoil = (float*)((unsigned __int32)Local_Player + 2992);
 
@@ -657,46 +717,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		*(__int8*)((unsigned __int32)__builtin_frame_address(0) + 24) = Send_Packet;
 
-		float Desired_Move_Forward[3];
-
-		float Desired_Move_Right[3];
-
-		Angle_Vectors(Move_Angles, Desired_Move_Forward, Desired_Move_Right, nullptr);
-
-		Desired_Move_Forward[2] = 0;
-
-		Desired_Move_Right[2] = 0;
-
-		Vector_Normalize(Desired_Move_Forward);
-
-		Vector_Normalize(Desired_Move_Right);
-
-		float Desired_Move[2] =
-		{
-			Desired_Move_Forward[0] * User_Command->Move[0] + Desired_Move_Right[0] * User_Command->Move[1],
-
-			Desired_Move_Forward[1] * User_Command->Move[0] + Desired_Move_Right[1] * User_Command->Move[1]
-		};
-
-		float Move_Forward[3];
-
-		float Move_Right[3];
-
-		Angle_Vectors(User_Command->View_Angles, Move_Forward, Move_Right, nullptr);
-
-		Move_Forward[2] = 0;
-
-		Move_Right[2] = 0;
-
-		Vector_Normalize(Move_Forward);
-
-		Vector_Normalize(Move_Right);
-
-		float Divider = Move_Forward[0] * Move_Right[1] - Move_Right[0] * Move_Forward[1];
-
-		User_Command->Move[0] = __builtin_roundf((Desired_Move[0] * Move_Right[1] - Move_Right[0] * Desired_Move[1]) / Divider);
-
-		User_Command->Move[1] = __builtin_roundf((Move_Forward[0] * Desired_Move[1] - Desired_Move[0] * Move_Forward[1]) / Divider);
+		Correct_Movement();
 	}
 
 	(decltype(&Redirected_Copy_User_Command)(Original_Copy_User_Command_Caller_Location))(Unknown_Parameter, User_Command);
