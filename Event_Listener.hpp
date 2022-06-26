@@ -4,18 +4,18 @@ float Shot_Time;
 
 void __stdcall Event_Processor(void* Event)
 {
-	using Get_Name_Type = char*(__thiscall*)(void* Event);
-
-	char* Name = Get_Name_Type((unsigned __int32)537579280)(Event);
-
-	using Identifier_To_Number_Type = __int32(__thiscall*)(void* Engine, __int32 Identifier);
-
-	using Get_Integer_Type = __int32(__thiscall*)(void* Event, char* Key, void* Unknown_Parameter);
-
 	void* Local_Player = *(void**)607867332;
 
 	if (Local_Player != nullptr)
 	{
+		using Get_Name_Type = char* (__thiscall*)(void* Event);
+
+		char* Name = Get_Name_Type((unsigned __int32)537579280)(Event);
+
+		using Identifier_To_Number_Type = __int32(__thiscall*)(void* Engine, __int32 Identifier);
+
+		using Get_Integer_Type = __int32(__thiscall*)(void* Event, char* Key, void* Unknown_Parameter);
+
 		__int32 Local_Player_Number = *(__int32*)((unsigned __int32)Local_Player + 80);
 
 		if (Name[0] == 'p')
@@ -30,13 +30,16 @@ void __stdcall Event_Processor(void* Event)
 				{
 					if (Victim_Number == Local_Player_Number)
 					{
-						Player_Data_Structure* Player_Data = &Players_Data[Killer_Number - 1];
-
-						Player_Data->Memorized = 0;
-
-						if (Console_Variable_Commentator.Integer == 1)
+						if (Name[7] == 'd')
 						{
-							PlaySoundW((wchar_t*)Sounds_Laugh, nullptr, SND_ASYNC | SND_MEMORY);
+							Player_Data_Structure* Player_Data = &Players_Data[Killer_Number - 1];
+
+							Player_Data->Memorized = 0;
+
+							if (Console_Variable_Commentator.Integer == 1)
+							{
+								PlaySoundW((wchar_t*)Sounds_Laugh, nullptr, SND_ASYNC | SND_MEMORY);
+							}
 						}
 					}
 					else
@@ -49,14 +52,8 @@ void __stdcall Event_Processor(void* Event)
 
 								if (Player_Data->Priority != -2)
 								{
-									if (Console_Variable_Bruteforce_Memory.Integer == 0)
+									if (Name[7] == 'h')
 									{
-										/*
-										* TODO
-										* reorder first player_* last bullet_* (if needed)
-										* revert on player_hurt (body hits aren't necessarily meaning miss)
-										*/
-
 										if (Player_Data->Tolerance == Console_Variable_Bruteforce_Tolerance.Integer)
 										{
 											constexpr __int32 Bruteforce_Angles_Modulo = sizeof(Bruteforce_Angles) / sizeof(float);
@@ -70,34 +67,31 @@ void __stdcall Event_Processor(void* Event)
 									}
 									else
 									{
-										void* Weapon = *(void**)((unsigned __int32)607973860 + (((*(unsigned __int32*)((unsigned __int32)Local_Player + 2872) & 4095) - 4097) << 4));
-
-										if (Weapon != nullptr)
+										if (Console_Variable_Bruteforce_Memory.Integer == 1)
 										{
-											using Get_Primary_Ammo_Capacity_Type = __int32(__thiscall**)(void* Weapon);
+											void* Weapon = *(void**)((unsigned __int32)607973860 + (((*(unsigned __int32*)((unsigned __int32)Local_Player + 2872) & 4095) - 4097) << 4));
 
-											Player_Data->Memorized = (*Get_Primary_Ammo_Capacity_Type(*(unsigned __int32*)Weapon + 1000))(Weapon);
-
-											if (Player_Data->Tolerance == Console_Variable_Bruteforce_Tolerance.Integer)
+											if (Weapon != nullptr)
 											{
-												constexpr __int32 Bruteforce_Angles_Modulo = sizeof(Bruteforce_Angles) / sizeof(float);
+												using Get_Primary_Ammo_Capacity_Type = __int32(__thiscall**)(void* Weapon);
 
-												Player_Data->Memorized_Y = Bruteforce_Angles[((Player_Data->Shots_Fired - 1) % Bruteforce_Angles_Modulo + Bruteforce_Angles_Modulo) % Bruteforce_Angles_Modulo];
-											}
-											else
-											{
+												Player_Data->Memorized = (*Get_Primary_Ammo_Capacity_Type(*(unsigned __int32*)Weapon + 1000))(Weapon);
+
 												Player_Data->Memorized_Y = Bruteforce_Angles[Player_Data->Shots_Fired];
-											}
 
-											Player_Data->Tolerance = 0;
+												Player_Data->Tolerance = 0;
+											}
 										}
 									}
 								}
 							}
 
-							if (Console_Variable_Commentator.Integer == 1)
+							if (Name[7] == 'd')
 							{
-								PlaySoundW((wchar_t*)Sounds_Exclamation, nullptr, SND_ASYNC | SND_MEMORY);
+								if (Console_Variable_Commentator.Integer == 1)
+								{
+									PlaySoundW((wchar_t*)Sounds_Exclamation, nullptr, SND_ASYNC | SND_MEMORY);
+								}
 							}
 						}
 					}
