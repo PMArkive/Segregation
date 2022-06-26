@@ -660,12 +660,12 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			}
 			else
 			{
-				Shot_Time = 0;
-
 				if (Previous_Player_Data_Location != nullptr)
 				{
 					Byte_Manager::Copy_Bytes(0, Previous_Player_Data_Location, sizeof(Previous_Player_Data), &Previous_Player_Data);
 				}
+
+				Shot_Time = 0;
 			}
 		}
 
