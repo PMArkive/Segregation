@@ -549,7 +549,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 															
 															Primary_Ammo_Capacity_Snapshot = (*Get_Primary_Ammo_Capacity_Type(*(unsigned __int32*)Weapon + 1000))(Weapon) - 1;
 
-															Byte_Manager::Copy_Bytes(0, &Previous_Player_Data, sizeof(Previous_Player_Data), Previous_Player_Data_Location);
+															Byte_Manager::Copy_Bytes(0, &Previous_Player_Data, sizeof(Previous_Player_Data), Player_Data);
 
 															if (Console_Variable_Bruteforce_Memory.Integer == 0)
 															{
