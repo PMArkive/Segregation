@@ -21,12 +21,7 @@ void Bruteforce_Reset_Memory()
 	{
 		Player_Data_Structure* Player_Data = &Players_Data[Entity_Number];
 
-		if (Player_Data->Memorized != 0)
-		{
-			Player_Data->Memorized = 0;
-
-			Player_Data->Shots_Fired = (Player_Data->Shots_Fired - 1) % (sizeof(Bruteforce_Angles) / sizeof(float));
-		}
+		Player_Data->Memorized = 0;
 
 		Entity_Number += 1;
 

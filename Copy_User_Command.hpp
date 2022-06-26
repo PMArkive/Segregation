@@ -51,8 +51,6 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		Update_Type(605209536)(Prediction, *(void**)540609292, 1, *(void**)540627876, *(__int32*)540627868 + *(__int32*)540627872);
 
-		User_Command->Buttons_State &= ~2048;
-
 		__int32 Previous_Buttons_State = User_Command->Buttons_State;
 
 		User_Command->Buttons_State &= ~1;
@@ -614,6 +612,8 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 				}
 			}
 		}
+
+		User_Command->Buttons_State &= ~2048;
 
 		if (In_Attack == 0)
 		{

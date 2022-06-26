@@ -60,26 +60,36 @@ void __stdcall Event_Processor(void* Event)
 									{
 										if (Name[7] == 'h')
 										{
-											if (Player_Data->Tolerance == Console_Variable_Bruteforce_Tolerance.Integer)
+											if (Player_Data->Memorized == 0)
 											{
-												constexpr __int32 Bruteforce_Angles_Modulo = sizeof(Bruteforce_Angles) / sizeof(float);
+												if (Player_Data->Tolerance == Console_Variable_Bruteforce_Tolerance.Integer)
+												{
+													constexpr __int32 Bruteforce_Angles_Modulo = sizeof(Bruteforce_Angles) / sizeof(float);
 
-												Player_Data->Shots_Fired = ((Player_Data->Shots_Fired - 1) % Bruteforce_Angles_Modulo + Bruteforce_Angles_Modulo) % Bruteforce_Angles_Modulo;
+													Player_Data->Shots_Fired = ((Player_Data->Shots_Fired - 1) % Bruteforce_Angles_Modulo + Bruteforce_Angles_Modulo) % Bruteforce_Angles_Modulo;
+												}
+												else
+												{
+													Player_Data->Tolerance = Console_Variable_Bruteforce_Tolerance.Integer;
+												}
 											}
 											else
 											{
-												Player_Data->Tolerance = Console_Variable_Bruteforce_Tolerance.Integer;
+												Player_Data->Memorized = Primary_Ammo_Capacity_Snapshot;
 											}
 										}
 										else
 										{
 											if (Console_Variable_Bruteforce_Memory.Integer == 1)
 											{
+												if (Player_Data->Memorized == 0)
+												{
+													Player_Data->Memorized_Y = Bruteforce_Angles[Player_Data->Shots_Fired];
+
+													Player_Data->Tolerance = 0;
+												}
+
 												Player_Data->Memorized = Primary_Ammo_Capacity_Snapshot;
-
-												Player_Data->Memorized_Y = Bruteforce_Angles[Player_Data->Shots_Fired];
-
-												Player_Data->Tolerance = 0;
 											}
 										}
 									}
