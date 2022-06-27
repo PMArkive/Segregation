@@ -547,7 +547,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 															if (Player_Data->Priority != -2)
 															{
-																Latest_Player_Data_Number = Optimal_Target_Number;
+																Latest_Player_Data_Number = Optimal_Target_Number + 64;
 
 																using Get_Primary_Ammo_Capacity_Type = __int32(__thiscall**)(void* Weapon);
 															
@@ -673,7 +673,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 				}
 				else
 				{
-					Byte_Manager::Copy_Bytes(0, &Players_Data[Latest_Player_Data_Number], sizeof(Latest_Player_Data), &Latest_Player_Data);
+					Byte_Manager::Copy_Bytes(0, &Players_Data[Latest_Player_Data_Number - 64], sizeof(Latest_Player_Data), &Latest_Player_Data);
 				}
 			}
 		}
