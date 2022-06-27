@@ -62,7 +62,9 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		static float Previous_Move_Angle_Y = Move_Angles[1];
 
-		if ((User_Command->Buttons_State & 2) == 2)
+		__int8 In_Jump = User_Command->Buttons_State & 2;
+
+		if (In_Jump == 2)
 		{
 			User_Command->Move[0] = 0;
 
@@ -186,6 +188,16 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 		User_Command->Move[0] = Previous_Move[0];
 
 		User_Command->Move[1] = Previous_Move[1];
+
+		User_Command->Buttons_State |= In_Jump;
+
+		if ((User_Command->Buttons_State & 2) == 2)
+		{
+			if (*(__int32*)((unsigned __int32)Local_Player + 456) != -1)
+			{
+				User_Command->Buttons_State &= ~2;
+			}
+		}
 
 		__int32 Choked_Commands_Count = *(__int32*)540627872;
 
