@@ -71,10 +71,6 @@ void __stdcall Event_Processor(void* Event)
 
 												Player_Data->Tolerance = Console_Variable_Bruteforce_Tolerance.Integer;
 											}
-											else
-											{
-												Player_Data->Memorized = Primary_Ammo_Capacity_Snapshot;
-											}
 										}
 										else
 										{
