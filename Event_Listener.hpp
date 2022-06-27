@@ -52,7 +52,7 @@ void __stdcall Event_Processor(void* Event)
 						{
 							if (Console_Variable_Bruteforce.Integer == 1)
 							{
-								if (Victim_Number - 1 == Latest_Player_Data_Number)
+								if (Victim_Number == Latest_Player_Data_Number + 1)
 								{
 									Player_Data_Structure* Player_Data = &Players_Data[Victim_Number - 1];
 

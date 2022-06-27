@@ -665,6 +665,8 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			}
 			else
 			{
+				Shot_Time = 0;
+
 				if (Latest_Player_Data_Number == 0)
 				{
 					goto Passed_Shot_Time_Check_Label;
@@ -673,8 +675,6 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 				{
 					Byte_Manager::Copy_Bytes(0, &Players_Data[Latest_Player_Data_Number], sizeof(Latest_Player_Data), &Latest_Player_Data);
 				}
-
-				Shot_Time = 0;
 			}
 		}
 
