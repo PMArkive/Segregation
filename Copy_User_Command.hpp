@@ -189,14 +189,13 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		User_Command->Move[1] = Previous_Move[1];
 
-		User_Command->Buttons_State |= In_Jump;
-
-		if ((User_Command->Buttons_State & 2) == 2)
+		if (*(__int32*)((unsigned __int32)Local_Player + 456) == -1)
 		{
-			if (*(__int32*)((unsigned __int32)Local_Player + 456) != -1)
-			{
-				User_Command->Buttons_State &= ~2;
-			}
+			User_Command->Buttons_State |= In_Jump;
+		}
+		else
+		{
+			User_Command->Buttons_State &= ~In_Jump;
 		}
 
 		__int32 Choked_Commands_Count = *(__int32*)540627872;
