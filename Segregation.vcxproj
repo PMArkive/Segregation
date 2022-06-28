@@ -74,6 +74,7 @@
     <ClCompile Include="Entry_Point.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Alternative_Copy_User_Command.hpp" />
     <ClInclude Include="Angles_Y.hpp" />
     <ClInclude Include="Bruteforce.hpp" />
     <ClInclude Include="Extended_Interface.hpp" />
@@ -82,7 +83,7 @@
     <ClInclude Include="Event_Listener.hpp" />
     <ClInclude Include="Interpolate.hpp" />
     <ClInclude Include="Is_Error_Material.hpp" />
-    <ClInclude Include="Copy_User_Command.hpp" />
+    <ClInclude Include="Classic_Copy_User_Command.hpp" />
     <ClInclude Include="Frame_Stage_Notify.hpp" />
     <ClInclude Include="Item_Post_Frame.hpp" />
     <ClInclude Include="Priority.hpp" />

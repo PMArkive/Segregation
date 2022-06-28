@@ -44,7 +44,13 @@
 
 #include <algorithm>
 
-#include "Copy_User_Command.hpp"
+#define Classic
+
+#ifdef Classic
+	#include "Classic_Copy_User_Command.hpp"
+#else
+	#include "Alternative_Copy_User_Command.hpp"
+#endif
 
 #include "Send_Move.hpp"
 

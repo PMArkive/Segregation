@@ -28,7 +28,7 @@
     <ClInclude Include="Is_Error_Material.hpp">
       <Filter>Header++</Filter>
     </ClInclude>
-    <ClInclude Include="Copy_User_Command.hpp">
+    <ClInclude Include="Classic_Copy_User_Command.hpp">
       <Filter>Header++</Filter>
     </ClInclude>
     <ClInclude Include="Frame_Stage_Notify.hpp">
@@ -80,6 +80,9 @@
       <Filter>Header++</Filter>
     </ClInclude>
     <ClInclude Include="Setup_Move.hpp">
+      <Filter>Header++</Filter>
+    </ClInclude>
+    <ClInclude Include="Alternative_Copy_User_Command.hpp">
       <Filter>Header++</Filter>
     </ClInclude>
   </ItemGroup>
