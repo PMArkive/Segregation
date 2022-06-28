@@ -68,14 +68,11 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 			if (*(__int32*)((unsigned __int32)Local_Player + 456) == -1)
 			{
-				User_Command->Buttons_State &= ~(*(__int32*)((unsigned __int32)Local_Player + 3420) & 2);
+				User_Command->Buttons_State &= ~(*(__int32*)((unsigned __int32)Local_Player + 308) & 2);
 			}
 			else
 			{
-				if ((*(__int32*)((unsigned __int32)Local_Player + 3420) & 2) == 2)
-				{
-					User_Command->Buttons_State &= ~2;
-				}
+				User_Command->Buttons_State &= ~(*(__int32*)((unsigned __int32)Local_Player + 3420) & 2);
 			}
 
 			float Difference = __builtin_remainderf(User_Command->View_Angles[1] - Previous_Move_Angle_Y, 360);
