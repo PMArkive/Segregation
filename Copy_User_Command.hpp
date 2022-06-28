@@ -68,7 +68,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 			if (*(__int32*)((unsigned __int32)Local_Player + 456) == -1)
 			{
-				User_Command->Buttons_State &= ~*(__int32*)((unsigned __int32)Local_Player + 308);
+				User_Command->Buttons_State &= ~(*(__int32*)((unsigned __int32)Local_Player + 3420) & 2);
 			}
 			else
 			{
