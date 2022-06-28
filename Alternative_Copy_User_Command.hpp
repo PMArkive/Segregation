@@ -188,6 +188,15 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		float* Local_Player_Origin = (float*)((unsigned __int32)Local_Player + 668);
 
+		static __int8 Extra_Send_Packet;
+
+		if (Extra_Send_Packet == 1)
+		{
+			Extra_Send_Packet = 0;
+
+			goto Send_Packet_Label;
+		}
+
 		if (Choked_Commands_Count < Console_Variable_Minimum_Choked_Commands.Integer)
 		{
 			Send_Packet = 0;
@@ -216,15 +225,6 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			{
 				goto Send_Packet_Label;
 			}
-		}
-
-		static __int8 Extra_Send_Packet;
-		
-		if (Extra_Send_Packet == 1)
-		{
-			Extra_Send_Packet = 0;
-
-			goto Send_Packet_Label;
 		}
 
 		__int32 Entity_Number = 1;
