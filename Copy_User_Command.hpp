@@ -68,7 +68,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 			if (*(__int32*)((unsigned __int32)Local_Player + 456) == -1)
 			{
-				User_Command->Buttons_State &= ~2;
+				User_Command->Buttons_State &= ~*(__int32*)((unsigned __int32)Local_Player + 308);
 			}
 			else
 			{
@@ -495,9 +495,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 																	{
 																		Target_Tick_Number = (*(float*)((unsigned __int32)Optimal_Target + 104) + Interpolation_Time) / Global_Variables->Interval_Per_Tick + 0.5f;
 
-																		__int32 Tick_Number_Difference = Global_Variables->Tick_Number + 1 + Total_Latency / Global_Variables->Interval_Per_Tick + 0.5f - Target_Tick_Number;
-																	
-																		if (Absolute(Corrected_Interpolation_Time - Tick_Number_Difference * Global_Variables->Interval_Per_Tick) <= 0.2f)
+																		if (Absolute(Corrected_Interpolation_Time - (__int32)(Global_Variables->Tick_Number + 1 + Total_Latency / Global_Variables->Interval_Per_Tick + 0.5f - Target_Tick_Number) * Global_Variables->Interval_Per_Tick) <= 0.2f)
 																		{
 																			float Origin_Difference[3] =
 																			{
