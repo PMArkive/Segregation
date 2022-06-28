@@ -186,8 +186,6 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		__int8 Send_Packet;
 
-		static float Previous_Networked_Origin[3];
-
 		float* Local_Player_Origin = (float*)((unsigned __int32)Local_Player + 668);
 
 		if (Choked_Commands_Count < Console_Variable_Minimum_Choked_Commands.Integer)
@@ -198,6 +196,8 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 		{
 			if (Choked_Commands_Count < Console_Variable_Maximum_Choked_Commands.Integer)
 			{
+				static float Previous_Networked_Origin[3];
+
 				if (__builtin_powf(Previous_Networked_Origin[0] - Local_Player_Origin[0], 2) + __builtin_powf(Previous_Networked_Origin[1] - Local_Player_Origin[1], 2) + __builtin_powf(Previous_Networked_Origin[2] - Local_Player_Origin[2], 2) <= 4096)
 				{
 					Send_Packet = 0;
