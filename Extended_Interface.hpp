@@ -78,7 +78,7 @@ void Implement_Extended_Interface()
 
 	wprintf(L"[ + ] Aim_Height %p\n", &Console_Variable_Aim_Height);
 
-	Create_Console_Variable_Type(539130656)(&Console_Variable_Angle_X, (char*)"Angle_X", (char*)"91", nullptr);
+	Create_Console_Variable_Type(539130656)(&Console_Variable_Angle_X, (char*)"Angle_X", (char*)"180", nullptr);
 
 	wprintf(L"[ + ] Angle_X %p\n", &Console_Variable_Angle_X);
 
