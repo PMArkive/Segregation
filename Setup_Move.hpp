@@ -2,7 +2,7 @@
 
 void Compress_User_Command(User_Command_Structure* User_Command)
 {
-	auto Compress_Angle = [](float Value, unsigned __int32 Shift) -> float
+	auto Compress_Angle = [](float Value, __int32 Shift) -> float
 	{
 		return ((__int32)(Value / 360 * Shift) & Shift - 1) * (360 / (float)Shift);
 	};
