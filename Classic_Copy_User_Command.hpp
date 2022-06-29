@@ -159,9 +159,9 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 			float Divider = Move_Forward[0] * Move_Right[1] - Move_Right[0] * Move_Forward[1];
 
-			User_Command->Move[0] = __builtin_roundf((Desired_Move[0] * Move_Right[1] - Move_Right[0] * Desired_Move[1]) / Divider);
+			User_Command->Move[0] = (Desired_Move[0] * Move_Right[1] - Move_Right[0] * Desired_Move[1]) / Divider;
 
-			User_Command->Move[1] = __builtin_roundf((Move_Forward[0] * Desired_Move[1] - Desired_Move[0] * Move_Forward[1]) / Divider);
+			User_Command->Move[1] = (Move_Forward[0] * Desired_Move[1] - Desired_Move[0] * Move_Forward[1]) / Divider;
 		};
 
 		Correct_Movement();
@@ -726,6 +726,8 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		Correct_Movement();
 	}
+
+	Compress_User_Command(User_Command);
 
 	(decltype(&Redirected_Copy_User_Command)(Original_Copy_User_Command_Caller_Location))(Unknown_Parameter, User_Command);
 }
