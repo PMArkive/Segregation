@@ -35,7 +35,7 @@ void Vector_Normalize(float* Vector)
 	Vector_Normalize_Type(606378096)(Vector);
 }
 
-Player_Data_Structure Latest_Player_Data;
+Player_Data_Structure Previous_Recent_Player_Data;
 
 void* Original_Copy_User_Command_Caller_Location;
 
@@ -205,9 +205,9 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 		{
 			if (Choked_Commands_Count < Console_Variable_Maximum_Choked_Commands.Integer)
 			{
-				static float Previous_Networked_Origin[3];
+				static float Networked_Origin[3];
 
-				if (__builtin_powf(Previous_Networked_Origin[0] - Local_Player_Origin[0], 2) + __builtin_powf(Previous_Networked_Origin[1] - Local_Player_Origin[1], 2) + __builtin_powf(Previous_Networked_Origin[2] - Local_Player_Origin[2], 2) <= 4096)
+				if (__builtin_powf(Networked_Origin[0] - Local_Player_Origin[0], 2) + __builtin_powf(Networked_Origin[1] - Local_Player_Origin[1], 2) + __builtin_powf(Networked_Origin[2] - Local_Player_Origin[2], 2) <= 4096)
 				{
 					Send_Packet = 0;
 				}
@@ -215,7 +215,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 				{
 					Send_Packet_Label:
 					{
-						Byte_Manager::Copy_Bytes(0, Previous_Networked_Origin, sizeof(Previous_Networked_Origin), Local_Player_Origin);
+						Byte_Manager::Copy_Bytes(0, Networked_Origin, sizeof(Networked_Origin), Local_Player_Origin);
 
 						Send_Packet = 1;
 					}
@@ -497,7 +497,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 										{
 											Shot_Time = Global_Variables->Current_Time;
 
-											Latest_Player_Data_Number = 0;
+											Recent_Player_Data_Number = 0;
 
 											Send_Packet = 1;
 
@@ -519,13 +519,13 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 													if (Player_Data->Priority != -2)
 													{
-														Latest_Player_Data_Number = Optimal_Target_Number + 64;
+														Recent_Player_Data_Number = Optimal_Target_Number + 64;
 
 														using Get_Primary_Ammo_Capacity_Type = __int32(__thiscall**)(void* Weapon);
 															
 														Primary_Ammo_Capacity_Snapshot = (*Get_Primary_Ammo_Capacity_Type(*(unsigned __int32*)Weapon + 1000))(Weapon) - 1;
 
-														Byte_Manager::Copy_Bytes(0, &Latest_Player_Data, sizeof(Latest_Player_Data), Player_Data);
+														Byte_Manager::Copy_Bytes(0, &Previous_Recent_Player_Data, sizeof(Previous_Recent_Player_Data), Player_Data);
 
 														if (Console_Variable_Bruteforce_Memory.Integer == 0)
 														{
@@ -637,13 +637,13 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			{
 				Shot_Time = 0;
 
-				if (Latest_Player_Data_Number == 0)
+				if (Recent_Player_Data_Number == 0)
 				{
 					goto Passed_Shot_Time_Check_Label;
 				}
 				else
 				{
-					Byte_Manager::Copy_Bytes(0, &Players_Data[Latest_Player_Data_Number - 64], sizeof(Latest_Player_Data), &Latest_Player_Data);
+					Byte_Manager::Copy_Bytes(0, &Players_Data[Recent_Player_Data_Number - 64], sizeof(Previous_Recent_Player_Data), &Previous_Recent_Player_Data);
 				}
 			}
 		}
