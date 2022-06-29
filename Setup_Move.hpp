@@ -2,18 +2,16 @@
 
 void Compress_User_Command(User_Command_Structure* User_Command)
 {
-	auto Compress_Angle = [](float Value, __int32 Bits) -> float
+	auto Compress_Angle = [](float Value, unsigned __int32 Shift) -> float
 	{
-		unsigned __int32 Shift = 1 << Bits;
-
 		return ((__int32)(Value / 360 * Shift) & Shift - 1) * (360 / (float)Shift);
 	};
 
-	User_Command->View_Angles[0] = Compress_Angle(User_Command->View_Angles[0], 16);
+	User_Command->View_Angles[0] = Compress_Angle(User_Command->View_Angles[0], 65536);
 
-	User_Command->View_Angles[1] = Compress_Angle(User_Command->View_Angles[1], 16);
+	User_Command->View_Angles[1] = Compress_Angle(User_Command->View_Angles[1], 65536);
 
-	User_Command->View_Angles[2] = Compress_Angle(User_Command->View_Angles[2], 8);
+	User_Command->View_Angles[2] = Compress_Angle(User_Command->View_Angles[2], 256);
 
 	User_Command->Move[0] = __builtin_roundf(User_Command->Move[0]);
 
