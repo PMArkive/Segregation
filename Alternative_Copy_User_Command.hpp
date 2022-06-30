@@ -140,6 +140,18 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		auto Correct_Movement = [&]() -> void
 		{
+			auto Compress_Floating_Point = [](float Value) -> float
+			{
+				Value = __builtin_roundf(Value);
+
+				if (*(unsigned __int32*)&Value == 2147483648)
+				{
+					return 0;
+				}
+
+				return Value;
+			};
+
 			float Desired_Move_Forward[3];
 
 			float Desired_Move_Right[3];
@@ -177,9 +189,9 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 			float Divider = Move_Forward[0] * Move_Right[1] - Move_Right[0] * Move_Forward[1];
 
-			User_Command->Move[0] = __builtin_roundf((Desired_Move[0] * Move_Right[1] - Move_Right[0] * Desired_Move[1]) / Divider);
+			User_Command->Move[0] = Compress_Floating_Point((Desired_Move[0] * Move_Right[1] - Move_Right[0] * Desired_Move[1]) / Divider);
 
-			User_Command->Move[1] = __builtin_roundf((Move_Forward[0] * Desired_Move[1] - Desired_Move[0] * Move_Forward[1]) / Divider);
+			User_Command->Move[1] = Compress_Floating_Point((Move_Forward[0] * Desired_Move[1] - Desired_Move[0] * Move_Forward[1]) / Divider);
 		};
 
 		Correct_Movement();
