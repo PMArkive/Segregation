@@ -1,5 +1,19 @@
 #pragma once
 
+void Compress_View_Angles(float* View_Angles)
+{
+	auto Compress_Angle = [](float Value, __int32 Shift) -> float
+	{
+		return ((__int32)(Value / 360 * Shift) & Shift - 1) * (360 / (float)Shift);
+	};
+
+	View_Angles[0] = Compress_Angle(View_Angles[0], 65536);
+
+	View_Angles[1] = Compress_Angle(View_Angles[1], 65536);
+
+	View_Angles[2] = Compress_Angle(View_Angles[2], 256);
+}
+
 float Absolute(float X)
 {
 	asm("fabs" : "+t"(X));
@@ -51,6 +65,8 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 	if (*(__int8*)((unsigned __int32)Local_Player + 135) == 0)
 	{
+		Compress_View_Angles(User_Command->View_Angles);
+
 		float Move_Angles[3] =
 		{
 			User_Command->View_Angles[0],
@@ -112,6 +128,8 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 		{
 			Previous_Move_Angle_Y = User_Command->View_Angles[1];
 		}
+
+		Compress_View_Angles(Move_Angles);
 
 		float Previous_Move[2] =
 		{
@@ -715,11 +733,13 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 					User_Command->View_Angles[1] = Arc_Tangent_2(Origin_Difference[0], Origin_Difference[1]) * 180 / 3.1415927f + Console_Variable_Angle_Y.Floating_Point;
 				}
 			}
-			
-			if (Send_Packet == 1)
-			{
-				Byte_Manager::Copy_Bytes(0, Update_Animation_Angle, sizeof(Update_Animation_Angle), User_Command->View_Angles);
-			}
+		}
+
+		Compress_View_Angles(User_Command->View_Angles);
+
+		if (Send_Packet == 1)
+		{
+			Byte_Manager::Copy_Bytes(0, Update_Animation_Angle, sizeof(Update_Animation_Angle), User_Command->View_Angles);
 		}
 
 		*(__int8*)((unsigned __int32)__builtin_frame_address(0) + 24) = Send_Packet;
