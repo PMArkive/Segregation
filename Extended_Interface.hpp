@@ -74,7 +74,7 @@ void Implement_Extended_Interface()
 
 	wprintf(L"[ + ] Maximum_Choked_Commands %p\n", &Console_Variable_Maximum_Choked_Commands);
 
-	Create_Console_Variable_Type(539130656)(&Console_Variable_Aim_Height, (char*)"Aim_Height", (char*)"0.95", nullptr);
+	Create_Console_Variable_Type(539130656)(&Console_Variable_Aim_Height, (char*)"Aim_Height", (char*)"0.9", nullptr);
 
 	wprintf(L"[ + ] Aim_Height %p\n", &Console_Variable_Aim_Height);
 
