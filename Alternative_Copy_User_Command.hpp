@@ -177,7 +177,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 		Run_Command_Type(605207600)(Prediction, Local_Player, User_Command, (void*)607735532);
 
 		User_Command->Buttons_State = Previous_Buttons_State;
-		
+
 		User_Command->Move[0] = Previous_Move[0];
 
 		User_Command->Move[1] = Previous_Move[1];
