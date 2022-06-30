@@ -55,11 +55,11 @@ struct User_Command_Structure
 
 	__int32 Tick_Number;
 
-	float View_Angles[3];
+	float Angles[3];
 
 	float Move[3];
 
-	__int32 Buttons_State;
+	__int32 Buttons;
 
 	__int8 Additional_Bytes_2[9];
 

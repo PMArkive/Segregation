@@ -1,17 +1,17 @@
 #pragma once
 
-void Compress_View_Angles(float* View_Angles)
+void Compress_Angles(float* Angles)
 {
 	auto Compress_Angle = [](float Value, __int32 Shift) -> float
 	{
 		return ((__int32)(Value / 360 * Shift) & Shift - 1) * (360 / (float)Shift);
 	};
 
-	View_Angles[0] = Compress_Angle(View_Angles[0], 65536);
+	Angles[0] = Compress_Angle(Angles[0], 65536);
 
-	View_Angles[1] = Compress_Angle(View_Angles[1], 65536);
+	Angles[1] = Compress_Angle(Angles[1], 65536);
 
-	View_Angles[2] = Compress_Angle(View_Angles[2], 256);
+	Angles[2] = Compress_Angle(Angles[2], 256);
 }
 
 float Absolute(float X)
@@ -65,41 +65,41 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 	if (*(__int8*)((unsigned __int32)Local_Player + 135) == 0)
 	{
-		Compress_View_Angles(User_Command->View_Angles);
+		Compress_Angles(User_Command->Angles);
 
 		float Move_Angles[3] =
 		{
-			User_Command->View_Angles[0],
+			User_Command->Angles[0],
 
-			User_Command->View_Angles[1],
+			User_Command->Angles[1],
 
 			0
 		};
 
 		static float Previous_Move_Angle_Y = Move_Angles[1];
 
-		if ((User_Command->Buttons_State & 2) == 2)
+		if ((User_Command->Buttons & 2) == 2)
 		{
 			User_Command->Move[0] = 0;
 
 			if (*(__int32*)((unsigned __int32)Local_Player + 456) == -1)
 			{
-				User_Command->Buttons_State &= ~(*(__int32*)((unsigned __int32)Local_Player + 308) & 2);
+				User_Command->Buttons &= ~(*(__int32*)((unsigned __int32)Local_Player + 308) & 2);
 			}
 			else
 			{
-				User_Command->Buttons_State &= ~(*(__int32*)((unsigned __int32)Local_Player + 3420) & 2);
+				User_Command->Buttons &= ~(*(__int32*)((unsigned __int32)Local_Player + 3420) & 2);
 			}
 
-			float Difference = __builtin_remainderf(User_Command->View_Angles[1] - Previous_Move_Angle_Y, 360);
+			float Difference = __builtin_remainderf(User_Command->Angles[1] - Previous_Move_Angle_Y, 360);
 
-			Previous_Move_Angle_Y = User_Command->View_Angles[1];
+			Previous_Move_Angle_Y = User_Command->Angles[1];
 
 			float* Velocity = (float*)((unsigned __int32)Local_Player + 224);
 
 			if (Absolute(Difference) < Arc_Tangent_2(Square_Root(__builtin_powf(Velocity[0], 2) + __builtin_powf(Velocity[1], 2)), 30) * 180 / 3.1415927f)
 			{
-				float Strafe_Angle = __builtin_remainderf(User_Command->View_Angles[1] - Arc_Tangent_2(Velocity[0], Velocity[1]) * 180 / 3.1415927f, 360);
+				float Strafe_Angle = __builtin_remainderf(User_Command->Angles[1] - Arc_Tangent_2(Velocity[0], Velocity[1]) * 180 / 3.1415927f, 360);
 
 				if (__builtin_signbitf(Strafe_Angle) == 0)
 				{
@@ -126,10 +126,10 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 		}
 		else
 		{
-			Previous_Move_Angle_Y = User_Command->View_Angles[1];
+			Previous_Move_Angle_Y = User_Command->Angles[1];
 		}
 
-		Compress_View_Angles(Move_Angles);
+		Compress_Angles(Move_Angles);
 
 		float Previous_Move[2] =
 		{
@@ -165,7 +165,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 			float Move_Right[3];
 
-			Angle_Vectors(User_Command->View_Angles, Move_Forward, Move_Right, nullptr);
+			Angle_Vectors(User_Command->Angles, Move_Forward, Move_Right, nullptr);
 
 			Move_Forward[2] = 0;
 
@@ -184,17 +184,17 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		Correct_Movement();
 
-		__int32 Previous_Buttons_State = User_Command->Buttons_State;
+		__int32 Previous_Buttons = User_Command->Buttons;
 
-		User_Command->Buttons_State &= ~1;
+		User_Command->Buttons &= ~1;
 
-		User_Command->Buttons_State &= ~2048;
+		User_Command->Buttons &= ~2048;
 
 		using Run_Command_Type = void(__thiscall*)(void* Prediction, void* Local_Player, User_Command_Structure* User_Command, void* Move_Helper);
 
 		Run_Command_Type(605207600)(Prediction, Local_Player, User_Command, (void*)607735532);
 
-		User_Command->Buttons_State = Previous_Buttons_State;
+		User_Command->Buttons = Previous_Buttons;
 
 		User_Command->Move[0] = Previous_Move[0];
 
@@ -328,7 +328,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			{
 				Passed_Shot_Time_Check_Label:
 				{
-					if ((User_Command->Buttons_State & 2048) == 0)
+					if ((User_Command->Buttons & 2048) == 0)
 					{
 						if (*(float*)((unsigned __int32)Local_Player + 2544) <= Global_Variables->Current_Time)
 						{
@@ -491,7 +491,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 																	Aim_Angles[1] = Arc_Tangent_2(Origin_Difference[0], Origin_Difference[1]) * 180 / 3.1415927f;
 
-																	User_Command->Buttons_State |= 1;
+																	User_Command->Buttons |= 1;
 
 																	goto Found_Optimal_Target_Label;
 																}
@@ -511,7 +511,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 											}
 										}
 
-										if ((User_Command->Buttons_State & 1) == 1)
+										if ((User_Command->Buttons & 1) == 1)
 										{
 											Shot_Time = Global_Variables->Current_Time;
 
@@ -527,7 +527,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 											{
 												User_Command->Tick_Number = Target_Tick_Number;
 
-												Byte_Manager::Copy_Bytes(0, User_Command->View_Angles, sizeof(Aim_Angles), Aim_Angles);
+												Byte_Manager::Copy_Bytes(0, User_Command->Angles, sizeof(Aim_Angles), Aim_Angles);
 
 												if (Console_Variable_Bruteforce.Integer == 1)
 												{
@@ -574,7 +574,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 												}
 											}
 
-											User_Command->View_Angles[2] = 0;
+											User_Command->Angles[2] = 0;
 
 											float Forward[3];
 
@@ -582,7 +582,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 											float Up[3];
 
-											Angle_Vectors(User_Command->View_Angles, Forward, Right, Up);
+											Angle_Vectors(User_Command->Angles, Forward, Right, Up);
 
 											User_Command->Command_Number = -2076434770;
 
@@ -625,9 +625,9 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 											float Spread_Angles[3] =
 											{
-												Arc_Tangent_2(Square_Root(__builtin_powf(Direction[0], 2) + __builtin_powf(Direction[1], 2)), -Direction[2]) * 180 / 3.1415927f - User_Command->View_Angles[0],
+												Arc_Tangent_2(Square_Root(__builtin_powf(Direction[0], 2) + __builtin_powf(Direction[1], 2)), -Direction[2]) * 180 / 3.1415927f - User_Command->Angles[0],
 
-												Arc_Tangent_2(Direction[0], Direction[1]) * 180 / 3.1415927f - User_Command->View_Angles[1],
+												Arc_Tangent_2(Direction[0], Direction[1]) * 180 / 3.1415927f - User_Command->Angles[1],
 
 												0
 											};
@@ -638,11 +638,11 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 											float* Recoil = (float*)((unsigned __int32)Local_Player + 2992);
 
-											User_Command->View_Angles[0] += Arc_Tangent_2(Square_Root(__builtin_powf(Forward[0], 2) + __builtin_powf(Forward[1], 2)), -Forward[2]) * 180 / 3.1415927f - Recoil[0] * 2;
+											User_Command->Angles[0] += Arc_Tangent_2(Square_Root(__builtin_powf(Forward[0], 2) + __builtin_powf(Forward[1], 2)), -Forward[2]) * 180 / 3.1415927f - Recoil[0] * 2;
 
-											User_Command->View_Angles[1] += Arc_Tangent_2(Forward[0], Forward[1]) * 180 / 3.1415927f - Recoil[1] * 2;
+											User_Command->Angles[1] += Arc_Tangent_2(Forward[0], Forward[1]) * 180 / 3.1415927f - Recoil[1] * 2;
 												
-											User_Command->View_Angles[2] += Arc_Tangent_2(Forward[0] * (Forward[0] * Up[2] - Forward[2] * Up[0]) - Forward[1] * (Forward[2] * Up[1] - Forward[1] * Up[2]), Forward[1] * Up[0] - Forward[0] * Up[1]) * 180 / 3.1415927f - Recoil[2] * 2;
+											User_Command->Angles[2] += Arc_Tangent_2(Forward[0] * (Forward[0] * Up[2] - Forward[2] * Up[0]) - Forward[1] * (Forward[2] * Up[1] - Forward[1] * Up[2]), Forward[1] * Up[0] - Forward[0] * Up[1]) * 180 / 3.1415927f - Recoil[2] * 2;
 										}
 									}
 								}
@@ -666,15 +666,15 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			}
 		}
 
-		User_Command->Buttons_State &= ~2048;
+		User_Command->Buttons &= ~2048;
 
 		if (In_Attack == 0)
 		{
-			User_Command->Buttons_State &= ~1;
+			User_Command->Buttons &= ~1;
 
 			if (Sorted_Target_List.size() != 0)
 			{
-				User_Command->View_Angles[0] = Console_Variable_Angle_X.Floating_Point;
+				User_Command->Angles[0] = Console_Variable_Angle_X.Floating_Point;
 
 				float* Optimal_Target_Origin = (float*)((unsigned __int32)Sorted_Target_List.at(0).Target + 668);
 				
@@ -689,25 +689,25 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 				{
 					if ((User_Command->Command_Number % 2) == 0)
 					{
-						User_Command->View_Angles[1] = Arc_Tangent_2(Origin_Difference[0], Origin_Difference[1]) * 180 / 3.1415927f + Console_Variable_First_Choked_Angle_Y.Floating_Point;
+						User_Command->Angles[1] = Arc_Tangent_2(Origin_Difference[0], Origin_Difference[1]) * 180 / 3.1415927f + Console_Variable_First_Choked_Angle_Y.Floating_Point;
 					}
 					else
 					{
-						User_Command->View_Angles[1] = Arc_Tangent_2(Origin_Difference[0], Origin_Difference[1]) * 180 / 3.1415927f + Console_Variable_Second_Choked_Angle_Y.Floating_Point;
+						User_Command->Angles[1] = Arc_Tangent_2(Origin_Difference[0], Origin_Difference[1]) * 180 / 3.1415927f + Console_Variable_Second_Choked_Angle_Y.Floating_Point;
 					}
 				}
 				else
 				{
-					User_Command->View_Angles[1] = Arc_Tangent_2(Origin_Difference[0], Origin_Difference[1]) * 180 / 3.1415927f + Console_Variable_Angle_Y.Floating_Point;
+					User_Command->Angles[1] = Arc_Tangent_2(Origin_Difference[0], Origin_Difference[1]) * 180 / 3.1415927f + Console_Variable_Angle_Y.Floating_Point;
 				}
 			}
 		}
 
-		Compress_View_Angles(User_Command->View_Angles);
+		Compress_Angles(User_Command->Angles);
 
 		if (Send_Packet == 1)
 		{
-			Byte_Manager::Copy_Bytes(0, Update_Animation_Angle, sizeof(Update_Animation_Angle), User_Command->View_Angles);
+			Byte_Manager::Copy_Bytes(0, Update_Animation_Angle, sizeof(Update_Animation_Angle), User_Command->Angles);
 		}
 
 		*(__int8*)((unsigned __int32)__builtin_frame_address(0) + 24) = Send_Packet;
