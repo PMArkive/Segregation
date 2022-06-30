@@ -55,6 +55,8 @@ void* Original_Copy_User_Command_Caller_Location;
 
 void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Command_Structure* User_Command)
 {
+	Compress_Angles(User_Command->Angles);
+
 	using Update_Type = void(__thiscall*)(void* Prediction, void* Unknown_Parameter_1, __int8 Unknown_Parameter_2, void* Unknown_Parameter_3, __int32 Unknown_Parameter_4);
 
 	void* Prediction = *(void**)540494880;
@@ -65,8 +67,6 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 	if (*(__int8*)((unsigned __int32)Local_Player + 135) == 0)
 	{
-		Compress_Angles(User_Command->Angles);
-
 		float Move_Angles[3] =
 		{
 			User_Command->Angles[0],
