@@ -31,15 +31,7 @@ void __thiscall Redirected_Setup_Move(void* Unknown_Parameter_1, void* Player, U
 		Compress_Angle(User_Command->View_Angles[2], 256)
 	};
 
-	*(float*)((unsigned __int32)Move_Data + 12) = Compressed_View_Angles[0];
+	Byte_Manager::Copy_Bytes(0, (float*)((unsigned __int32)Move_Data + 12), sizeof(Compressed_View_Angles), Compressed_View_Angles);
 
-	*(float*)((unsigned __int32)Move_Data + 16) = Compressed_View_Angles[1];
-
-	*(float*)((unsigned __int32)Move_Data + 20) = Compressed_View_Angles[2];
-
-	*(float*)((unsigned __int32)Move_Data + 76) = Compressed_View_Angles[0];
-
-	*(float*)((unsigned __int32)Move_Data + 80) = Compressed_View_Angles[1];
-
-	*(float*)((unsigned __int32)Move_Data + 84) = Compressed_View_Angles[2];
+	Byte_Manager::Copy_Bytes(0, (float*)((unsigned __int32)Move_Data + 76), sizeof(Compressed_View_Angles), Compressed_View_Angles);
 }
