@@ -160,9 +160,9 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 			Desired_Move_Forward[2] = 0;
 
-			Desired_Move_Right[2] = 0;
-
 			Vector_Normalize(Desired_Move_Forward);
+
+			Desired_Move_Right[2] = 0;
 
 			Vector_Normalize(Desired_Move_Right);
 
@@ -181,9 +181,9 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 			Move_Forward[2] = 0;
 
-			Move_Right[2] = 0;
-
 			Vector_Normalize(Move_Forward);
+
+			Move_Right[2] = 0;
 
 			Vector_Normalize(Move_Right);
 
