@@ -6,7 +6,7 @@ void Redirected_Draw_Crosshair()
 
 	static float Rotation_Angle;
 
-	auto Uber_Alles = [&](__int32 X, __int8 Red, __int32 Y)
+	auto Uber_Alles = [&](__int8 Red, __int32 X, __int32 Y)
 	{
 		using Set_Color_Type = void(__thiscall**)(void* Surface, unsigned __int8 Red, unsigned __int8 Green, unsigned __int8 Blue, unsigned __int8 Alpha);
 
@@ -78,23 +78,23 @@ void Redirected_Draw_Crosshair()
 
 	__int32 Screen_Height = Get_Screen_Size_Type(604542848)() / 2;
 
-	Uber_Alles(Screen_Width - 1, 0, Screen_Height);
+	Uber_Alles(0, Screen_Width - 1, Screen_Height);
 
-	Uber_Alles(Screen_Width, 0, Screen_Height - 1);
+	Uber_Alles(0, Screen_Width, Screen_Height - 1);
 
-	Uber_Alles(Screen_Width + 1, 0, Screen_Height);
+	Uber_Alles(0, Screen_Width + 1, Screen_Height);
 
-	Uber_Alles(Screen_Width, 0, Screen_Height + 1);
+	Uber_Alles(0, Screen_Width, Screen_Height + 1);
 
-	Uber_Alles(Screen_Width - 1, 0, Screen_Height - 1);
+	Uber_Alles(0, Screen_Width - 1, Screen_Height - 1);
 
-	Uber_Alles(Screen_Width + 1, 0, Screen_Height - 1);
+	Uber_Alles(0, Screen_Width + 1, Screen_Height - 1);
 
-	Uber_Alles(Screen_Width - 1, 0, Screen_Height + 1);
+	Uber_Alles(0, Screen_Width - 1, Screen_Height + 1);
 
-	Uber_Alles(Screen_Width + 1, 0, Screen_Height + 1);
+	Uber_Alles(0, Screen_Width + 1, Screen_Height + 1);
 
-	Uber_Alles(Screen_Width, 1, Screen_Height);
+	Uber_Alles(1, Screen_Width, Screen_Height);
 
 	Rotation_Angle = __builtin_remainderf(Rotation_Angle - ((*(Global_Variables_Structure**)607726732)->Absolute_Frame_Time * Console_Variable_Uber_Alles_Speed.Integer), 360);
 }

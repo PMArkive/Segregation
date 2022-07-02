@@ -1,12 +1,12 @@
 #pragma once
 
+float Compress_Angle(float Value, __int32 Shift)
+{
+	return ((__int32)(Value / 360 * Shift) & Shift - 1) * (360 / (float)Shift);
+}
+
 void Compress_Angles(float* Angles)
 {
-	auto Compress_Angle = [](float Value, __int32 Shift) -> float
-	{
-		return ((__int32)(Value / 360 * Shift) & Shift - 1) * (360 / (float)Shift);
-	};
-
 	Angles[0] = Compress_Angle(Angles[0], 65536);
 
 	Angles[1] = Compress_Angle(Angles[1], 65536);
@@ -110,7 +110,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 					User_Command->Move[1] = 400;
 				}
 
-				Move_Angles[1] -= Strafe_Angle;
+				Move_Angles[1] = Compress_Angle(Move_Angles[1] - Strafe_Angle, 65536);
 			}
 			else
 			{
@@ -128,8 +128,6 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 		{
 			Previous_Move_Angle_Y = User_Command->Angles[1];
 		}
-
-		Compress_Angles(Move_Angles);
 
 		float Previous_Move[2] =
 		{
