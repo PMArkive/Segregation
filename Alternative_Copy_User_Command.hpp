@@ -139,41 +139,29 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			User_Command->Move[1]
 		};
 
+		float Desired_Move_Forward[3];
+
+		float Desired_Move_Right[3];
+
+		Angle_Vectors(Move_Angles, Desired_Move_Forward, Desired_Move_Right, nullptr);
+
+		Desired_Move_Forward[2] = 0;
+
+		Vector_Normalize(Desired_Move_Forward);
+
+		Desired_Move_Right[2] = 0;
+
+		Vector_Normalize(Desired_Move_Right);
+
+		float Desired_Move[2] =
+		{
+			Desired_Move_Forward[0] * User_Command->Move[0] + Desired_Move_Right[0] * User_Command->Move[1],
+
+			Desired_Move_Forward[1] * User_Command->Move[0] + Desired_Move_Right[1] * User_Command->Move[1]
+		};
+
 		auto Correct_Movement = [&]() -> void
 		{
-			auto Compress_Floating_Point = [](float Value) -> float
-			{
-				Value = __builtin_roundf(Value);
-
-				if (*(unsigned __int32*)&Value == 2147483648)
-				{
-					return 0;
-				}
-
-				return Value;
-			};
-
-			float Desired_Move_Forward[3];
-
-			float Desired_Move_Right[3];
-
-			Angle_Vectors(Move_Angles, Desired_Move_Forward, Desired_Move_Right, nullptr);
-
-			Desired_Move_Forward[2] = 0;
-
-			Vector_Normalize(Desired_Move_Forward);
-
-			Desired_Move_Right[2] = 0;
-
-			Vector_Normalize(Desired_Move_Right);
-
-			float Desired_Move[2] =
-			{
-				Desired_Move_Forward[0] * User_Command->Move[0] + Desired_Move_Right[0] * User_Command->Move[1],
-
-				Desired_Move_Forward[1] * User_Command->Move[0] + Desired_Move_Right[1] * User_Command->Move[1]
-			};
-
 			float Move_Forward[3];
 
 			float Move_Right[3];
@@ -190,9 +178,19 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 			float Divider = Move_Forward[0] * Move_Right[1] - Move_Right[0] * Move_Forward[1];
 
-			User_Command->Move[0] = Compress_Floating_Point((Desired_Move[0] * Move_Right[1] - Move_Right[0] * Desired_Move[1]) / Divider);
+			User_Command->Move[0] = __builtin_roundf((Desired_Move[0] * Move_Right[1] - Move_Right[0] * Desired_Move[1]) / Divider);
 
-			User_Command->Move[1] = Compress_Floating_Point((Move_Forward[0] * Desired_Move[1] - Desired_Move[0] * Move_Forward[1]) / Divider);
+			if (*(unsigned __int32*)&User_Command->Move[0] == 2147483648)
+			{
+				User_Command->Move[0] = 0;
+			}
+
+			User_Command->Move[1] = __builtin_roundf((Move_Forward[0] * Desired_Move[1] - Desired_Move[0] * Move_Forward[1]) / Divider);
+
+			if (*(unsigned __int32*)&User_Command->Move[1] == 2147483648)
+			{
+				User_Command->Move[1] = 0;
+			}
 		};
 
 		Correct_Movement();
