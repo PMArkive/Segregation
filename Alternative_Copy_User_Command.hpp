@@ -195,17 +195,13 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		Correct_Movement();
 
-		__int32 Previous_Buttons = User_Command->Buttons;
-
-		User_Command->Buttons &= ~1;
-
-		User_Command->Buttons &= ~2048;
+		Shot_Time *= -1;
 
 		using Run_Command_Type = void(__thiscall*)(void* Prediction, void* Local_Player, User_Command_Structure* User_Command, void* Move_Helper);
 
 		Run_Command_Type(605207600)(Prediction, Local_Player, User_Command, (void*)607735532);
 
-		User_Command->Buttons = Previous_Buttons;
+		Shot_Time *= -1;
 
 		User_Command->Move[0] = Previous_Move[0];
 

@@ -44,8 +44,6 @@
 
 #include <algorithm>
 
-#define Classic
-
 #ifdef Classic
 	#include "Classic_Copy_User_Command.hpp"
 #else
