@@ -92,6 +92,10 @@ void __thiscall Redirected_Frame_Stage_Notify(void* Unknown_Parameter, __int32 S
 
 			Transfer_Data_Type(605218912)(&Predicton_Copy, nullptr, *(__int32*)((unsigned __int32)Local_Player + 80), (void*)607768164);
 		}
+
+		using Update_Animations_Type = void(__thiscall*)();
+
+		Update_Animations_Type(604212176)();
 	}
 
 	(decltype(&Redirected_Frame_Stage_Notify)(Original_Frame_Stage_Notify_Caller_Location))(Unknown_Parameter, Stage);

@@ -185,7 +185,7 @@ __int32 __stdcall DllMain(void* This_Module_Location, unsigned __int32 Call_Reas
 
 			wprintf(L"[ + ] Animations\n");
 			{
-				unsigned __int8 Maintain_Sequence_Transition_Bytes[3] =
+				unsigned __int8 Maintain_Sequence_Transitions_Bytes[3] =
 				{
 					194,
 
@@ -194,7 +194,9 @@ __int32 __stdcall DllMain(void* This_Module_Location, unsigned __int32 Call_Reas
 					0
 				};
 
-				Byte_Manager::Copy_Bytes(1, (void*)604206416, sizeof(Maintain_Sequence_Transition_Bytes), Maintain_Sequence_Transition_Bytes);
+				Byte_Manager::Copy_Bytes(1, (void*)604206416, sizeof(Maintain_Sequence_Transitions_Bytes), Maintain_Sequence_Transitions_Bytes);
+
+				Byte_Manager::Set_Bytes(1, (void*)604538368, 5, 144);
 
 				Redirection_Manager::Redirect_Function(Original_Update_Animation_Caller_Location, 4, (void*)605800256, 1, (void*)Redirected_Update_Animation);
 
