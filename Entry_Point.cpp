@@ -14,8 +14,6 @@
 
 #include "Extended_Interface.hpp"
 
-#include "Angles_Y.hpp"
-
 #pragma comment(lib, "WinMM.Lib")
 
 #include "Sounds.hpp"
@@ -152,8 +150,6 @@ __int32 __stdcall DllMain(void* This_Module_Location, unsigned __int32 Call_Reas
 			{
 				Redirection_Manager::Redirect_Function(Original_Frame_Stage_Notify_Caller_Location, 1, (void*)604538592, 1, (void*)Redirected_Frame_Stage_Notify);
 
-				*(void**)608149676 = (void*)Redirected_Angles_Y;
-
 				Byte_Manager::Set_Bytes(1, (void*)537149578, 1, 235);
 			}
 
@@ -196,6 +192,8 @@ __int32 __stdcall DllMain(void* This_Module_Location, unsigned __int32 Call_Reas
 
 				Byte_Manager::Copy_Bytes(1, (void*)604206416, sizeof(Maintain_Sequence_Transitions_Bytes), Maintain_Sequence_Transitions_Bytes);
 
+				Byte_Manager::Set_Bytes(1, (void*)604538368, 5, 144);
+
 				Redirection_Manager::Redirect_Function(Original_Update_Animation_Caller_Location, 4, (void*)605800256, 1, (void*)Redirected_Update_Animation);
 
 				Byte_Manager::Set_Bytes(1, (void*)605800287, 1, 235);
@@ -210,8 +208,6 @@ __int32 __stdcall DllMain(void* This_Module_Location, unsigned __int32 Call_Reas
 			wprintf(L"[ + ] Prediction\n");
 			{
 				Redirection_Manager::Redirect_Function(1, (void*)537158848, (void*)Redirected_Run_Prediction);
-
-				Byte_Manager::Set_Bytes(1, (void*)605209595, 1, 235);
 
 				Redirection_Manager::Redirect_Function(Original_Run_Simulation_Caller_Location, 0, (void*)605206096, 1, (void*)Redirected_Run_Simulation);
 

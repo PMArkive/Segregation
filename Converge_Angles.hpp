@@ -20,7 +20,7 @@ void __thiscall Redirected_Converge_Angles(void* Animation_State, float Goal, vo
 				{
 					Bruteforce_Label:
 					{
-						Goal = Player_Data->Y + Bruteforce_Angles[Player_Data->Shots_Fired];
+						Goal = *(float*)((unsigned __int32)Animation_State + 24) + Bruteforce_Angles[Player_Data->Shots_Fired];
 					}
 				}
 				else
@@ -30,7 +30,7 @@ void __thiscall Redirected_Converge_Angles(void* Animation_State, float Goal, vo
 						goto Bruteforce_Label;
 					}
 
-					Goal = Player_Data->Y + Player_Data->Memorized_Y;
+					Goal = *(float*)((unsigned __int32)Animation_State + 24) + Player_Data->Memorized_Y;
 				}
 
 				Instant = 1;
@@ -38,7 +38,7 @@ void __thiscall Redirected_Converge_Angles(void* Animation_State, float Goal, vo
 		}
 	}
 
-	if (*(float*)Current != Goal)
+	if (Goal != *(float*)Current)
 	{
 		if (Instant == 0)
 		{

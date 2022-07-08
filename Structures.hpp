@@ -26,8 +26,6 @@ struct Player_Data_Structure
 	__int32 Tolerance;
 
 	float Memorized_Y;
-
-	float Y;
 };
 
 struct Global_Variables_Structure
