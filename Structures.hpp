@@ -21,9 +21,9 @@ struct Player_Data_Structure
 
 	__int32 Memorized;
 
-	__int32 Shots_Fired;
-
 	__int32 Tolerance;
+
+	__int32 Shots_Fired;
 
 	float Memorized_Y;
 };
