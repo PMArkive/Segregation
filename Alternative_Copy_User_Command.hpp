@@ -293,7 +293,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 								Target_Structure Target =
 								{
-									Player_Data->Priority,
+									Player_Data->Priority == -2 ? (__int8)0 : Player_Data->Priority,
 
 									Square_Root(__builtin_powf(Local_Player_Origin[0] - Entity_Origin[0], 2) + __builtin_powf(Local_Player_Origin[1] - Entity_Origin[1], 2) + __builtin_powf(Local_Player_Origin[2] - Entity_Origin[2], 2)),
 
