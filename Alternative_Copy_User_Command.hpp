@@ -343,313 +343,316 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 							if (Weapon != nullptr)
 							{
-								if (*(__int32*)((unsigned __int32)Weapon + 1788) > 0)
+								if (*(__int32*)((unsigned __int32)Weapon + 1780) != -1)
 								{
-									if (*(float*)((unsigned __int32)Weapon + 1720) <= Global_Variables->Current_Time)
+									if (*(__int32*)((unsigned __int32)Weapon + 1788) > 0)
 									{
-										size_t Target_Number = 0;
-
-										void* Optimal_Target;
-
-										using Get_Eye_Position_Type = void(__thiscall*)(void* Player, float* Eye_Position);
-
-										float Local_Player_Eye_Position[3];
-
-										Get_Eye_Position_Type(604058320)(Local_Player, Local_Player_Eye_Position);
-
-										__int32 Target_Tick_Number;
-
-										using Get_Latency_Type = float(__thiscall*)(void* Network_Channel, __int32 Flow_Type);
-
-										void* Network_Channel = *(void**)540608912;
-
-										float Total_Latency = Get_Latency_Type(537919008)(Network_Channel, 0) + Get_Latency_Type(537919008)(Network_Channel, 1);
-
-										float Interpolation_Ratio = std::clamp(*(float*)607906336, *(float*)542242312, *(float*)542242072);
-
-										__int32 Update_Rate = std::clamp(*(__int32*)540495212, *(__int32*)542221268, *(__int32*)542221412);
-
-										float Interpolation_Time = max(*(float*)541928632, Interpolation_Ratio / Update_Rate);
-
-										float Corrected_Interpolation_Time = std::clamp(Total_Latency + Interpolation_Time, 0.f, 1.f);
-
-										float Aim_Angles[2];
-
-										Traverse_Sorted_Target_List_Label:
+										if (*(float*)((unsigned __int32)Weapon + 1720) <= Global_Variables->Current_Time)
 										{
-											if (Target_Number == Sorted_Target_List.size())
-											{
-												Optimal_Target = nullptr;
-											}
-											else
-											{
-												Optimal_Target = Sorted_Target_List.at(Target_Number).Target;
-												
-												using Setup_Bones_Type = __int8(__thiscall*)(void* Entity, void* Bones, __int32 Maximum_Bones, __int32 Mask, float Current_Time);
+											size_t Target_Number = 0;
 
-												float Bones[128][3][4];
+											void* Optimal_Target;
 
-												if (Setup_Bones_Type(604209888)((void*)((unsigned __int32)Optimal_Target + 4), Bones, 128, 524032, Global_Variables->Current_Time) == 1)
+											using Get_Eye_Position_Type = void(__thiscall*)(void* Player, float* Eye_Position);
+
+											float Local_Player_Eye_Position[3];
+
+											Get_Eye_Position_Type(604058320)(Local_Player, Local_Player_Eye_Position);
+
+											__int32 Target_Tick_Number;
+
+											using Get_Latency_Type = float(__thiscall*)(void* Network_Channel, __int32 Flow_Type);
+
+											void* Network_Channel = *(void**)540608912;
+
+											float Total_Latency = Get_Latency_Type(537919008)(Network_Channel, 0) + Get_Latency_Type(537919008)(Network_Channel, 1);
+
+											float Interpolation_Ratio = std::clamp(*(float*)607906336, *(float*)542242312, *(float*)542242072);
+
+											__int32 Update_Rate = std::clamp(*(__int32*)540495212, *(__int32*)542221268, *(__int32*)542221412);
+
+											float Interpolation_Time = max(*(float*)541928632, Interpolation_Ratio / Update_Rate);
+
+											float Corrected_Interpolation_Time = std::clamp(Total_Latency + Interpolation_Time, 0.f, 1.f);
+
+											float Aim_Angles[2];
+
+											Traverse_Sorted_Target_List_Label:
+											{
+												if (Target_Number == Sorted_Target_List.size())
 												{
-													void* Model = *(void**)((unsigned __int32)Optimal_Target + 92);
+													Optimal_Target = nullptr;
+												}
+												else
+												{
+													Optimal_Target = Sorted_Target_List.at(Target_Number).Target;
+												
+													using Setup_Bones_Type = __int8(__thiscall*)(void* Entity, void* Bones, __int32 Maximum_Bones, __int32 Mask, float Current_Time);
 
-													if (Model != nullptr)
+													float Bones[128][3][4];
+
+													if (Setup_Bones_Type(604209888)((void*)((unsigned __int32)Optimal_Target + 4), Bones, 128, 524032, Global_Variables->Current_Time) == 1)
 													{
-														using Get_Studio_Model_Type = void*(__thiscall*)(void* Model_Cache, void* Model);
+														void* Model = *(void**)((unsigned __int32)Optimal_Target + 92);
 
-														static void* Get_Studio_Model_Location = (void*)((unsigned __int32)GetModuleHandleW(L"datacache.dll") + 46416);
-
-														static void* Model_Cache = (void*)((unsigned __int32)GetModuleHandleW(L"datacache.dll") + 125464);
-
-														void* Studio_Model = Get_Studio_Model_Type((unsigned __int32)Get_Studio_Model_Location)(Model_Cache, *(void**)((unsigned __int32)Model + 144));
-
-														if (Studio_Model != nullptr)
+														if (Model != nullptr)
 														{
-															auto Trace_Ray = [&](float* End) -> __int8
+															using Get_Studio_Header_Type = void*(__thiscall*)(void* Model_Cache, void* Model);
+
+															static void* Get_Studio_Header_Location = (void*)((unsigned __int32)GetModuleHandleW(L"datacache.dll") + 46416);
+
+															static void* Model_Cache = (void*)((unsigned __int32)GetModuleHandleW(L"datacache.dll") + 125464);
+
+															void* Studio_Header = Get_Studio_Header_Type((unsigned __int32)Get_Studio_Header_Location)(Model_Cache, *(void**)((unsigned __int32)Model + 144));
+
+															if (Studio_Header != nullptr)
 															{
-																struct Ray_Structure
+																auto Trace_Ray = [&](float* End) -> __int8
 																{
-																	__int8 Additional_Bytes[50];
-																};
-
-																struct Trace_Structure
-																{
-																	__int8 Additional_Bytes_1[76];
-
-																	void* Entity;
-
-																	__int8 Additional_Bytes_2[4];
-																};
-
-																using Trace_Ray_Type = void(__cdecl*)(Ray_Structure* Ray, __int32 Mask, void* Skip, __int32 Group, Trace_Structure* Trace);
-
-																using Initialize_Ray_Type = void(__thiscall*)(Ray_Structure* Ray, float* Start, float* End);
-
-																Ray_Structure Ray;
-
-																Initialize_Ray_Type(537380224)(&Ray, Local_Player_Eye_Position, End);
-
-																Trace_Structure Trace;
-
-																Trace_Ray_Type(604317152)(&Ray, 1174421515, Local_Player, 0, &Trace);
-
-																if (Trace.Entity == nullptr)
-																{
-																	return 1;
-																}
-
-																if (Trace.Entity == Optimal_Target)
-																{
-																	return 1;
-																}
-
-																return 0;
-															};
-
-															void* Hitbox_Set = (void*)((unsigned __int32)Studio_Model + *(__int32*)((unsigned __int32)Studio_Model + 176));
-
-															float* Bounding_Box_Minimum = (float*)((unsigned __int32)Hitbox_Set + 836);
-
-															float Hitbox_Minimum[3] =
-															{
-																Bounding_Box_Minimum[0] * Bones[14][0][0] + Bounding_Box_Minimum[1] * Bones[14][0][1] + Bounding_Box_Minimum[2] * Bones[14][0][2] + Bones[14][0][3],
-
-																Bounding_Box_Minimum[0] * Bones[14][1][0] + Bounding_Box_Minimum[1] * Bones[14][1][1] + Bounding_Box_Minimum[2] * Bones[14][1][2] + Bones[14][1][3],
-
-																Bounding_Box_Minimum[0] * Bones[14][2][0] + Bounding_Box_Minimum[1] * Bones[14][2][1] + Bounding_Box_Minimum[2] * Bones[14][2][2] + Bones[14][2][3]
-															};
-
-															float* Bounding_Box_Maximum = (float*)((unsigned __int32)Hitbox_Set + 848);
-
-															float Hitbox_Maximum[3] =
-															{
-																Bounding_Box_Maximum[0] * Bones[14][0][0] + Bounding_Box_Maximum[1] * Bones[14][0][1] + Bounding_Box_Maximum[2] * Bones[14][0][2] + Bones[14][0][3],
-
-																Bounding_Box_Maximum[0] * Bones[14][1][0] + Bounding_Box_Maximum[1] * Bones[14][1][1] + Bounding_Box_Maximum[2] * Bones[14][1][2] + Bones[14][1][3],
-
-																Bounding_Box_Maximum[0] * Bones[14][2][0] + Bounding_Box_Maximum[1] * Bones[14][2][1] + Bounding_Box_Maximum[2] * Bones[14][2][2] + Bones[14][2][3]
-															};
-
-															float Optimal_Target_Origin[3] =
-															{
-																(Hitbox_Minimum[0] + Hitbox_Maximum[0]) / 2,
-
-																(Hitbox_Minimum[1] + Hitbox_Maximum[1]) / 2,
-
-																Hitbox_Minimum[2] + (Hitbox_Maximum[2] - Hitbox_Minimum[2]) * Console_Variable_Aim_Height.Floating_Point
-															};
-																
-															if (Trace_Ray(Optimal_Target_Origin) == 1)
-															{
-																Target_Tick_Number = (*(float*)((unsigned __int32)Optimal_Target + 104) + Interpolation_Time) / Global_Variables->Interval_Per_Tick + 0.5f;
-
-																if (Absolute(Corrected_Interpolation_Time - (__int32)(Global_Variables->Tick_Number + Total_Latency / Global_Variables->Interval_Per_Tick + 0.5f - Target_Tick_Number) * Global_Variables->Interval_Per_Tick) <= 0.2f)
-																{
-																	float Origin_Difference[3] =
+																	struct Ray_Structure
 																	{
-																		Optimal_Target_Origin[0] - Local_Player_Eye_Position[0],
-
-																		Optimal_Target_Origin[1] - Local_Player_Eye_Position[1],
-
-																		Optimal_Target_Origin[2] - Local_Player_Eye_Position[2]
+																		__int8 Additional_Bytes[50];
 																	};
 
-																	Aim_Angles[0] = Arc_Tangent_2(Square_Root(__builtin_powf(Origin_Difference[0], 2) + __builtin_powf(Origin_Difference[1], 2)), -Origin_Difference[2]) * 180 / 3.1415927f;
+																	struct Trace_Structure
+																	{
+																		__int8 Additional_Bytes_1[76];
 
-																	Aim_Angles[1] = Arc_Tangent_2(Origin_Difference[0], Origin_Difference[1]) * 180 / 3.1415927f;
+																		void* Entity;
 
-																	User_Command->Buttons |= 1;
+																		__int8 Additional_Bytes_2[4];
+																	};
 
-																	goto Found_Optimal_Target_Label;
+																	using Trace_Ray_Type = void(__cdecl*)(Ray_Structure* Ray, __int32 Mask, void* Skip, __int32 Group, Trace_Structure* Trace);
+
+																	using Initialize_Ray_Type = void(__thiscall*)(Ray_Structure* Ray, float* Start, float* End);
+
+																	Ray_Structure Ray;
+
+																	Initialize_Ray_Type(537380224)(&Ray, Local_Player_Eye_Position, End);
+
+																	Trace_Structure Trace;
+
+																	Trace_Ray_Type(604317152)(&Ray, 1174421515, Local_Player, 0, &Trace);
+
+																	if (Trace.Entity == nullptr)
+																	{
+																		return 1;
+																	}
+
+																	if (Trace.Entity == Optimal_Target)
+																	{
+																		return 1;
+																	}
+
+																	return 0;
+																};
+
+																void* Hitbox_Set = (void*)((unsigned __int32)Studio_Header + *(__int32*)((unsigned __int32)Studio_Header + 176));
+
+																float* Bounding_Box_Minimum = (float*)((unsigned __int32)Hitbox_Set + 836);
+
+																float Hitbox_Minimum[3] =
+																{
+																	Bounding_Box_Minimum[0] * Bones[14][0][0] + Bounding_Box_Minimum[1] * Bones[14][0][1] + Bounding_Box_Minimum[2] * Bones[14][0][2] + Bones[14][0][3],
+
+																	Bounding_Box_Minimum[0] * Bones[14][1][0] + Bounding_Box_Minimum[1] * Bones[14][1][1] + Bounding_Box_Minimum[2] * Bones[14][1][2] + Bones[14][1][3],
+
+																	Bounding_Box_Minimum[0] * Bones[14][2][0] + Bounding_Box_Minimum[1] * Bones[14][2][1] + Bounding_Box_Minimum[2] * Bones[14][2][2] + Bones[14][2][3]
+																};
+
+																float* Bounding_Box_Maximum = (float*)((unsigned __int32)Hitbox_Set + 848);
+
+																float Hitbox_Maximum[3] =
+																{
+																	Bounding_Box_Maximum[0] * Bones[14][0][0] + Bounding_Box_Maximum[1] * Bones[14][0][1] + Bounding_Box_Maximum[2] * Bones[14][0][2] + Bones[14][0][3],
+
+																	Bounding_Box_Maximum[0] * Bones[14][1][0] + Bounding_Box_Maximum[1] * Bones[14][1][1] + Bounding_Box_Maximum[2] * Bones[14][1][2] + Bones[14][1][3],
+
+																	Bounding_Box_Maximum[0] * Bones[14][2][0] + Bounding_Box_Maximum[1] * Bones[14][2][1] + Bounding_Box_Maximum[2] * Bones[14][2][2] + Bones[14][2][3]
+																};
+
+																float Optimal_Target_Origin[3] =
+																{
+																	(Hitbox_Minimum[0] + Hitbox_Maximum[0]) / 2,
+
+																	(Hitbox_Minimum[1] + Hitbox_Maximum[1]) / 2,
+
+																	Hitbox_Minimum[2] + (Hitbox_Maximum[2] - Hitbox_Minimum[2]) * Console_Variable_Aim_Height.Floating_Point
+																};
+																
+																if (Trace_Ray(Optimal_Target_Origin) == 1)
+																{
+																	Target_Tick_Number = (*(float*)((unsigned __int32)Optimal_Target + 104) + Interpolation_Time) / Global_Variables->Interval_Per_Tick + 0.5f;
+
+																	if (Absolute(Corrected_Interpolation_Time - (__int32)(Global_Variables->Tick_Number + Total_Latency / Global_Variables->Interval_Per_Tick + 0.5f - Target_Tick_Number) * Global_Variables->Interval_Per_Tick) <= 0.2f)
+																	{
+																		float Origin_Difference[3] =
+																		{
+																			Optimal_Target_Origin[0] - Local_Player_Eye_Position[0],
+
+																			Optimal_Target_Origin[1] - Local_Player_Eye_Position[1],
+
+																			Optimal_Target_Origin[2] - Local_Player_Eye_Position[2]
+																		};
+
+																		Aim_Angles[0] = Arc_Tangent_2(Square_Root(__builtin_powf(Origin_Difference[0], 2) + __builtin_powf(Origin_Difference[1], 2)), -Origin_Difference[2]) * 180 / 3.1415927f;
+
+																		Aim_Angles[1] = Arc_Tangent_2(Origin_Difference[0], Origin_Difference[1]) * 180 / 3.1415927f;
+
+																		User_Command->Buttons |= 1;
+
+																		goto Found_Optimal_Target_Label;
+																	}
 																}
 															}
 														}
 													}
-												}
 
-												Target_Number += 1;
+													Target_Number += 1;
 
-												goto Traverse_Sorted_Target_List_Label;
+													goto Traverse_Sorted_Target_List_Label;
 
-												Found_Optimal_Target_Label:
-												{
-
-												}
-											}
-										}
-
-										if ((User_Command->Buttons & 1) == 1)
-										{
-											Shot_Time = Global_Variables->Current_Time;
-
-											Recent_Player_Data_Number = 0;
-
-											Send_Packet = 1;
-
-											Extra_Send_Packet = 1;
-
-											In_Attack = 1;
-											
-											if (Optimal_Target != nullptr)
-											{
-												User_Command->Tick_Number = Target_Tick_Number;
-
-												Byte_Manager::Copy_Bytes(0, User_Command->Angles, sizeof(Aim_Angles), Aim_Angles);
-
-												if (Console_Variable_Bruteforce.Integer == 1)
-												{
-													__int32 Optimal_Target_Number = *(__int32*)((unsigned __int32)Optimal_Target + 80) - 1;
-
-													Player_Data_Structure* Player_Data = &Players_Data[Optimal_Target_Number];
-
-													if (Player_Data->Priority != -2)
+													Found_Optimal_Target_Label:
 													{
-														Recent_Player_Data_Number = Optimal_Target_Number + 64;
 
-														using Get_Primary_Ammo_Capacity_Type = __int32(__thiscall**)(void* Weapon);
-															
-														Primary_Ammo_Capacity_Snapshot = (*Get_Primary_Ammo_Capacity_Type(*(unsigned __int32*)Weapon + 1000))(Weapon) - 1;
-
-														Byte_Manager::Copy_Bytes(0, &Previous_Recent_Player_Data, sizeof(Previous_Recent_Player_Data), Player_Data);
-
-														if (Console_Variable_Bruteforce_Memory.Integer == 0)
-														{
-															Bruteforce_Label:
-															{
-																if (Player_Data->Tolerance == 0)
-																{
-																	Player_Data->Shots_Fired = (Player_Data->Shots_Fired + 1) % (sizeof(Bruteforce_Angles) / sizeof(float));
-
-																	Player_Data->Tolerance = Console_Variable_Bruteforce_Tolerance.Integer;
-																}
-																else
-																{
-																	Player_Data->Tolerance -= 1;
-																}
-															}
-														}
-														else
-														{
-															if (Player_Data->Memorized == 0)
-															{
-																goto Bruteforce_Label;
-															}
-
-															Player_Data->Memorized -= 1;
-														}
 													}
 												}
 											}
 
-											User_Command->Angles[2] = 0;
-
-											float Forward[3];
-
-											float Right[3];
-
-											float Up[3];
-
-											Angle_Vectors(User_Command->Angles, Forward, Right, Up);
-
-											User_Command->Command_Number = -2076434770;
-
-											constexpr __int32 Random_Seed = 32;
-
-											User_Command->Random_Seed = Random_Seed;
-
-											using Random_Seed_Type = void(__cdecl*)(__int32 Seed);
-
-											static void* Random_Seed_Location = (void*)((unsigned __int32)GetModuleHandleW(L"vstdlib.dll") + 11856);
-
-											Random_Seed_Type((unsigned __int32)Random_Seed_Location)((Random_Seed & 255) + 1);
-
-											using Random_Float_Type = float(__cdecl*)(float Minimum, float Maximum);
-
-											static void* Random_Float_Location = (void*)((unsigned __int32)GetModuleHandleW(L"vstdlib.dll") + 11872);
-
-											float Random_X = Random_Float_Type(Random_Float_Location)(-0.5f, 0.5f) + Random_Float_Type(Random_Float_Location)(-0.5f, 0.5f);
-
-											Weapon_Spread = -1;
-
-											using Primary_Attack_Type = void(__thiscall**)(void* Weapon);
-
-											(*Primary_Attack_Type(*(unsigned __int32*)Weapon + 856))(Weapon);
-
-											float Random_Y = Random_Float_Type(Random_Float_Location)(-0.5f, 0.5f) + Random_Float_Type(Random_Float_Location)(-0.5f, 0.5f);
-
-											float Direction[3] =
+											if ((User_Command->Buttons & 1) == 1)
 											{
-												Forward[0] + Random_X * Weapon_Spread * Right[0] + Random_Y * Weapon_Spread * Up[1],
+												Shot_Time = Global_Variables->Current_Time;
 
-												Forward[1] + Random_X * Weapon_Spread * Right[1] + Random_Y * Weapon_Spread * Up[1],
+												Recent_Player_Data_Number = 0;
 
-												Forward[2] + Random_X * Weapon_Spread * Right[2] + Random_Y * Weapon_Spread * Up[2]
-											};
+												Send_Packet = 1;
 
-											Vector_Normalize(Direction);
+												Extra_Send_Packet = 1;
 
-											Weapon_Spread = 0;
+												In_Attack = 1;
+											
+												if (Optimal_Target != nullptr)
+												{
+													User_Command->Tick_Number = Target_Tick_Number;
 
-											float Spread_Angles[3] =
-											{
-												Arc_Tangent_2(Square_Root(__builtin_powf(Direction[0], 2) + __builtin_powf(Direction[1], 2)), -Direction[2]) * 180 / 3.1415927f - User_Command->Angles[0],
+													Byte_Manager::Copy_Bytes(0, User_Command->Angles, sizeof(Aim_Angles), Aim_Angles);
 
-												Arc_Tangent_2(Direction[0], Direction[1]) * 180 / 3.1415927f - User_Command->Angles[1],
+													if (Console_Variable_Bruteforce.Integer == 1)
+													{
+														__int32 Optimal_Target_Number = *(__int32*)((unsigned __int32)Optimal_Target + 80) - 1;
 
-												0
-											};
+														Player_Data_Structure* Player_Data = &Players_Data[Optimal_Target_Number];
 
-											using Angle_Vectors_Transpose_Type = void(__cdecl*)(float* Angles, float* Forward, float* Right, float* Up);
+														if (Player_Data->Priority != -2)
+														{
+															Recent_Player_Data_Number = Optimal_Target_Number + 64;
 
-											Angle_Vectors_Transpose_Type(574033968)(Spread_Angles, Forward, nullptr, Up);
+															using Get_Primary_Ammo_Capacity_Type = __int32(__thiscall**)(void* Weapon);
+															
+															Primary_Ammo_Capacity_Snapshot = (*Get_Primary_Ammo_Capacity_Type(*(unsigned __int32*)Weapon + 1000))(Weapon) - 1;
 
-											float* Recoil = (float*)((unsigned __int32)Local_Player + 2992);
+															Byte_Manager::Copy_Bytes(0, &Previous_Recent_Player_Data, sizeof(Previous_Recent_Player_Data), Player_Data);
 
-											User_Command->Angles[0] += Arc_Tangent_2(Square_Root(__builtin_powf(Forward[0], 2) + __builtin_powf(Forward[1], 2)), -Forward[2]) * 180 / 3.1415927f - Recoil[0] * 2;
+															if (Console_Variable_Bruteforce_Memory.Integer == 0)
+															{
+																Bruteforce_Label:
+																{
+																	if (Player_Data->Tolerance == 0)
+																	{
+																		Player_Data->Shots_Fired = (Player_Data->Shots_Fired + 1) % (sizeof(Bruteforce_Angles) / sizeof(float));
 
-											User_Command->Angles[1] += Arc_Tangent_2(Forward[0], Forward[1]) * 180 / 3.1415927f - Recoil[1] * 2;
+																		Player_Data->Tolerance = Console_Variable_Bruteforce_Tolerance.Integer;
+																	}
+																	else
+																	{
+																		Player_Data->Tolerance -= 1;
+																	}
+																}
+															}
+															else
+															{
+																if (Player_Data->Memorized == 0)
+																{
+																	goto Bruteforce_Label;
+																}
+
+																Player_Data->Memorized -= 1;
+															}
+														}
+													}
+												}
+
+												User_Command->Angles[2] = 0;
+
+												float Forward[3];
+
+												float Right[3];
+
+												float Up[3];
+
+												Angle_Vectors(User_Command->Angles, Forward, Right, Up);
+
+												User_Command->Command_Number = -2076434770;
+
+												constexpr __int32 Random_Seed = 32;
+
+												User_Command->Random_Seed = Random_Seed;
+
+												using Random_Seed_Type = void(__cdecl*)(__int32 Seed);
+
+												static void* Random_Seed_Location = (void*)((unsigned __int32)GetModuleHandleW(L"vstdlib.dll") + 11856);
+
+												Random_Seed_Type((unsigned __int32)Random_Seed_Location)((Random_Seed & 255) + 1);
+
+												using Random_Float_Type = float(__cdecl*)(float Minimum, float Maximum);
+
+												static void* Random_Float_Location = (void*)((unsigned __int32)GetModuleHandleW(L"vstdlib.dll") + 11872);
+
+												float Random_X = Random_Float_Type(Random_Float_Location)(-0.5f, 0.5f) + Random_Float_Type(Random_Float_Location)(-0.5f, 0.5f);
+
+												Weapon_Spread = -1;
+
+												using Primary_Attack_Type = void(__thiscall**)(void* Weapon);
+
+												(*Primary_Attack_Type(*(unsigned __int32*)Weapon + 856))(Weapon);
+
+												float Random_Y = Random_Float_Type(Random_Float_Location)(-0.5f, 0.5f) + Random_Float_Type(Random_Float_Location)(-0.5f, 0.5f);
+
+												float Direction[3] =
+												{
+													Forward[0] + Random_X * Weapon_Spread * Right[0] + Random_Y * Weapon_Spread * Up[1],
+
+													Forward[1] + Random_X * Weapon_Spread * Right[1] + Random_Y * Weapon_Spread * Up[1],
+
+													Forward[2] + Random_X * Weapon_Spread * Right[2] + Random_Y * Weapon_Spread * Up[2]
+												};
+
+												Vector_Normalize(Direction);
+
+												Weapon_Spread = 0;
+
+												float Spread_Angles[3] =
+												{
+													Arc_Tangent_2(Square_Root(__builtin_powf(Direction[0], 2) + __builtin_powf(Direction[1], 2)), -Direction[2]) * 180 / 3.1415927f - User_Command->Angles[0],
+
+													Arc_Tangent_2(Direction[0], Direction[1]) * 180 / 3.1415927f - User_Command->Angles[1],
+
+													0
+												};
+
+												using Angle_Vectors_Transpose_Type = void(__cdecl*)(float* Angles, float* Forward, float* Right, float* Up);
+
+												Angle_Vectors_Transpose_Type(574033968)(Spread_Angles, Forward, nullptr, Up);
+
+												float* Recoil = (float*)((unsigned __int32)Local_Player + 2992);
+
+												User_Command->Angles[0] += Arc_Tangent_2(Square_Root(__builtin_powf(Forward[0], 2) + __builtin_powf(Forward[1], 2)), -Forward[2]) * 180 / 3.1415927f - Recoil[0] * 2;
+
+												User_Command->Angles[1] += Arc_Tangent_2(Forward[0], Forward[1]) * 180 / 3.1415927f - Recoil[1] * 2;
 												
-											User_Command->Angles[2] += Arc_Tangent_2(Forward[0] * (Forward[0] * Up[2] - Forward[2] * Up[0]) - Forward[1] * (Forward[2] * Up[1] - Forward[1] * Up[2]), Forward[1] * Up[0] - Forward[0] * Up[1]) * 180 / 3.1415927f - Recoil[2] * 2;
+												User_Command->Angles[2] += Arc_Tangent_2(Forward[0] * (Forward[0] * Up[2] - Forward[2] * Up[0]) - Forward[1] * (Forward[2] * Up[1] - Forward[1] * Up[2]), Forward[1] * Up[0] - Forward[0] * Up[1]) * 180 / 3.1415927f - Recoil[2] * 2;
+											}
 										}
 									}
 								}

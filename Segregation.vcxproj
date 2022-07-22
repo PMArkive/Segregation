@@ -126,7 +126,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Alternative_Copy_User_Command.hpp" />
-    <ClInclude Include="Angles_Y.hpp" />
     <ClInclude Include="Bruteforce.hpp" />
     <ClInclude Include="Extended_Interface.hpp" />
     <ClInclude Include="Converge_Angles.hpp" />

@@ -49,9 +49,6 @@
     <ClInclude Include="Item_Post_Frame.hpp">
       <Filter>Header++</Filter>
     </ClInclude>
-    <ClInclude Include="Angles_Y.hpp">
-      <Filter>Header++</Filter>
-    </ClInclude>
     <ClInclude Include="Interpolate.hpp">
       <Filter>Header++</Filter>
     </ClInclude>
