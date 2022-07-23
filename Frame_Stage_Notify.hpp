@@ -45,22 +45,6 @@ void Predicton_Copy_Compare(char* Class, void* Unknown_Parameter_1, void* Unknow
 	}
 }
 
-void Update_Animations()
-{
-	__int32 Tick_Number = (*(Global_Variables_Structure**)607726732)->Tick_Number;
-
-	static __int32 Last_Update_Animations_Tick_Number;
-
-	if (Tick_Number != Last_Update_Animations_Tick_Number)
-	{
-		using Update_Animations_Type = void(__thiscall*)();
-
-		Update_Animations_Type(604212176)();
-
-		Last_Update_Animations_Tick_Number = Tick_Number;
-	}
-}
-
 void __thiscall Redirected_Frame_Stage_Notify(void* Unknown_Parameter, __int32 Stage)
 {
 	if (Stage == 3)
@@ -108,8 +92,6 @@ void __thiscall Redirected_Frame_Stage_Notify(void* Unknown_Parameter, __int32 S
 
 			Transfer_Data_Type(605218912)(&Predicton_Copy, nullptr, *(__int32*)((unsigned __int32)Local_Player + 80), (void*)607768164);
 		}
-
-		Update_Animations();
 	}
 
 	(decltype(&Redirected_Frame_Stage_Notify)(Original_Frame_Stage_Notify_Caller_Location))(Unknown_Parameter, Stage);

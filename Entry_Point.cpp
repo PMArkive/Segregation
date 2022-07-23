@@ -192,8 +192,6 @@ __int32 __stdcall DllMain(void* This_Module_Location, unsigned __int32 Call_Reas
 
 				Byte_Manager::Copy_Bytes(1, (void*)604206416, sizeof(Maintain_Sequence_Transitions_Bytes), Maintain_Sequence_Transitions_Bytes);
 
-				Byte_Manager::Set_Bytes(1, (void*)604538368, 5, 144);
-
 				Redirection_Manager::Redirect_Function(Original_Update_Animation_Caller_Location, 4, (void*)605800256, 1, (void*)Redirected_Update_Animation);
 
 				Byte_Manager::Set_Bytes(1, (void*)605800287, 1, 235);

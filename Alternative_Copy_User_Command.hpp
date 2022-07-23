@@ -66,8 +66,6 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 		Update_Type(605209712)(Prediction, 1, 1, *(void**)540627876, *(__int32*)540627868 + *(__int32*)540627872);
 	}
 
-	Update_Animations();
-
 	void* Local_Player = *(void**)607867332;
 
 	if (*(__int8*)((unsigned __int32)Local_Player + 135) == 0)
