@@ -8,9 +8,9 @@
 
 #include "Redirection_Manager/Redirection_Manager.hpp"
 
-#include "Structures.hpp"
-
 #include "Frame_Stage_Notify.hpp"
+
+#include "Structures.hpp"
 
 #include "Extended_Interface.hpp"
 
