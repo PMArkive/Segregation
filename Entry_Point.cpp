@@ -52,7 +52,7 @@
 
 #include "Draw_Crosshair.hpp"
 
-#include "Is_Error_Material.hpp"
+#include "Precache.hpp"
 
 #include "Shutdown.hpp"
 
@@ -311,7 +311,7 @@ __int32 __stdcall DllMain(void* This_Module_Location, unsigned __int32 Call_Reas
 
 			wprintf(L"[ + ] Materials\n");
 			{
-				Redirection_Manager::Redirect_Function(Original_Is_Error_Material_Caller_Location, 2, (void*)((unsigned __int32)GetModuleHandleW(L"MaterialSystem.dll") + 20432), 1, (void*)Redirected_Is_Error_Material);
+				Redirection_Manager::Redirect_Function(Original_Precache_Caller_Location, 5, (void*)((unsigned __int32)GetModuleHandleW(L"MaterialSystem.dll") + 21984), 1, (void*)Redirected_Precache);
 
 				Byte_Manager::Set_Bytes(1, (void*)605809168, 1, 195);
 

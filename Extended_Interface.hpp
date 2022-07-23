@@ -94,7 +94,7 @@ void Implement_Extended_Interface()
 
 	wprintf(L"[ + ] Angle_Y %p\n", &Console_Variable_Angle_Y);
 
-	Create_Console_Variable_Type(539130656)(&Console_Variable_Uber_Alles_Scale, (char*)"Uber_Alles_Scale", (char*)"8", nullptr);
+	Create_Console_Variable_Type(539130656)(&Console_Variable_Uber_Alles_Scale, (char*)"Uber_Alles_Scale", (char*)"16", nullptr);
 
 	wprintf(L"[ + ] Uber_Alles_Scale %p\n", &Console_Variable_Uber_Alles_Scale);
 

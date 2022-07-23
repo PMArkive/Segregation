@@ -14,7 +14,7 @@ void Redirected_Draw_Crosshair()
 
 		(*Set_Color_Type(*(unsigned __int32*)Surface + 44))(Surface, Red * 255, 0, 0, 255);
 
-		float Uber_Alles = 2 * Console_Variable_Uber_Alles_Scale.Integer;
+		float Uber_Alles = Console_Variable_Uber_Alles_Scale.Integer;
 
 		__int32 Points[16]
 		{
