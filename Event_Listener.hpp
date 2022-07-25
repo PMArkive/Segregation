@@ -2,19 +2,6 @@
 
 __int32 Recent_Player_Data_Number;
 
-constexpr float Bruteforce_Angles[5] =
-{
-	0,
-
-	-45,
-
-	45,
-
-	-90,
-
-	90
-};
-
 __int32 Primary_Ammo_Capacity_Snapshot;
 
 float Shot_Time;
@@ -77,9 +64,7 @@ void __stdcall Event_Processor(void* Event)
 											{
 												if (Player_Data->Tolerance == Console_Variable_Bruteforce_Tolerance.Integer)
 												{
-													constexpr __int32 Bruteforce_Angles_Modulo = sizeof(Bruteforce_Angles) / sizeof(float);
-
-													Player_Data->Shots_Fired = ((Player_Data->Shots_Fired - 1) % Bruteforce_Angles_Modulo + Bruteforce_Angles_Modulo) % Bruteforce_Angles_Modulo;
+													Player_Data->Shots_Fired = ((Player_Data->Shots_Fired - 1) % Bruteforce_Angles_Count + Bruteforce_Angles_Count) % Bruteforce_Angles_Count;
 												}
 												else
 												{
