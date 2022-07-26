@@ -1,5 +1,3 @@
-#pragma once
-
 float Weapon_Spread;
 
 void* Original_Weapon_Spread_Caller_Location;

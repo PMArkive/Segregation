@@ -1,5 +1,3 @@
-#pragma once
-
 float Compress_Angle(float Value, __int32 Shift)
 {
 	return ((__int32)(Value / 360 * Shift) & Shift - 1) * (360 / (float)Shift);

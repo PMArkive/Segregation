@@ -10,8 +10,6 @@
 
 #include "Frame_Stage_Notify.hpp"
 
-#include "Structures.hpp"
-
 #include "Extended_Interface.hpp"
 
 #pragma comment(lib, "WinMM.Lib")

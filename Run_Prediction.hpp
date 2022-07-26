@@ -1,5 +1,3 @@
-#pragma once
-
 void Redirected_Run_Prediction()
 {
 	if (*(__int8*)540609192 == 6)

@@ -1,5 +1,3 @@
-#pragma once
-
 void* Original_Interpolate_Caller_Location;
 
 __int8 __thiscall Redirected_Interpolate(void* Player, void* Unknown_Parameter)

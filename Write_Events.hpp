@@ -1,5 +1,3 @@
-#pragma once
-
 void* Original_Write_Events_Caller_Location;
 
 void __thiscall Redirected_Write_Events(void* Unknown_Parameter_1, void* Unknown_Parameter_2)

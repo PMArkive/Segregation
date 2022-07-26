@@ -1,5 +1,3 @@
-#pragma once
-
 float Update_Animation_Angle[2];
 
 void* Original_Update_Animation_Caller_Location;

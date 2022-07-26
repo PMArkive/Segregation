@@ -1,5 +1,3 @@
-#pragma once
-
 void* Original_Converge_Angles_Caller_Location;
 
 void __thiscall Redirected_Converge_Angles(void* Animation_State, float Goal, void* Unknown_Parameter_1, void* Unknown_Parameter_2, void* Unknown_Parameter_3, float* Current)

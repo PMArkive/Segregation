@@ -1,4 +1,17 @@
-#pragma once
+struct Interface_Structure
+{
+	__int8 Additional_Bytes_1[32];
+
+	char* String;
+
+	__int8 Additional_Bytes_2[4];
+
+	float Floating_Point;
+
+	__int32 Integer;
+
+	__int8 Additional_Bytes_3[24];
+};
 
 Interface_Structure Console_Variable_Commentator;
 

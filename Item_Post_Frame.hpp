@@ -1,5 +1,3 @@
-#pragma once
-
 void* Original_Player_Item_Post_Frame_Caller_Location;
 
 void* Original_Weapon_Item_Post_Frame_Caller_Location;

@@ -1,5 +1,3 @@
-#pragma once
-
 void Redirected_Send_Move()
 {
 	struct Move_Message_Structure

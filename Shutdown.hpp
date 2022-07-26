@@ -1,5 +1,3 @@
-#pragma once
-
 void* Original_Shutdown_Caller_Location;
 
 void __thiscall Redirected_Shutdown(void* Unknown_Parameter, char* Reason)

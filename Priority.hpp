@@ -1,4 +1,32 @@
-#pragma once
+struct Global_Variables_Structure
+{
+	__int8 Additional_Bytes[8];
+
+	float Absolute_Frame_Time;
+
+	float Current_Time;
+
+	float Frame_Time;
+
+	__int32 Maximum_Clients;
+
+	__int32 Tick_Number;
+
+	float Interval_Per_Tick;
+};
+
+struct Player_Data_Structure
+{
+	__int8 Priority;
+
+	__int32 Memorized;
+
+	__int32 Tolerance;
+
+	__int32 Shots_Fired;
+
+	float Memorized_Y;
+};
 
 Player_Data_Structure Players_Data[64];
 

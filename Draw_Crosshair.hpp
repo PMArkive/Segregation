@@ -1,5 +1,3 @@
-#pragma once
-
 void Redirected_Draw_Crosshair()
 {
 	*(__int8*)608051340 = 0;

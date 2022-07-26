@@ -1,5 +1,3 @@
-#pragma once
-
 void* Original_Frame_Stage_Notify_Caller_Location;
 
 struct Prediction_Copy_Structure

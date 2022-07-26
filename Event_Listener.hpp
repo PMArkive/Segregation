@@ -1,5 +1,3 @@
-#pragma once
-
 __int32 Recent_Player_Data_Number;
 
 __int32 Primary_Ammo_Capacity_Snapshot;

@@ -1,13 +1,11 @@
-#pragma once
-
-__int8 Precache;
-
 void* Original_Precache_Caller_Location;
 
 void __thiscall Redirected_Precache(void* Material)
 {
 	if ((*(unsigned __int16*)((unsigned __int32)Material + 32) & 2) == 0)
 	{
+		static __int8 Precache;
+
 		if (Precache == 0)
 		{
 			Precache = 1;

@@ -1,5 +1,3 @@
-#pragma once
-
 void Bruteforce_Reset_Memory()
 {
 	__int32 Entity_Number = 0;
