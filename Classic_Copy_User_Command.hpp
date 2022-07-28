@@ -391,6 +391,10 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 													Get_Eye_Position_Type(604058320)(Local_Player, Local_Player_Eye_Position);
 
+													using Get_Weapon_Information_Type = void* (__thiscall*)(void* Weapon);
+
+													float Weapon_Range = *(float*)((unsigned __int32)Get_Weapon_Information_Type(604037872)(Weapon) + 2020);
+
 													__int32 Target_Tick_Number;
 
 													using Get_Latency_Type = float(__thiscall*)(void* Network_Channel, __int32 Flow_Type);
@@ -465,74 +469,70 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 																			Ray_Structure Ray;
 
-																			Initialize_Ray_Type(537380224)(&Ray, Local_Player_Eye_Position, End);
+																			float Direction[3] =
+																			{
+																				End[0] - Local_Player_Eye_Position[0],
+
+																				End[1] - Local_Player_Eye_Position[1],
+
+																				End[2] - Local_Player_Eye_Position[2]
+																			};
+
+																			Vector_Normalize(Direction);
+
+																			float Normalized_End[3]
+																			{
+																				Local_Player_Eye_Position[0] + Direction[0] * Weapon_Range,
+
+																				Local_Player_Eye_Position[1] + Direction[1] * Weapon_Range,
+
+																				Local_Player_Eye_Position[2] + Direction[2] * Weapon_Range
+																			};
+
+																			Initialize_Ray_Type(537380224)(&Ray, Local_Player_Eye_Position, Normalized_End);
 
 																			Trace_Structure Trace;
 
 																			Trace_Ray_Type(604317152)(&Ray, 1174421515, Local_Player, nullptr, &Trace);
 
-																			if (Console_Variable_Aim_Intersection.Integer == 0)
+																			struct Filter_Structure
 																			{
-																				struct Filter_Structure
-																				{
-																					void* Table;
+																				void* Table;
 
-																					void* Skip;
+																				void* Skip;
 
-																					__int32 Group;
-																				};
+																				__int32 Group;
+																			};
 
-																				using Clip_Trace_To_Players_Type = void(__cdecl*)(float* Start, float* End, __int32 Mask, Filter_Structure* Filter, Trace_Structure* Trace);
+																			using Clip_Trace_To_Players_Type = void(__cdecl*)(float* Start, float* End, __int32 Mask, Filter_Structure* Filter, Trace_Structure* Trace);
 
-																				float Direction[3] =
-																				{
-																					End[0] - Local_Player_Eye_Position[0],
+																			Normalized_End[0] += Direction[0] * 40;
 
-																					End[1] - Local_Player_Eye_Position[1],
+																			Normalized_End[1] += Direction[1] * 40;
 
-																					End[2] - Local_Player_Eye_Position[2]
-																				};
+																			Normalized_End[2] += Direction[2] * 40;
 
-																				Vector_Normalize(Direction);
+																			Filter_Structure Filter;
 
-																				float Extended_End[3] =
-																				{
-																					End[0] + Direction[0] * 40,
+																			Filter.Table = (void*)607282692;
 
-																					End[1] + Direction[1] * 40,
+																			Filter.Skip = Local_Player;
 
-																					End[2] + Direction[2] * 40,
-																				};
+																			Filter.Group = 0;
 
-																				Filter_Structure Filter;
+																			Clip_Trace_To_Players_Type(605426672)(Local_Player_Eye_Position, Normalized_End, 1174421515, &Filter, &Trace);
 
-																				Filter.Table = (void*)607282692;
-
-																				Filter.Skip = Local_Player;
-
-																				Filter.Group = 0;
-
-																				Clip_Trace_To_Players_Type(605426672)(Local_Player_Eye_Position, Extended_End, 1174421515, &Filter, &Trace);
-
-																				if (Trace.Entity == Optimal_Target)
+																			if (Trace.Entity == Optimal_Target)
+																			{
+																				if (Console_Variable_Aim_Intersection.Integer == 0)
 																				{
 																					if (Trace.Group == 1)
 																					{
 																						return 1;
 																					}
 																				}
-																			}
-																			else
-																			{
-																				if (Trace.Entity == nullptr)
-																				{
-																					return 1;
-																				}
 
-																				if (Trace.Entity == Optimal_Target)
-																				{
-																					return 1;
-																				}
+																				return 1;
 																			}
 
 																			return 0;
