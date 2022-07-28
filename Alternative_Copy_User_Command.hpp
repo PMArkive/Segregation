@@ -450,6 +450,26 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 																		using Clip_Trace_To_Players_Type = void(__cdecl*)(float* Start, float* End, __int32 Mask, Filter_Structure* Filter, Trace_Structure* Trace);
 
+																		float Direction[3] =
+																		{
+																			End[0] - Local_Player_Eye_Position[0],
+
+																			End[1] - Local_Player_Eye_Position[1],
+
+																			End[2] - Local_Player_Eye_Position[2]
+																		};
+
+																		Vector_Normalize(Direction);
+
+																		float Extended_End[3] =
+																		{
+																			End[0] + Direction[0] * 40,
+
+																			End[1] + Direction[1] * 40,
+
+																			End[2] + Direction[2] * 40,
+																		};
+
 																		Filter_Structure Filter;
 
 																		Filter.Table = (void*)607282692;
@@ -458,7 +478,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 																		Filter.Group = 0;
 
-																		Clip_Trace_To_Players_Type(605426672)(Local_Player_Eye_Position, End, 1174421515, &Filter, &Trace);
+																		Clip_Trace_To_Players_Type(605426672)(Local_Player_Eye_Position, Extended_End, 1174421515, &Filter, &Trace);
 
 																		if (Trace.Entity == Optimal_Target)
 																		{
