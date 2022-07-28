@@ -443,11 +443,20 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 																	if (Studio_Header != nullptr)
 																	{
-																		auto Trace_Ray = [&](float* End) -> __int8
+																		auto Trace_Ray = [&](float* Direction) -> __int8
 																		{
 																			struct Ray_Structure
 																			{
 																				__int8 Additional_Bytes[50];
+																			};
+
+																			struct Filter_Structure
+																			{
+																				void* Table;
+
+																				void* Skip;
+
+																				__int32 Group;
 																			};
 
 																			struct Trace_Structure
@@ -463,24 +472,13 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 																				__int8 Additional_Bytes_3[4];
 																			};
 
-																			using Trace_Ray_Type = void(__cdecl*)(Ray_Structure* Ray, __int32 Mask, void* Skip, void* Unknown_Parameter, Trace_Structure* Trace);
+																			using Trace_Ray_Type = void(__thiscall*)(void* Engine, Ray_Structure* Ray, __int32 Mask, Filter_Structure* Filter, Trace_Structure* Trace);
 
 																			using Initialize_Ray_Type = void(__thiscall*)(Ray_Structure* Ray, float* Start, float* End);
 
 																			Ray_Structure Ray;
 
-																			float Direction[3] =
-																			{
-																				End[0] - Local_Player_Eye_Position[0],
-
-																				End[1] - Local_Player_Eye_Position[1],
-
-																				End[2] - Local_Player_Eye_Position[2]
-																			};
-
-																			Vector_Normalize(Direction);
-
-																			float Normalized_End[3]
+																			float End[3]
 																			{
 																				Local_Player_Eye_Position[0] + Direction[0] * Weapon_Range,
 
@@ -489,28 +487,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 																				Local_Player_Eye_Position[2] + Direction[2] * Weapon_Range
 																			};
 
-																			Initialize_Ray_Type(537380224)(&Ray, Local_Player_Eye_Position, Normalized_End);
-
-																			Trace_Structure Trace;
-
-																			Trace_Ray_Type(604317152)(&Ray, 1174421515, Local_Player, nullptr, &Trace);
-
-																			struct Filter_Structure
-																			{
-																				void* Table;
-
-																				void* Skip;
-
-																				__int32 Group;
-																			};
-
-																			using Clip_Trace_To_Players_Type = void(__cdecl*)(float* Start, float* End, __int32 Mask, Filter_Structure* Filter, Trace_Structure* Trace);
-
-																			Normalized_End[0] += Direction[0] * 40;
-
-																			Normalized_End[1] += Direction[1] * 40;
-
-																			Normalized_End[2] += Direction[2] * 40;
+																			Initialize_Ray_Type(537380224)(&Ray, Local_Player_Eye_Position, End);
 
 																			Filter_Structure Filter;
 
@@ -520,7 +497,19 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 																			Filter.Group = 0;
 
-																			Clip_Trace_To_Players_Type(605426672)(Local_Player_Eye_Position, Normalized_End, 1174421515, &Filter, &Trace);
+																			Trace_Structure Trace;
+
+																			Trace_Ray_Type(537565888)((void*)540446304, &Ray, 1174421515, &Filter, &Trace);
+
+																			using Clip_Trace_To_Players_Type = void(__cdecl*)(float* Start, float* End, __int32 Mask, Filter_Structure* Filter, Trace_Structure* Trace);
+
+																			End[0] += Direction[0] * 40;
+
+																			End[1] += Direction[1] * 40;
+
+																			End[2] += Direction[2] * 40;
+
+																			Clip_Trace_To_Players_Type(605426672)(Local_Player_Eye_Position, End, 1174421515, &Filter, &Trace);
 
 																			if (Trace.Entity == Optimal_Target)
 																			{
@@ -571,21 +560,23 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 																			Hitbox_Minimum[2] + (Hitbox_Maximum[2] - Hitbox_Minimum[2]) * Console_Variable_Aim_Height.Floating_Point
 																		};
 																
-																		if (Trace_Ray(Optimal_Target_Origin) == 1)
+																		float Direction[3] =
+																		{
+																			Optimal_Target_Origin[0] - Local_Player_Eye_Position[0],
+
+																			Optimal_Target_Origin[1] - Local_Player_Eye_Position[1],
+
+																			Optimal_Target_Origin[2] - Local_Player_Eye_Position[2]
+																		};
+
+																		Vector_Normalize(Direction);
+
+																		if (Trace_Ray(Direction) == 1)
 																		{
 																			Target_Tick_Number = (*(float*)((unsigned __int32)Optimal_Target + 104) + Interpolation_Time) / Global_Variables->Interval_Per_Tick + 0.5f;
 
-																			if (Absolute(Corrected_Interpolation_Time - (__int32)(Global_Variables->Tick_Number + 1 + Total_Latency / Global_Variables->Interval_Per_Tick + 0.5f - Target_Tick_Number) * Global_Variables->Interval_Per_Tick) <= 0.2f)
+																			if (Absolute(Corrected_Interpolation_Time - (__int32)(Global_Variables->Tick_Number + Total_Latency / Global_Variables->Interval_Per_Tick + 0.5f - Target_Tick_Number) * Global_Variables->Interval_Per_Tick) <= 0.2f)
 																			{
-																				float Direction[3] =
-																				{
-																					Optimal_Target_Origin[0] - Local_Player_Eye_Position[0],
-
-																					Optimal_Target_Origin[1] - Local_Player_Eye_Position[1],
-
-																					Optimal_Target_Origin[2] - Local_Player_Eye_Position[2]
-																				};
-
 																				Aim_Angles[0] = Arc_Tangent_2(Square_Root(__builtin_powf(Direction[0], 2) + __builtin_powf(Direction[1], 2)), -Direction[2]) * 180 / 3.1415927f;
 
 																				Aim_Angles[1] = Arc_Tangent_2(Direction[0], Direction[1]) * 180 / 3.1415927f;
@@ -776,12 +767,16 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 				float* Optimal_Target_Origin = (float*)((unsigned __int32)Sorted_Target_List.at(0).Target + 668);
 				
-				float Direction[2] =
+				float Direction[3] =
 				{
 					Optimal_Target_Origin[0] - Local_Player_Origin[0],
 
-					Optimal_Target_Origin[1] - Local_Player_Origin[1]
+					Optimal_Target_Origin[1] - Local_Player_Origin[1],
+
+					0
 				};
+
+				Vector_Normalize(Direction);
 
 				if (Send_Packet == 0)
 				{
