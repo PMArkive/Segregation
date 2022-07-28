@@ -414,14 +414,18 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 																	struct Trace_Structure
 																	{
-																		__int8 Additional_Bytes_1[76];
+																		__int8 Additional_Bytes_1[68];
+
+																		__int32 Group;
+
+																		__int8 Additional_Bytes_2[4];
 
 																		void* Entity;
 
-																		__int8 Additional_Bytes_2[4];
+																		__int8 Additional_Bytes_3[4];
 																	};
 
-																	using Trace_Ray_Type = void(__cdecl*)(Ray_Structure* Ray, __int32 Mask, void* Skip, __int32 Group, Trace_Structure* Trace);
+																	using Trace_Ray_Type = void(__cdecl*)(Ray_Structure* Ray, __int32 Mask, void* Skip, void* Unknown_Parameter, Trace_Structure* Trace);
 
 																	using Initialize_Ray_Type = void(__thiscall*)(Ray_Structure* Ray, float* Start, float* End);
 
@@ -431,16 +435,33 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 																	Trace_Structure Trace;
 
-																	Trace_Ray_Type(604317152)(&Ray, 1174421515, Local_Player, 0, &Trace);
+																	Trace_Ray_Type(604317152)(&Ray, 1174421515, Local_Player, nullptr, &Trace);
 
-																	if (Trace.Entity == nullptr)
+																	if (Console_Variable_Aim_Intersection.Integer == 0)
 																	{
-																		return 1;
+																		using Clip_Trace_To_Players_Type = void(__cdecl*)(float* Start, float* End, __int32 Mask, void* Unknown_Parameter, Trace_Structure* Trace);
+
+																		Clip_Trace_To_Players_Type(605426672)(Local_Player_Eye_Position, End, 1174421515, nullptr, &Trace);
+
+																		if (Trace.Entity == Optimal_Target)
+																		{
+																			if (Trace.Group == 1)
+																			{
+																				return 1;
+																			}
+																		}
 																	}
-
-																	if (Trace.Entity == Optimal_Target)
+																	else
 																	{
-																		return 1;
+																		if (Trace.Entity == nullptr)
+																		{
+																			return 1;
+																		}
+
+																		if (Trace.Entity == Optimal_Target)
+																		{
+																			return 1;
+																		}
 																	}
 
 																	return 0;
@@ -485,7 +506,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 																	if (Absolute(Corrected_Interpolation_Time - (__int32)(Global_Variables->Tick_Number + Total_Latency / Global_Variables->Interval_Per_Tick + 0.5f - Target_Tick_Number) * Global_Variables->Interval_Per_Tick) <= 0.2f)
 																	{
-																		float Origin_Difference[3] =
+																		float Direction[3] =
 																		{
 																			Optimal_Target_Origin[0] - Local_Player_Eye_Position[0],
 
@@ -494,9 +515,9 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 																			Optimal_Target_Origin[2] - Local_Player_Eye_Position[2]
 																		};
 
-																		Aim_Angles[0] = Arc_Tangent_2(Square_Root(__builtin_powf(Origin_Difference[0], 2) + __builtin_powf(Origin_Difference[1], 2)), -Origin_Difference[2]) * 180 / 3.1415927f;
+																		Aim_Angles[0] = Arc_Tangent_2(Square_Root(__builtin_powf(Direction[0], 2) + __builtin_powf(Direction[1], 2)), -Direction[2]) * 180 / 3.1415927f;
 
-																		Aim_Angles[1] = Arc_Tangent_2(Origin_Difference[0], Origin_Difference[1]) * 180 / 3.1415927f;
+																		Aim_Angles[1] = Arc_Tangent_2(Direction[0], Direction[1]) * 180 / 3.1415927f;
 
 																		User_Command->Buttons |= 1;
 
@@ -686,7 +707,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 				float* Optimal_Target_Origin = (float*)((unsigned __int32)Sorted_Target_List.at(0).Target + 668);
 				
-				float Origin_Difference[2] =
+				float Direction[2] =
 				{
 					Optimal_Target_Origin[0] - Local_Player_Origin[0],
 
@@ -697,16 +718,16 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 				{
 					if ((User_Command->Command_Number % 2) == 0)
 					{
-						User_Command->Angles[1] = Arc_Tangent_2(Origin_Difference[0], Origin_Difference[1]) * 180 / 3.1415927f + Console_Variable_First_Choked_Angle_Y.Floating_Point;
+						User_Command->Angles[1] = Arc_Tangent_2(Direction[0], Direction[1]) * 180 / 3.1415927f + Console_Variable_First_Choked_Angle_Y.Floating_Point;
 					}
 					else
 					{
-						User_Command->Angles[1] = Arc_Tangent_2(Origin_Difference[0], Origin_Difference[1]) * 180 / 3.1415927f + Console_Variable_Second_Choked_Angle_Y.Floating_Point;
+						User_Command->Angles[1] = Arc_Tangent_2(Direction[0], Direction[1]) * 180 / 3.1415927f + Console_Variable_Second_Choked_Angle_Y.Floating_Point;
 					}
 				}
 				else
 				{
-					User_Command->Angles[1] = Arc_Tangent_2(Origin_Difference[0], Origin_Difference[1]) * 180 / 3.1415927f + Console_Variable_Angle_Y.Floating_Point;
+					User_Command->Angles[1] = Arc_Tangent_2(Direction[0], Direction[1]) * 180 / 3.1415927f + Console_Variable_Angle_Y.Floating_Point;
 				}
 			}
 		}

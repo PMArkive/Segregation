@@ -35,6 +35,8 @@ Interface_Structure Console_Variable_Minimum_Choked_Commands;
 
 Interface_Structure Console_Variable_Maximum_Choked_Commands;
 
+Interface_Structure Console_Variable_Aim_Intersection;
+
 Interface_Structure Console_Variable_Aim_Height;
 
 Interface_Structure Console_Variable_Angle_X;
@@ -94,6 +96,10 @@ void Implement_Extended_Interface()
 	Create_Console_Variable_Type(539130656)(&Console_Variable_Maximum_Choked_Commands, (char*)"Maximum_Choked_Commands", (char*)"21", nullptr);
 
 	wprintf(L"[ + ] Maximum_Choked_Commands %p\n", &Console_Variable_Maximum_Choked_Commands);
+
+	Create_Console_Variable_Type(539130656)(&Console_Variable_Aim_Intersection, (char*)"Aim_Intersection", (char*)"0", nullptr);
+
+	wprintf(L"[ + ] Aim_Intersection %p\n", &Console_Variable_Aim_Intersection);
 
 	Create_Console_Variable_Type(539130656)(&Console_Variable_Aim_Height, (char*)"Aim_Height", (char*)"0.9", nullptr);
 
