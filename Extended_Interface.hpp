@@ -97,7 +97,7 @@ void Implement_Extended_Interface()
 
 	wprintf(L"[ + ] Maximum_Choked_Commands %p\n", &Console_Variable_Maximum_Choked_Commands);
 
-	Create_Console_Variable_Type(539130656)(&Console_Variable_Aim_Intersection, (char*)"Aim_Intersection", (char*)"0", nullptr);
+	Create_Console_Variable_Type(539130656)(&Console_Variable_Aim_Intersection, (char*)"Aim_Intersection", (char*)"1", nullptr);
 
 	wprintf(L"[ + ] Aim_Intersection %p\n", &Console_Variable_Aim_Intersection);
 

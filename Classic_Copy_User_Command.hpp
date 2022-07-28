@@ -473,7 +473,24 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 																			if (Console_Variable_Aim_Intersection.Integer == 0)
 																			{
-																				using Clip_Trace_To_Players_Type = void(__cdecl*)(float* Start, float* End, __int32 Mask, void* Unknown_Parameter, Trace_Structure* Trace);
+																				struct Filter_Structure
+																				{
+																					void* Table;
+
+																					void* Skip;
+
+																					__int32 Group;
+																				};
+
+																				using Clip_Trace_To_Players_Type = void(__cdecl*)(float* Start, float* End, __int32 Mask, Filter_Structure* Filter, Trace_Structure* Trace);
+
+																				Filter_Structure Filter;
+
+																				Filter.Table = (void*)607282692;
+
+																				Filter.Skip = Local_Player;
+
+																				Filter.Group = 0;
 
 																				Clip_Trace_To_Players_Type(605426672)(Local_Player_Eye_Position, End, 1174421515, nullptr, &Trace);
 
