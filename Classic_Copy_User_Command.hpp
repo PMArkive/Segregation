@@ -520,8 +520,10 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 																						return 1;
 																					}
 																				}
-
-																				return 1;
+																				else
+																				{
+																					return 1;
+																				}
 																			}
 
 																			return 0;
