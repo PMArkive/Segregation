@@ -53,8 +53,6 @@ void* Original_Copy_User_Command_Caller_Location;
 
 void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Command_Structure* User_Command)
 {
-	Compress_Angles(User_Command->Angles);
-
 	void* Prediction = *(void**)540494880;
 
 	if (*(__int32*)541926600 != 1)
@@ -111,7 +109,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 					User_Command->Move[1] = 400;
 				}
 
-				Move_Angles[1] = Compress_Angle(Move_Angles[1] - Strafe_Angle, 65536);
+				Move_Angles[1] -= Strafe_Angle;
 			}
 			else
 			{
@@ -160,11 +158,22 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		auto Correct_Movement = [&]() -> void
 		{
+			float Compressed_Angles[3] =
+			{
+				User_Command->Angles[0],
+
+				User_Command->Angles[1],
+
+				User_Command->Angles[2]
+			};
+
+			Compress_Angles(Compressed_Angles);
+
 			float Move_Forward[3];
 
 			float Move_Right[3];
 
-			Angle_Vectors(User_Command->Angles, Move_Forward, Move_Right, nullptr);
+			Angle_Vectors(Compressed_Angles, Move_Forward, Move_Right, nullptr);
 
 			Move_Forward[2] = 0;
 
@@ -899,6 +908,10 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 		*(__int8*)((unsigned __int32)__builtin_frame_address(0) + 24) = Send_Packet;
 
 		Correct_Movement();
+	}
+	else
+	{
+		Compress_Angles(User_Command->Angles);
 	}
 
 	(decltype(&Redirected_Copy_User_Command)(Original_Copy_User_Command_Caller_Location))(Unknown_Parameter, User_Command);
