@@ -473,17 +473,12 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 																	if (Trace.Entity == Optimal_Target)
 																	{
-																		if (Console_Variable_Aim_Intersection.Integer == 0)
+																		if (Console_Variable_Aim_Intersection.Integer == 1)
 																		{
-																			if (Trace.Group == 1)
-																			{
-																				return 1;
-																			}
+																			return Trace.Group == 1;
 																		}
-																		else
-																		{
-																			return 1;
-																		}
+
+																		return 1;
 																	}
 
 																	return 0;
@@ -799,10 +794,8 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 				{
 					goto Passed_Shot_Time_Check_Label;
 				}
-				else
-				{
-					Byte_Manager::Copy_Bytes(0, &Players_Data[Recent_Player_Data_Number - 64], sizeof(Previous_Recent_Player_Data), &Previous_Recent_Player_Data);
-				}
+
+				Byte_Manager::Copy_Bytes(0, &Players_Data[Recent_Player_Data_Number - 64], sizeof(Previous_Recent_Player_Data), &Previous_Recent_Player_Data);
 			}
 		}
 

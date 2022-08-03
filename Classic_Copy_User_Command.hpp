@@ -214,7 +214,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		__int32 Choked_Commands_Count = *(__int32*)540627872;
 
-		__int8 Send_Packet;
+		__int8 Send_Packet = 1;
 
 		__int32 Predicted_Choked_Commands_Count = Choked_Commands_Count + 1;
 
@@ -251,8 +251,6 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 				else
 				{
 					Byte_Manager::Copy_Bytes(0, Networked_Origin, sizeof(Networked_Origin), Local_Player_Origin);
-
-					Send_Packet = 1;
 				}
 
 				Predict_Dynamic_Send_Packet_Label:
@@ -273,8 +271,6 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			else
 			{
 				Byte_Manager::Copy_Bytes(0, Networked_Origin, sizeof(Networked_Origin), Local_Player_Origin);
-
-				Send_Packet = 1;
 			}
 		}
 
@@ -511,17 +507,12 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 																			if (Trace.Entity == Optimal_Target)
 																			{
-																				if (Console_Variable_Aim_Intersection.Integer == 0)
+																				if (Console_Variable_Aim_Intersection.Integer == 1)
 																				{
-																					if (Trace.Group == 1)
-																					{
-																						return 1;
-																					}
+																					return Trace.Group == 1;
 																				}
-																				else
-																				{
-																					return 1;
-																				}
+
+																				return 1;
 																			}
 
 																			return 0;
@@ -837,10 +828,8 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 				{
 					goto Passed_Shot_Time_Check_Label;
 				}
-				else
-				{
-					Byte_Manager::Copy_Bytes(0, &Players_Data[Recent_Player_Data_Number - 64], sizeof(Previous_Recent_Player_Data), &Previous_Recent_Player_Data);
-				}
+
+				Byte_Manager::Copy_Bytes(0, &Players_Data[Recent_Player_Data_Number - 64], sizeof(Previous_Recent_Player_Data), &Previous_Recent_Player_Data);
 			}
 		}
 
@@ -889,7 +878,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		Compress_Angles(User_Command->Angles);
 
-		if (Send_Packet == 1)
+		if (Send_Packet != 0)
 		{
 			Byte_Manager::Copy_Bytes(0, Update_Animation_Angles, sizeof(Update_Animation_Angles), User_Command->Angles);
 		}
