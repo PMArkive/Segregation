@@ -205,16 +205,12 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		__int32 Choked_Commands_Count = *(__int32*)540627872;
 
-		__int8 Send_Packet;
+		static __int8 Send_Packet;
 
 		float* Local_Player_Origin = (float*)((unsigned __int32)Local_Player + 668);
 
-		static __int8 Extra_Send_Packet;
-
-		if (Extra_Send_Packet == 1)
+		if (Send_Packet == 2)
 		{
-			Extra_Send_Packet = 0;
-
 			goto Send_Packet_Label;
 		}
 
@@ -573,9 +569,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 												Recent_Player_Data_Number = 0;
 
-												Send_Packet = 1;
-
-												Extra_Send_Packet = 1;
+												Send_Packet = 2;
 
 												In_Attack = 1;
 											
@@ -857,7 +851,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		Compress_Angles(User_Command->Angles);
 
-		if (Send_Packet == 1)
+		if (Send_Packet != 0)
 		{
 			Byte_Manager::Copy_Bytes(0, Update_Animation_Angles, sizeof(Update_Animation_Angles), User_Command->Angles);
 		}
