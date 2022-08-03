@@ -156,9 +156,9 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			Desired_Move_Forward[1] * User_Command->Move[0] + Desired_Move_Right[1] * User_Command->Move[1]
 		};
 
-		auto Correct_Movement = [&]() -> void
+		auto Correct_Movement = [&](__int8 Compressed_Angles) -> void
 		{
-			float Compressed_Angles[3] =
+			float Angles[3] =
 			{
 				User_Command->Angles[0],
 
@@ -167,13 +167,16 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 				User_Command->Angles[2]
 			};
 
-			Compress_Angles(Compressed_Angles);
+			if (Compressed_Angles == 1)
+			{
+				Compress_Angles(Angles);
+			}
 
 			float Move_Forward[3];
 
 			float Move_Right[3];
 
-			Angle_Vectors(Compressed_Angles, Move_Forward, Move_Right, nullptr);
+			Angle_Vectors(Angles, Move_Forward, Move_Right, nullptr);
 
 			Move_Forward[2] = 0;
 
@@ -200,7 +203,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			}
 		};
 
-		Correct_Movement();
+		Correct_Movement(1);
 
 		Shot_Time *= -1;
 
@@ -698,52 +701,50 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 												float Rotations[2][3][3];
 
-												unsigned __int8 Rotation_Number = 0;
+												unsigned __int8 Calculation_Number = 0;
 
 												Calculate_Rotation_Label:
 												{
-													Rotations[Rotation_Number][0][0] = Directions[Rotation_Number][0];
+													Rotations[Calculation_Number][0][0] = Directions[Calculation_Number][0];
 
-													Rotations[Rotation_Number][0][1] = Directions[Rotation_Number][1];
+													Rotations[Calculation_Number][0][1] = Directions[Calculation_Number][1];
 
-													Rotations[Rotation_Number][0][2] = Directions[Rotation_Number][2];
+													Rotations[Calculation_Number][0][2] = Directions[Calculation_Number][2];
 
-													if (Directions[Rotation_Number][0] + Directions[Rotation_Number][1] + Directions[Rotation_Number][2] == 1)
+													if (Directions[Calculation_Number][0] + Directions[Calculation_Number][1] + Directions[Calculation_Number][2] == 1)
 													{
-														Rotations[Rotation_Number][1][0] = 0;
+														Rotations[Calculation_Number][1][1] = 1;
 
-														Rotations[Rotation_Number][1][1] = 1;
+														Rotations[Calculation_Number][1][2] = 0;
 
-														Rotations[Rotation_Number][1][2] = 0;
+														Rotations[Calculation_Number][2][0] = 0;
 
-														Rotations[Rotation_Number][2][0] = 0;
+														Rotations[Calculation_Number][2][1] = 0;
 
-														Rotations[Rotation_Number][2][1] = 0;
-
-														Rotations[Rotation_Number][2][2] = 1;
+														Rotations[Calculation_Number][2][2] = 1;
 													}
 													else
 													{
-														Rotations[Rotation_Number][1][0] = 0;
+														Rotations[Calculation_Number][1][0] = 0;
 
-														Rotations[Rotation_Number][1][1] = Directions[Rotation_Number][2];
+														Rotations[Calculation_Number][1][1] = Directions[Calculation_Number][2];
 
-														Rotations[Rotation_Number][1][2] = -Directions[Rotation_Number][1];
+														Rotations[Calculation_Number][1][2] = -Directions[Calculation_Number][1];
 
-														Vector_Normalize(Rotations[Rotation_Number][1]);
+														Vector_Normalize(Rotations[Calculation_Number][1]);
 
-														Rotations[Rotation_Number][2][0] = Rotations[Rotation_Number][1][2] * Directions[Rotation_Number][1] - Rotations[Rotation_Number][1][1] * Directions[Rotation_Number][2];
+														Rotations[Calculation_Number][2][0] = Rotations[Calculation_Number][1][2] * Directions[Calculation_Number][1] - Rotations[Calculation_Number][1][1] * Directions[Calculation_Number][2];
 
-														Rotations[Rotation_Number][2][1] = Rotations[Rotation_Number][1][2] * -Directions[Rotation_Number][0];
+														Rotations[Calculation_Number][2][1] = Rotations[Calculation_Number][1][2] * -Directions[Calculation_Number][0];
 
-														Rotations[Rotation_Number][2][2] = Rotations[Rotation_Number][1][1] * Directions[Rotation_Number][0];
+														Rotations[Calculation_Number][2][2] = Rotations[Calculation_Number][1][1] * Directions[Calculation_Number][0];
 
-														Vector_Normalize(Rotations[Rotation_Number][2]);
+														Vector_Normalize(Rotations[Calculation_Number][2]);
 													}
 
-													if (Rotation_Number != 1)
+													if (Calculation_Number != 1)
 													{
-														Rotation_Number += 1;
+														Calculation_Number += 1;
 
 														goto Calculate_Rotation_Label;
 													}
@@ -752,15 +753,15 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 												float Rotation[3][3] =
 												{
 													{
-														Rotations[0][0][0] * Rotations[1][0][0] + Rotations[0][1][0] * Rotations[1][1][0] + Rotations[0][2][0] * Rotations[1][2][0],
+														Rotations[0][0][0] * Rotations[1][0][0] + Rotations[0][2][0] * Rotations[1][2][0],
 
-														Rotations[0][0][1] * Rotations[1][0][0] + Rotations[0][1][1] * Rotations[1][1][0] + Rotations[0][2][1] * Rotations[1][2][0],
+														Rotations[0][0][1] * Rotations[1][0][0] + Rotations[0][2][1] * Rotations[1][2][0],
 
-														Rotations[0][0][2] * Rotations[1][0][0] + Rotations[0][1][2] * Rotations[1][1][0] + Rotations[0][2][2] * Rotations[1][2][0]
+														Rotations[0][0][2] * Rotations[1][0][0] + Rotations[0][2][2] * Rotations[1][2][0]
 													},
 
 													{
-														Rotations[0][0][0] * Rotations[1][0][1] + Rotations[0][1][0] * Rotations[1][1][1] + Rotations[0][2][0] * Rotations[1][2][1],
+														Rotations[0][0][0] * Rotations[1][0][1] + Rotations[0][2][0] * Rotations[1][2][1],
 
 														Rotations[0][0][1] * Rotations[1][0][1] + Rotations[0][1][1] * Rotations[1][1][1] + Rotations[0][2][1] * Rotations[1][2][1],
 
@@ -768,7 +769,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 													},
 
 													{
-														Rotations[0][0][0] * Rotations[1][0][2] + Rotations[0][1][0] * Rotations[1][1][2] + Rotations[0][2][0] * Rotations[1][2][2],
+														Rotations[0][0][0] * Rotations[1][0][2] + Rotations[0][2][0] * Rotations[1][2][2],
 
 														Rotations[0][0][1] * Rotations[1][0][2] + Rotations[0][1][1] * Rotations[1][1][2] + Rotations[0][2][1] * Rotations[1][2][2],
 
@@ -870,12 +871,12 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		if (Send_Packet == 1)
 		{
-			Byte_Manager::Copy_Bytes(0, Update_Animation_Angle, sizeof(Update_Animation_Angle), User_Command->Angles);
+			Byte_Manager::Copy_Bytes(0, Update_Animation_Angles, sizeof(Update_Animation_Angles), User_Command->Angles);
 		}
 
 		*(__int8*)((unsigned __int32)__builtin_frame_address(0) + 24) = Send_Packet;
 
-		Correct_Movement();
+		Correct_Movement(0);
 	}
 	else
 	{
