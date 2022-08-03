@@ -1,17 +1,3 @@
-float Compress_Angle(float Value, __int32 Shift)
-{
-	return ((__int32)(Value / 360 * Shift) & Shift - 1) * (360 / (float)Shift);
-}
-
-void Compress_Angles(float* Angles)
-{
-	Angles[0] = Compress_Angle(Angles[0], 65536);
-
-	Angles[1] = Compress_Angle(Angles[1], 65536);
-
-	Angles[2] = Compress_Angle(Angles[2], 256);
-}
-
 float Absolute(float X)
 {
 	asm("fabs" : "+t"(X));
@@ -48,6 +34,20 @@ void Vector_Normalize(float* Vector)
 }
 
 Player_Data_Structure Previous_Recent_Player_Data;
+
+void Compress_Angles(float* Angles)
+{
+	auto Compress_Angle = [](float Value, __int32 Shift) -> float
+	{
+		return ((__int32)(Value / 360 * Shift) & Shift - 1) * (360 / (float)Shift);
+	};
+
+	Angles[0] = Compress_Angle(Angles[0], 65536);
+
+	Angles[1] = Compress_Angle(Angles[1], 65536);
+
+	Angles[2] = Compress_Angle(Angles[2], 256);
+}
 
 void* Original_Copy_User_Command_Caller_Location;
 
@@ -156,27 +156,13 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			Desired_Move_Forward[1] * User_Command->Move[0] + Desired_Move_Right[1] * User_Command->Move[1]
 		};
 
-		auto Correct_Movement = [&](__int8 Compressed_Angles) -> void
+		auto Correct_Movement = [&]() -> void
 		{
-			float Angles[3] =
-			{
-				User_Command->Angles[0],
-
-				User_Command->Angles[1],
-
-				User_Command->Angles[2]
-			};
-
-			if (Compressed_Angles == 1)
-			{
-				Compress_Angles(Angles);
-			}
-
 			float Move_Forward[3];
 
 			float Move_Right[3];
 
-			Angle_Vectors(Angles, Move_Forward, Move_Right, nullptr);
+			Angle_Vectors(User_Command->Angles, Move_Forward, Move_Right, nullptr);
 
 			Move_Forward[2] = 0;
 
@@ -203,7 +189,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			}
 		};
 
-		Correct_Movement(1);
+		Correct_Movement();
 
 		Shot_Time *= -1;
 
@@ -867,6 +853,8 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			}
 		}
 
+		Correct_Movement();
+
 		Compress_Angles(User_Command->Angles);
 
 		if (Send_Packet == 1)
@@ -875,8 +863,6 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 		}
 
 		*(__int8*)((unsigned __int32)__builtin_frame_address(0) + 24) = Send_Packet;
-
-		Correct_Movement(0);
 	}
 	else
 	{
