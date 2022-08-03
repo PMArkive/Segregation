@@ -507,7 +507,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 																			if (Trace.Entity == Optimal_Target)
 																			{
-																				if (Console_Variable_Aim_Intersection.Integer == 1)
+																				if (Console_Variable_Aim_Intersection.Integer == 0)
 																				{
 																					return Trace.Group == 1;
 																				}
