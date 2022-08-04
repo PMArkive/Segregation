@@ -156,11 +156,13 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		Vector_Normalize(Desired_Move_Right);
 
-		float Desired_Move[2] =
+		float Desired_Move[3] =
 		{
 			Desired_Move_Forward[0] * User_Command->Move[0] + Desired_Move_Right[0] * User_Command->Move[1],
 
-			Desired_Move_Forward[1] * User_Command->Move[0] + Desired_Move_Right[1] * User_Command->Move[1]
+			Desired_Move_Forward[1] * User_Command->Move[0] + Desired_Move_Right[1] * User_Command->Move[1],
+
+			0
 		};
 
 		float Desired_Move_Magnitude = Vector_Normalize(Desired_Move);
