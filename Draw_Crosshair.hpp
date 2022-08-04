@@ -4,49 +4,49 @@ void Redirected_Draw_Crosshair()
 
 	static float Rotation_Angle;
 
-	auto Uber_Alles = [&](__int8 Red, __int32 X, __int32 Y)
+	auto Uber_Alles = [&](unsigned __int8 Red, __int32 X, __int32 Y)
 	{
 		using Set_Color_Type = void(__thiscall**)(void* Surface, unsigned __int8 Red, unsigned __int8 Green, unsigned __int8 Blue, unsigned __int8 Alpha);
 
 		void* Surface = *(void**)608279384;
 
-		(*Set_Color_Type(*(unsigned __int32*)Surface + 44))(Surface, Red * 255, 0, 0, 255);
+		(*Set_Color_Type(*(unsigned __int32*)Surface + 44))(Surface, Red, 0, 0, 255);
 
 		float Uber_Alles = Console_Variable_Uber_Alles_Scale.Integer;
 
 		__int32 Points[16]
 		{
-			(__int32)__builtin_roundf(Uber_Alles * __builtin_sinf((Rotation_Angle - 90) * 3.1415927f / 180)),
+			(__int32)(Uber_Alles * __builtin_sinf((Rotation_Angle - 90) * 3.1415927f / 180)),
 
-			(__int32)__builtin_roundf(Uber_Alles * __builtin_cosf((Rotation_Angle - 90) * 3.1415927f / 180)),
+			(__int32)(Uber_Alles * __builtin_cosf((Rotation_Angle - 90) * 3.1415927f / 180)),
 
-			(__int32)__builtin_roundf(Uber_Alles * __builtin_sinf((Rotation_Angle - 90) * 3.1415927f / 180)),
+			(__int32)(Uber_Alles * __builtin_sinf((Rotation_Angle - 90) * 3.1415927f / 180)),
 
-			(__int32)__builtin_roundf(Uber_Alles * __builtin_cosf((Rotation_Angle - 90) * 3.1415927f / 180 + 1)),
+			(__int32)(Uber_Alles * __builtin_cosf((Rotation_Angle - 90) * 3.1415927f / 180 + 1)),
 
-			(__int32)__builtin_roundf(Uber_Alles * __builtin_sinf(Rotation_Angle * 3.1415927f / 180)),
+			(__int32)(Uber_Alles * __builtin_sinf(Rotation_Angle * 3.1415927f / 180)),
 
-			(__int32)__builtin_roundf(Uber_Alles * __builtin_cosf(Rotation_Angle * 3.1415927f / 180)),
+			(__int32)(Uber_Alles * __builtin_cosf(Rotation_Angle * 3.1415927f / 180)),
 
-			(__int32)__builtin_roundf(Uber_Alles * __builtin_sinf(Rotation_Angle * 3.1415927f / 180 + 1)),
+			(__int32)(Uber_Alles * __builtin_sinf(Rotation_Angle * 3.1415927f / 180 + 1)),
 
-			(__int32)__builtin_roundf(Uber_Alles * __builtin_cosf(Rotation_Angle * 3.1415927f / 180)),
+			(__int32)(Uber_Alles * __builtin_cosf(Rotation_Angle * 3.1415927f / 180)),
 
-			(__int32)__builtin_roundf(Uber_Alles * __builtin_sinf((Rotation_Angle + 90) * 3.1415927f / 180)),
+			(__int32)(Uber_Alles * __builtin_sinf((Rotation_Angle + 90) * 3.1415927f / 180)),
 
-			(__int32)__builtin_roundf(Uber_Alles * __builtin_cosf((Rotation_Angle + 90) * 3.1415927f / 180)),
+			(__int32)(Uber_Alles * __builtin_cosf((Rotation_Angle + 90) * 3.1415927f / 180)),
 
-			(__int32)__builtin_roundf(Uber_Alles * __builtin_sinf((Rotation_Angle + 90) * 3.1415927f / 180)),
+			(__int32)(Uber_Alles * __builtin_sinf((Rotation_Angle + 90) * 3.1415927f / 180)),
 
-			(__int32)__builtin_roundf(Uber_Alles * __builtin_cosf((Rotation_Angle + 90) * 3.1415927f / 180 + 1)),
+			(__int32)(Uber_Alles * __builtin_cosf((Rotation_Angle + 90) * 3.1415927f / 180 + 1)),
 
-			(__int32)__builtin_roundf(Uber_Alles * __builtin_sinf((Rotation_Angle + 180) * 3.1415927f / 180)),
+			(__int32)(Uber_Alles * __builtin_sinf((Rotation_Angle + 180) * 3.1415927f / 180)),
 
-			(__int32)__builtin_roundf(Uber_Alles * __builtin_cosf((Rotation_Angle + 180) * 3.1415927f / 180)),
+			(__int32)(Uber_Alles * __builtin_cosf((Rotation_Angle + 180) * 3.1415927f / 180)),
 
-			(__int32)__builtin_roundf(Uber_Alles * __builtin_sinf((Rotation_Angle + 180) * 3.1415927f / 180 + 1)),
+			(__int32)(Uber_Alles * __builtin_sinf((Rotation_Angle + 180) * 3.1415927f / 180 + 1)),
 
-			(__int32)__builtin_roundf(Uber_Alles * __builtin_cosf((Rotation_Angle + 180) * 3.1415927f / 180)),
+			(__int32)(Uber_Alles * __builtin_cosf((Rotation_Angle + 180) * 3.1415927f / 180)),
 		};
 
 		using Draw_Line_Type = void(__thiscall*)(void* Surface, __int32 From_X, __int32 From_Y, __int32 To_X, __int32 To_Y);
@@ -92,7 +92,7 @@ void Redirected_Draw_Crosshair()
 
 	Uber_Alles(0, Screen_Width + 1, Screen_Height + 1);
 
-	Uber_Alles(1, Screen_Width, Screen_Height);
+	Uber_Alles(255, Screen_Width, Screen_Height);
 
 	Rotation_Angle = __builtin_remainderf(Rotation_Angle - ((*(Global_Variables_Structure**)607726732)->Absolute_Frame_Time * Console_Variable_Uber_Alles_Speed.Integer), 360);
 }

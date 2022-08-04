@@ -5,6 +5,13 @@ float Absolute(float X)
 	return X;
 }
 
+float Vector_Normalize(float* Vector)
+{
+	using Vector_Normalize_Type = float(__thiscall*)(float* Vector);
+
+	return Vector_Normalize_Type(606378096)(Vector);
+}
+
 float Arc_Tangent_2(float X, float Y)
 {
 	asm("fpatan" : "+t"(X) : "u"(Y) : "st(1)");
@@ -24,13 +31,6 @@ void Angle_Vectors(float* Angles, float* Forward, float* Right, float* Up)
 	using Angle_Vectors_Type = void(__cdecl*)(float* Angles, float* Forward, float* Right, float* Up);
 
 	Angle_Vectors_Type(606384752)(Angles, Forward, Right, Up);
-}
-
-void Vector_Normalize(float* Vector)
-{
-	using Vector_Normalize_Type = float(__thiscall*)(float* Vector);
-
-	Vector_Normalize_Type(606378096)(Vector);
 }
 
 Player_Data_Structure Previous_Recent_Player_Data;
@@ -94,9 +94,16 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 			Previous_Move_Angle_Y = User_Command->Angles[1];
 
-			float* Velocity = (float*)((unsigned __int32)Local_Player + 224);
+			float Velocity[3] = 
+			{
+				*(float*)((unsigned __int32)Local_Player + 224),
 
-			if (Absolute(Difference) < Arc_Tangent_2(Square_Root(__builtin_powf(Velocity[0], 2) + __builtin_powf(Velocity[1], 2)), 30) * 180 / 3.1415927f)
+				*(float*)((unsigned __int32)Local_Player + 228),
+
+				0
+			};
+
+			if (Absolute(Difference) < Arc_Tangent_2(Vector_Normalize(Velocity), 30) * 180 / 3.1415927f)
 			{
 				float Strafe_Angle = __builtin_remainderf(User_Command->Angles[1] - Arc_Tangent_2(Velocity[0], Velocity[1]) * 180 / 3.1415927f, 360);
 
@@ -156,6 +163,8 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			Desired_Move_Forward[1] * User_Command->Move[0] + Desired_Move_Right[1] * User_Command->Move[1]
 		};
 
+		float Desired_Move_Magnitude = Vector_Normalize(Desired_Move);
+
 		auto Correct_Movement = [&]() -> void
 		{
 			float Move_Forward[3];
@@ -172,21 +181,11 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 			Vector_Normalize(Move_Right);
 
-			float Divider = Move_Forward[0] * Move_Right[1] - Move_Right[0] * Move_Forward[1];
+			float Divider = (Move_Forward[0] * Move_Right[1] - Move_Right[0] * Move_Forward[1]) / Desired_Move_Magnitude;
 
-			User_Command->Move[0] = __builtin_roundf((Desired_Move[0] * Move_Right[1] - Move_Right[0] * Desired_Move[1]) / Divider);
+			User_Command->Move[0] = (__int16)((Desired_Move[0] * Move_Right[1] - Move_Right[0] * Desired_Move[1]) / Divider);
 
-			if (*(unsigned __int32*)&User_Command->Move[0] == 2147483648)
-			{
-				User_Command->Move[0] = 0;
-			}
-
-			User_Command->Move[1] = __builtin_roundf((Move_Forward[0] * Desired_Move[1] - Desired_Move[0] * Move_Forward[1]) / Divider);
-
-			if (*(unsigned __int32*)&User_Command->Move[1] == 2147483648)
-			{
-				User_Command->Move[1] = 0;
-			}
+			User_Command->Move[1] = (__int16)((Move_Forward[0] * Desired_Move[1] - Desired_Move[0] * Move_Forward[1]) / Divider);
 		};
 
 		Correct_Movement();

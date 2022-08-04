@@ -1,5 +1,3 @@
-void* Original_Frame_Stage_Notify_Caller_Location;
-
 struct Prediction_Copy_Structure
 {
 	__int8 Additional_Bytes_1[8];
@@ -42,6 +40,8 @@ void Predicton_Copy_Compare(char* Class, void* Unknown_Parameter_1, void* Unknow
 		Byte_Manager::Copy_Bytes(0, (void*)(*(unsigned __int32*)607867332 + 2884 * (Class[1] == 'P') + Field->Offset[0]), Field->Bytes, (void*)((unsigned __int32)Predicton_Copy.Source + Field->Offset[1]));
 	}
 }
+
+void* Original_Frame_Stage_Notify_Caller_Location;
 
 void __thiscall Redirected_Frame_Stage_Notify(void* Unknown_Parameter, __int32 Stage)
 {
