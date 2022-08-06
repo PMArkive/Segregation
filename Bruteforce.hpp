@@ -32,6 +32,8 @@ void Bruteforce_Reset_Tolerance()
 	}
 }
 
+__int32 Recent_Player_Data_Number;
+
 void Bruteforce_Reset()
 {
 	__int32 Entity_Number = 0;
@@ -53,6 +55,8 @@ void Bruteforce_Reset()
 			goto Traverse_Players_Data_Label;
 		}
 	}
+
+	Recent_Player_Data_Number = 0;
 }
 
 __int8 Bruteforce_Angles_Count;

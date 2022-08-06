@@ -31,6 +31,8 @@ Interface_Structure Console_Variable_Bruteforce;
 
 Interface_Structure Console_Variable_Bruteforce_Angles;
 
+Interface_Structure Console_Variable_Alternative;
+
 Interface_Structure Console_Variable_Minimum_Choked_Commands;
 
 Interface_Structure Console_Variable_Maximum_Choked_Commands;
@@ -88,6 +90,10 @@ void Implement_Extended_Interface()
 	Bruteforce_Set_Angles(&Console_Variable_Bruteforce_Angles);
 
 	wprintf(L"[ + ] Bruteforce_Angles %p\n", &Console_Variable_Bruteforce_Angles);
+
+	Create_Console_Variable_Type(539130656)(&Console_Variable_Alternative, (char*)"Alternative", (char*)"0", nullptr);
+
+	wprintf(L"[ + ] Alternative %p\n", &Console_Variable_Alternative);
 
 	Create_Console_Variable_Type(539130656)(&Console_Variable_Minimum_Choked_Commands, (char*)"Minimum_Choked_Commands", (char*)"2", nullptr);
 

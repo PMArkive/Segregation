@@ -35,20 +35,6 @@ void Angle_Vectors(float* Angles, float* Forward, float* Right, float* Up)
 
 Player_Data_Structure Previous_Recent_Player_Data;
 
-void Compress_Angles(float* Angles)
-{
-	auto Compress_Angle = [](float Value, __int32 Shift) -> float
-	{
-		return ((__int32)(Value / 360 * Shift) & Shift - 1) * (360 / (float)Shift);
-	};
-
-	Angles[0] = Compress_Angle(Angles[0], 65536);
-
-	Angles[1] = Compress_Angle(Angles[1], 65536);
-
-	Angles[2] = Compress_Angle(Angles[2], 256);
-}
-
 void* Original_Copy_User_Command_Caller_Location;
 
 void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Command_Structure* User_Command)
@@ -192,14 +178,11 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		Correct_Movement();
 
-		float Local_Player_Previous_Origin[3] =
-		{
-			*(float*)((unsigned __int32)Local_Player + 668),
+		float Local_Player_Previous_Origin[3];
 
-			*(float*)((unsigned __int32)Local_Player + 672),
+		float* Local_Player_Origin = (float*)((unsigned __int32)Local_Player + 668);
 
-			*(float*)((unsigned __int32)Local_Player + 676),
-		};
+		Byte_Manager::Copy_Bytes(0, Local_Player_Previous_Origin, sizeof(Local_Player_Previous_Origin), Local_Player_Origin);
 
 		Shot_Time *= -1;
 
@@ -213,15 +196,20 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		User_Command->Move[1] = Previous_Move[1];
 
-		__int32 Choked_Commands_Count = *(__int32*)540627872;
+		static __int8 Send_Packet;
 
-		__int8 Send_Packet = 1;
+		if (Send_Packet == 2)
+		{
+			goto Send_Packet_Label;
+		}
+
+		__int32 Choked_Commands_Count = *(__int32*)540627872;
 
 		__int32 Predicted_Choked_Commands_Count = Choked_Commands_Count + 1;
 
-		__int8 Predicted_Send_Packet = 0;
+		__int8 Predicted_Send_Packet = Console_Variable_Alternative.Integer;
 
-		float* Local_Player_Origin = (float*)((unsigned __int32)Local_Player + 668);
+		static float Networked_Origin[3];
 
 		if (Choked_Commands_Count < Console_Variable_Minimum_Choked_Commands.Integer)
 		{
@@ -241,37 +229,43 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 		}
 		else
 		{
-			static float Networked_Origin[3];
-
 			if (Choked_Commands_Count < Console_Variable_Maximum_Choked_Commands.Integer)
 			{
+				Byte_Manager::Copy_Bytes(0, Local_Player_Previous_Origin, sizeof(Local_Player_Previous_Origin) * Console_Variable_Alternative.Integer, Local_Player_Origin);
+
 				if (__builtin_powf(Networked_Origin[0] - Local_Player_Previous_Origin[0], 2) + __builtin_powf(Networked_Origin[1] - Local_Player_Previous_Origin[1], 2) + __builtin_powf(Networked_Origin[2] - Local_Player_Previous_Origin[2], 2) <= 4096)
 				{
 					Send_Packet = 0;
-				}
-				else
-				{
-					Byte_Manager::Copy_Bytes(0, Networked_Origin, sizeof(Networked_Origin), Local_Player_Origin);
-				}
 
-				Predict_Dynamic_Send_Packet_Label:
-				{
-					if (Predicted_Choked_Commands_Count == Console_Variable_Maximum_Choked_Commands.Integer)
+					Predict_Dynamic_Send_Packet_Label:
 					{
-						Predicted_Send_Packet = 1;
-					}
-					else
-					{
-						if (__builtin_powf(Networked_Origin[0] - Local_Player_Origin[0], 2) + __builtin_powf(Networked_Origin[1] - Local_Player_Origin[1], 2) + __builtin_powf(Networked_Origin[2] - Local_Player_Origin[2], 2) > 4096)
+						if (Predicted_Choked_Commands_Count == Console_Variable_Maximum_Choked_Commands.Integer)
 						{
 							Predicted_Send_Packet = 1;
 						}
+						else
+						{
+							if (__builtin_powf(Networked_Origin[0] - Local_Player_Origin[0], 2) + __builtin_powf(Networked_Origin[1] - Local_Player_Origin[1], 2) + __builtin_powf(Networked_Origin[2] - Local_Player_Origin[2], 2) > 4096)
+							{
+								Predicted_Send_Packet = 1;
+							}
+						}
+					}
+
+				}
+				else
+				{
+					Send_Packet_Label:
+					{
+						Byte_Manager::Copy_Bytes(0, Networked_Origin, sizeof(Networked_Origin), Local_Player_Origin);
+
+						Send_Packet = 1;
 					}
 				}
 			}
 			else
 			{
-				Byte_Manager::Copy_Bytes(0, Networked_Origin, sizeof(Networked_Origin), Local_Player_Origin);
+				goto Send_Packet_Label;
 			}
 		}
 
@@ -360,7 +354,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 				{
 					if ((User_Command->Buttons & 2048) == 0)
 					{
-						if (Send_Packet == 0)
+						if (Send_Packet * (Console_Variable_Alternative.Integer ^ 1) == 0)
 						{
 							if (Predicted_Send_Packet == 1)
 							{
@@ -598,6 +592,8 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 														Shot_Time = Global_Variables->Current_Time;
 
 														Recent_Player_Data_Number = 0;
+
+														Send_Packet = Console_Variable_Alternative.Integer * 2;
 
 														In_Attack = 1;
 											
@@ -877,7 +873,16 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		Correct_Movement();
 
-		Compress_Angles(User_Command->Angles);
+		auto Compress_Angle = [](float Value, __int32 Shift) -> float
+		{
+			return ((__int32)(Value / 360 * Shift) & Shift - 1) * (360 / (float)Shift);
+		};
+
+		User_Command->Angles[0] = Compress_Angle(User_Command->Angles[0], 65536);
+
+		User_Command->Angles[1] = Compress_Angle(User_Command->Angles[1], 65536);
+
+		User_Command->Angles[2] = Compress_Angle(User_Command->Angles[2], 256);
 
 		if (Send_Packet != 0)
 		{
@@ -885,10 +890,6 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 		}
 
 		*(__int8*)((unsigned __int32)__builtin_frame_address(0) + 24) = Send_Packet;
-	}
-	else
-	{
-		Compress_Angles(User_Command->Angles);
 	}
 
 	(decltype(&Redirected_Copy_User_Command)(Original_Copy_User_Command_Caller_Location))(Unknown_Parameter, User_Command);
