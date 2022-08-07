@@ -383,13 +383,9 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 				{
 					if ((User_Command->Buttons & 2048) == 0)
 					{
-						__int8 Send_Packet_Sequence;
+						__int8 Send_Packet_Sequence = (Send_Packet == 0) + (Predicted_Send_Packet == 1);
 
-						if (Interface_Alternative.Integer == 0)
-						{
-							Send_Packet_Sequence = (Send_Packet == 0) + (Predicted_Send_Packet == 1);
-						}
-						else
+						if (Interface_Alternative.Integer != 0)
 						{
 							Send_Packet_Sequence = 2;
 						}
