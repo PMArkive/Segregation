@@ -140,7 +140,7 @@ __int32 __stdcall DllMain(void* This_Module_Location, unsigned __int32 Call_Reas
 				Implement_Extended_Interface();
 			}
 
-			wprintf(L"[ + ] Events Processing\n");
+			wprintf(L"[ + ] Events\n");
 			{
 				Redirection_Manager::Redirect_Function(Original_Frame_Stage_Notify_Caller_Location, 1, (void*)604538592, 1, (void*)Redirected_Frame_Stage_Notify);
 
@@ -217,14 +217,14 @@ __int32 __stdcall DllMain(void* This_Module_Location, unsigned __int32 Call_Reas
 				Redirection_Manager::Redirect_Function(Original_Weapon_Spread_Caller_Location, 1, (void*)605949248, 1, (void*)Redirected_Weapon_Spread);
 			}
 
-			wprintf(L"[ + ] Commands Processing\n");
+			wprintf(L"[ + ] Input\n");
 			{
 				Byte_Manager::Set_Bytes(1, (void*)604993824, 3, 144);
 
 				Redirection_Manager::Redirect_Function(Original_Copy_User_Command_Caller_Location, 0, (void*)604850464, 1, (void*)Redirected_Copy_User_Command);
 			}
 
-			wprintf(L"[ + ] Commands Networking\n");
+			wprintf(L"[ + ] Network\n");
 			{
 				Redirection_Manager::Redirect_Function(1, (void*)537142224, (void*)Redirected_Send_Move);
 			}
