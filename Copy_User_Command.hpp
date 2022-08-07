@@ -61,7 +61,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			0
 		};
 
-		static float Previous_Move_Angle_Y = Move_Angles[1];
+		static float Previous_Move_Angle_Y;
 
 		if ((User_Command->Buttons & 2) == 2)
 		{
