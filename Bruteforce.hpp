@@ -21,7 +21,7 @@ void Bruteforce_Reset_Tolerance()
 
 	Traverse_Players_Data_Label:
 	{
-		Players_Data[Entity_Number].Tolerance = Console_Variable_Bruteforce_Tolerance.Integer;
+		Players_Data[Entity_Number].Tolerance = Interface_Bruteforce_Tolerance.Integer;
 
 		Entity_Number += 1;
 
@@ -31,8 +31,6 @@ void Bruteforce_Reset_Tolerance()
 		}
 	}
 }
-
-__int32 Recent_Player_Data_Number;
 
 void Bruteforce_Reset()
 {
@@ -44,7 +42,7 @@ void Bruteforce_Reset()
 
 		Player_Data->Memorized = 0;
 
-		Player_Data->Tolerance = Console_Variable_Bruteforce_Tolerance.Integer;
+		Player_Data->Tolerance = Interface_Bruteforce_Tolerance.Integer;
 
 		Player_Data->Shots_Fired = 0;
 
@@ -55,8 +53,6 @@ void Bruteforce_Reset()
 			goto Traverse_Players_Data_Label;
 		}
 	}
-
-	Recent_Player_Data_Number = 0;
 }
 
 __int8 Bruteforce_Angles_Count;

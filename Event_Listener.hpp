@@ -1,3 +1,5 @@
+__int32 Recent_Player_Data_Number;
+
 __int32 Primary_Ammo_Capacity_Snapshot;
 
 float Shot_Time;
@@ -36,7 +38,7 @@ void __stdcall Event_Processor(void* Event)
 
 							Player_Data->Memorized = 0;
 
-							if (Console_Variable_Commentator.Integer == 1)
+							if (Interface_Commentator.Integer == 1)
 							{
 								PlaySoundW((wchar_t*)Sounds_Laugh, nullptr, SND_ASYNC | SND_MEMORY);
 							}
@@ -46,7 +48,7 @@ void __stdcall Event_Processor(void* Event)
 					{
 						if (Killer_Number == Local_Player_Number)
 						{
-							if (Console_Variable_Bruteforce.Integer == 1)
+							if (Interface_Bruteforce.Integer == 1)
 							{
 								if (Victim_Number == Recent_Player_Data_Number - 63)
 								{
@@ -58,19 +60,19 @@ void __stdcall Event_Processor(void* Event)
 										{
 											if (Player_Data->Memorized == 0)
 											{
-												if (Player_Data->Tolerance == Console_Variable_Bruteforce_Tolerance.Integer)
+												if (Player_Data->Tolerance == Interface_Bruteforce_Tolerance.Integer)
 												{
 													Player_Data->Shots_Fired = ((Player_Data->Shots_Fired - 1) % Bruteforce_Angles_Count + Bruteforce_Angles_Count) % Bruteforce_Angles_Count;
 												}
 												else
 												{
-													Player_Data->Tolerance = Console_Variable_Bruteforce_Tolerance.Integer;
+													Player_Data->Tolerance = Interface_Bruteforce_Tolerance.Integer;
 												}
 											}
 										}
 										else
 										{
-											if (Console_Variable_Bruteforce_Memory.Integer == 1)
+											if (Interface_Bruteforce_Memory.Integer == 1)
 											{
 												if (Player_Data->Memorized == 0)
 												{
@@ -88,7 +90,7 @@ void __stdcall Event_Processor(void* Event)
 
 							if (Name[7] == 'd')
 							{
-								if (Console_Variable_Commentator.Integer == 1)
+								if (Interface_Commentator.Integer == 1)
 								{
 									PlaySoundW((wchar_t*)Sounds_Exclamation, nullptr, SND_ASYNC | SND_MEMORY);
 								}

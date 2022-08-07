@@ -20,6 +20,8 @@
 
 #include "Write_Events.hpp"
 
+#include "Shutdown.hpp"
+
 #include "Interpolate.hpp"
 
 #include "Update_Animation.hpp"
@@ -47,8 +49,6 @@
 #include "Draw_Crosshair.hpp"
 
 #include "Precache.hpp"
-
-#include "Shutdown.hpp"
 
 __int32 __stdcall DllMain(void* This_Module_Location, unsigned __int32 Call_Reason, void* Reserved)
 {
@@ -140,15 +140,12 @@ __int32 __stdcall DllMain(void* This_Module_Location, unsigned __int32 Call_Reas
 				Implement_Extended_Interface();
 			}
 
-			wprintf(L"[ + ] Data Networking\n");
+			wprintf(L"[ + ] Events Processing\n");
 			{
 				Redirection_Manager::Redirect_Function(Original_Frame_Stage_Notify_Caller_Location, 1, (void*)604538592, 1, (void*)Redirected_Frame_Stage_Notify);
 
 				Byte_Manager::Set_Bytes(1, (void*)537149578, 1, 235);
-			}
 
-			wprintf(L"[ + ] Events\n");
-			{
 				void* Event_Listener = (void*)malloc(sizeof(void*));
 
 				void* Event_Listener_Table = malloc(sizeof(void*) * 2);
@@ -166,6 +163,8 @@ __int32 __stdcall DllMain(void* This_Module_Location, unsigned __int32 Call_Reas
 				Add_Listener_Type(537586416)((void*)540812808, Event_Listener, (char*)"bullet_impact", 0);
 
 				Redirection_Manager::Redirect_Function(Original_Write_Events_Caller_Location, 2, (void*)537582208, 1, (void*)Redirected_Write_Events);
+
+				Redirection_Manager::Redirect_Function(Original_Shutdown_Caller_Location, 0, (void*)537926128, 1, (void*)Redirected_Shutdown);
 			}
 
 			wprintf(L"[ + ] Interpolation\n");
@@ -319,11 +318,6 @@ __int32 __stdcall DllMain(void* This_Module_Location, unsigned __int32 Call_Reas
 				};
 
 				Byte_Manager::Copy_Bytes(1, (void*)605610608, sizeof(Smoke_Bytes), Smoke_Bytes);
-			}
-
-			wprintf(L"[ + ] Shutdown\n");
-			{
-				Redirection_Manager::Redirect_Function(Original_Shutdown_Caller_Location, 0, (void*)537926128, 1, (void*)Redirected_Shutdown);
 			}
 		}
 	}

@@ -12,7 +12,7 @@ void Redirected_Draw_Crosshair()
 
 		(*Set_Color_Type(*(unsigned __int32*)Surface + 44))(Surface, Red, 0, 0, 255);
 
-		float Uber_Alles = Console_Variable_Uber_Alles_Scale.Integer;
+		float Uber_Alles = Interface_Uber_Alles_Scale.Integer;
 
 		__int32 Points[16]
 		{
@@ -94,5 +94,5 @@ void Redirected_Draw_Crosshair()
 
 	Uber_Alles(255, Screen_Width, Screen_Height);
 
-	Rotation_Angle = __builtin_remainderf(Rotation_Angle - ((*(Global_Variables_Structure**)607726732)->Absolute_Frame_Time * Console_Variable_Uber_Alles_Speed.Integer), 360);
+	Rotation_Angle = __builtin_remainderf(Rotation_Angle - ((*(Global_Variables_Structure**)607726732)->Absolute_Frame_Time * Interface_Uber_Alles_Speed.Integer), 360);
 }

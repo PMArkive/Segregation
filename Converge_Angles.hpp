@@ -4,7 +4,7 @@ void __thiscall Redirected_Converge_Angles(void* Animation_State, float Goal, vo
 {
 	__int8 Instant = 0;
 
-	if (Console_Variable_Bruteforce.Integer == 1)
+	if (Interface_Bruteforce.Integer == 1)
 	{
 		void* Entity = *(void**)((unsigned __int32)Animation_State + 20);
 
@@ -16,7 +16,7 @@ void __thiscall Redirected_Converge_Angles(void* Animation_State, float Goal, vo
 
 				if (Player_Data->Priority != -2)
 				{
-					if (Console_Variable_Bruteforce_Memory.Integer == 0)
+					if (Interface_Bruteforce_Memory.Integer == 0)
 					{
 						Bruteforce_Label:
 						{
