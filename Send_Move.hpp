@@ -66,7 +66,7 @@ void Redirected_Send_Move()
 
 	void* Network_Channel = *(void**)540608912;
 
-	if (Extra_Commands_Queue > 0)
+	if (Extra_Commands_Queue != 0)
 	{
 		*(__int32*)((unsigned __int32)Network_Channel + 28) -= Extra_Commands_Queue;
 	}
