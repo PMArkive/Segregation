@@ -76,9 +76,9 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 				User_Command->Buttons &= ~(*(__int32*)((unsigned __int32)Local_Player + 3420) & 2);
 			}
 
-			float Difference = __builtin_remainderf(User_Command->Angles[1] - Previous_Move_Angle_Y, 360);
+			float Difference = __builtin_remainderf(Move_Angles[1] - Previous_Move_Angle_Y, 360);
 
-			Previous_Move_Angle_Y = User_Command->Angles[1];
+			Previous_Move_Angle_Y = Move_Angles[1];
 
 			float Velocity[3] =
 			{
@@ -91,7 +91,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 			if (Absolute(Difference) < Arc_Tangent_2(Vector_Normalize(Velocity), 30) * 180 / 3.1415927f)
 			{
-				float Strafe_Angle = __builtin_remainderf(User_Command->Angles[1] - Arc_Tangent_2(Velocity[0], Velocity[1]) * 180 / 3.1415927f, 360);
+				float Strafe_Angle = __builtin_remainderf(Move_Angles[1] - Arc_Tangent_2(Velocity[0], Velocity[1]) * 180 / 3.1415927f, 360);
 
 				if (__builtin_signbitf(Strafe_Angle) == 0)
 				{
@@ -118,7 +118,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 		}
 		else
 		{
-			Previous_Move_Angle_Y = User_Command->Angles[1];
+			Previous_Move_Angle_Y = Move_Angles[1];
 		}
 
 		float Previous_Move[2] =
