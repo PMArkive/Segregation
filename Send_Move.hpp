@@ -32,9 +32,9 @@ void Redirected_Send_Move()
 
 	__int32 Choked_Commands = *(__int32*)540627872;
 
-	__int32 Next_Command_Number = *(__int32*)540627868 + Choked_Commands + 1;
-
 	__int32 Commands_Queue = std::clamp(Choked_Commands + 1, 0, 15);
+
+	*(__int32*)((unsigned __int32)&Message + 20) = Commands_Queue;
 
 	__int32 Extra_Commands_Queue = Choked_Commands + 1 - Commands_Queue;
 
@@ -42,23 +42,23 @@ void Redirected_Send_Move()
 
 	*(__int32*)((unsigned __int32)&Message + 16) = Backup_Commands;
 
-	*(__int32*)((unsigned __int32)&Message + 20) = Commands_Queue;
-
-	__int32 To_Command_Number = Next_Command_Number - (Commands_Queue + Backup_Commands) + 1;
-
 	__int32 From_Command_Number = -1;
+
+	__int32 Next_Command_Number = *(__int32*)540627868 + Choked_Commands + 2;
+
+	__int32 To_Command_Number = Next_Command_Number - (Commands_Queue + Backup_Commands);
 
 	Write_Command_Label:
 	{
-		using Write_Command_Type = __int8(__thiscall*)(void* Client, void* Data, __int32 From, __int32 To, __int8 New);
+		using Write_Command_Type = __int8(__thiscall*)(void* Client, void* Data, __int32 From, __int32 To, void* Unknown_Parameter);
 
-		Write_Command_Type(604533440)(*(void**)540494868, (void*)((unsigned __int32)&Message + 52), From_Command_Number, To_Command_Number, To_Command_Number != Next_Command_Number - Commands_Queue + 1);
+		Write_Command_Type(604533440)(*(void**)540494868, (void*)((unsigned __int32)&Message + 52), From_Command_Number, To_Command_Number, nullptr);
 
 		From_Command_Number = To_Command_Number;
 
 		To_Command_Number += 1;
 
-		if (To_Command_Number <= Next_Command_Number)
+		if (To_Command_Number != Next_Command_Number)
 		{
 			goto Write_Command_Label;
 		}
@@ -66,10 +66,7 @@ void Redirected_Send_Move()
 
 	void* Network_Channel = *(void**)540608912;
 
-	if (Extra_Commands_Queue != 0)
-	{
-		*(__int32*)((unsigned __int32)Network_Channel + 28) -= Extra_Commands_Queue;
-	}
+	*(__int32*)((unsigned __int32)Network_Channel + 28) -= Extra_Commands_Queue;
 
 	using Send_Network_Message_Type = void(__thiscall*)(void* Network_Channel, void* Message, __int8 Unknown_Parameter);
 
