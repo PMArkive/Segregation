@@ -302,6 +302,22 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		__int32 Team_Number = *(__int32*)((unsigned __int32)Local_Player + 144);
 
+		using Get_Latency_Type = float(__thiscall*)(void* Network_Channel, __int32 Flow_Type);
+
+		void* Network_Channel = *(void**)540608912;
+
+		float Total_Latency = Get_Latency_Type(537919008)(Network_Channel, 0) + Get_Latency_Type(537919008)(Network_Channel, 1);
+
+		float Interpolation_Ratio = std::clamp(*(float*)607906336, *(float*)542242312, *(float*)542242072);
+
+		__int32 Update_Rate = std::clamp(*(__int32*)540495212, *(__int32*)542221268, *(__int32*)542221412);
+
+		float Interpolation_Time = max(*(float*)541928632, Interpolation_Ratio / Update_Rate);
+
+		float Corrected_Interpolation_Time = std::clamp(Total_Latency + Interpolation_Time, 0.f, 1.f);
+
+		Global_Variables_Structure* Global_Variables = *(Global_Variables_Structure**)607726732;
+
 		struct Target_Structure
 		{
 			__int8 Priority;
@@ -309,15 +325,13 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			float Distance;
 
 			void* Target;
+
+			__int32 Tick_Number;
 		};
 
 		static std::vector<Target_Structure> Sorted_Target_List;
 
 		Sorted_Target_List.clear();
-
-		Global_Variables_Structure* Global_Variables = *(Global_Variables_Structure**)607726732;
-
-		__int32 Maximum_Clients = Global_Variables->Maximum_Clients;
 
 		Traverse_Entity_List_Label:
 		{
@@ -335,25 +349,32 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 						{
 							if (*(__int8*)((unsigned __int32)Entity + 320) == 0)
 							{
-								float* Entity_Origin = (float*)((unsigned __int32)Entity + 668);
+								__int32 Entity_Tick_Number = (*(float*)((unsigned __int32)Entity + 104) + Interpolation_Time) / Global_Variables->Interval_Per_Tick + 0.5f;
 
-								Target_Structure Target =
+								if (Absolute(Corrected_Interpolation_Time - (__int32)(Global_Variables->Tick_Number + Total_Latency / Global_Variables->Interval_Per_Tick + 0.5f - Entity_Tick_Number) * Global_Variables->Interval_Per_Tick) <= 0.2f)
 								{
-									Player_Data->Priority == -2 ? (__int8)0 : Player_Data->Priority,
+									float* Entity_Origin = (float*)((unsigned __int32)Entity + 668);
 
-									Square_Root(__builtin_powf(Local_Player_Origin[0] - Entity_Origin[0], 2) + __builtin_powf(Local_Player_Origin[1] - Entity_Origin[1], 2) + __builtin_powf(Local_Player_Origin[2] - Entity_Origin[2], 2)),
+									Target_Structure Target =
+									{
+										Player_Data->Priority == -2 ? (__int8)0 : Player_Data->Priority,
 
-									Entity
-								};
+										Square_Root(__builtin_powf(Local_Player_Origin[0] - Entity_Origin[0], 2) + __builtin_powf(Local_Player_Origin[1] - Entity_Origin[1], 2) + __builtin_powf(Local_Player_Origin[2] - Entity_Origin[2], 2)),
 
-								Sorted_Target_List.push_back(Target);
+										Entity,
+
+										Entity_Tick_Number
+									};
+
+									Sorted_Target_List.push_back(Target);
+								}
 							}
 						}
 					}
 				}
 			}
 		
-			if (Entity_Number != Maximum_Clients)
+			if (Entity_Number != Global_Variables->Maximum_Clients)
 			{
 				Entity_Number += 1;
 
@@ -406,7 +427,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 											{
 												size_t Target_Number = 0;
 
-												void* Optimal_Target;
+												Target_Structure Target;
 
 												using Get_Eye_Position_Type = void(__thiscall*)(void* Player, float* Eye_Position);
 
@@ -418,39 +439,21 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 												float Weapon_Range = *(float*)((unsigned __int32)Get_Weapon_Information_Type(604037872)(Weapon) + 2020);
 
-												__int32 Optimal_Target_Tick_Number;
-
-												using Get_Latency_Type = float(__thiscall*)(void* Network_Channel, __int32 Flow_Type);
-
-												void* Network_Channel = *(void**)540608912;
-
-												float Total_Latency = Get_Latency_Type(537919008)(Network_Channel, 0) + Get_Latency_Type(537919008)(Network_Channel, 1);
-
-												float Interpolation_Ratio = std::clamp(*(float*)607906336, *(float*)542242312, *(float*)542242072);
-
-												__int32 Update_Rate = std::clamp(*(__int32*)540495212, *(__int32*)542221268, *(__int32*)542221412);
-
-												float Interpolation_Time = max(*(float*)541928632, Interpolation_Ratio / Update_Rate);
-
-												float Corrected_Interpolation_Time = std::clamp(Total_Latency + Interpolation_Time, 0.f, 1.f);
-
-												float Aim_Angles[2];
-
 												Traverse_Sorted_Target_List_Label:
 												{
 													if (Target_Number == Sorted_Target_List.size())
 													{
-														Optimal_Target = nullptr;
+														Recent_Player_Data_Number = 0;
 													}
 													else
 													{
-														Optimal_Target = Sorted_Target_List.at(Target_Number).Target;
+														Target = Sorted_Target_List.at(Target_Number);
 
 														using Setup_Bones_Type = __int8(__thiscall*)(void* Entity, void* Bones, __int32 Maximum_Bones, __int32 Mask, float Current_Time);
 
 														float Bones[128][3][4];
 
-														if (Setup_Bones_Type(604209888)((void*)((unsigned __int32)Optimal_Target + 4), Bones, 128, 524032, Global_Variables->Current_Time) == 1)
+														if (Setup_Bones_Type(604209888)((void*)((unsigned __int32)Target.Target + 4), Bones, 128, 524032, Global_Variables->Current_Time) == 1)
 														{
 															auto Trace_Ray = [&](float* Direction) -> __int8
 															{
@@ -520,7 +523,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 																Clip_Trace_To_Players_Type(605426672)(Local_Player_Eye_Position, End, 1174421515, &Filter, &Trace);
 
-																if (Trace.Entity == Optimal_Target)
+																if (Trace.Entity == Target.Target)
 																{
 																	if (Interface_Aim_Intersection.Integer == 0)
 																	{
@@ -533,9 +536,9 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 																return 0;
 															};
 
-															using Get_Studio_Header_Type = void* (__thiscall*)(void* Entity);
+															using Get_Studio_Header_Type = void*(__thiscall*)(void* Entity);
 
-															void* Studio_Header = *(void**)Get_Studio_Header_Type((unsigned __int32)604188448)(Optimal_Target);
+															void* Studio_Header = *(void**)Get_Studio_Header_Type((unsigned __int32)604188448)(Target.Target);
 
 															void* Hitbox_Set = (void*)((unsigned __int32)Studio_Header + *(__int32*)((unsigned __int32)Studio_Header + 176));
 
@@ -561,7 +564,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 																Bones[14][2][0] * Bounding_Box_Maximum[0] + Bones[14][2][1] * Bounding_Box_Maximum[1] + Bones[14][2][2] * Bounding_Box_Maximum[2] + Bones[14][2][3]
 															};
 
-															float Optimal_Target_Origin[3] =
+															float Target_Origin[3] =
 															{
 																(Hitbox_Minimum[0] + Hitbox_Maximum[0]) / 2,
 
@@ -569,32 +572,71 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 																Hitbox_Minimum[2] + (Hitbox_Maximum[2] - Hitbox_Minimum[2]) * Interface_Aim_Height.Floating_Point
 															};
-																
+
 															float Direction[3] =
 															{
-																Optimal_Target_Origin[0] - Local_Player_Eye_Position[0],
+																Target_Origin[0] - Local_Player_Eye_Position[0],
 
-																Optimal_Target_Origin[1] - Local_Player_Eye_Position[1],
+																Target_Origin[1] - Local_Player_Eye_Position[1],
 
-																Optimal_Target_Origin[2] - Local_Player_Eye_Position[2]
+																Target_Origin[2] - Local_Player_Eye_Position[2]
 															};
 
 															Vector_Normalize(Direction);
 
 															if (Trace_Ray(Direction) == 1)
 															{
-																Optimal_Target_Tick_Number = (*(float*)((unsigned __int32)Optimal_Target + 104) + Interpolation_Time) / Global_Variables->Interval_Per_Tick + 0.5f;
+																User_Command->Tick_Number = Target.Tick_Number;
 
-																if (Absolute(Corrected_Interpolation_Time - (__int32)(Global_Variables->Tick_Number + Total_Latency / Global_Variables->Interval_Per_Tick + 0.5f - Optimal_Target_Tick_Number) * Global_Variables->Interval_Per_Tick) <= 0.2f)
+																User_Command->Angles[0] = Arc_Tangent_2(Square_Root(__builtin_powf(Direction[0], 2) + __builtin_powf(Direction[1], 2)), -Direction[2]) * 180 / 3.1415927f;
+
+																User_Command->Angles[1] = Arc_Tangent_2(Direction[0], Direction[1]) * 180 / 3.1415927f;
+
+																if (Interface_Bruteforce.Integer == 1)
 																{
-																	Aim_Angles[0] = Arc_Tangent_2(Square_Root(__builtin_powf(Direction[0], 2) + __builtin_powf(Direction[1], 2)), -Direction[2]) * 180 / 3.1415927f;
+																	__int32 Target_Number = *(__int32*)((unsigned __int32)Target.Target + 80) - 1;
 
-																	Aim_Angles[1] = Arc_Tangent_2(Direction[0], Direction[1]) * 180 / 3.1415927f;
+																	Player_Data_Structure* Player_Data = &Players_Data[Target_Number];
 
-																	User_Command->Buttons |= 1;
+																	if (Player_Data->Priority != -2)
+																	{
+																		Recent_Player_Data_Number = Target_Number + 64;
 
-																	goto Found_Optimal_Target_Label;
+																		Byte_Manager::Copy_Bytes(0, &Previous_Recent_Player_Data, sizeof(Previous_Recent_Player_Data), Player_Data);
+
+																		if (Interface_Bruteforce_Memory.Integer == 0)
+																		{
+																			Bruteforce_Label:
+																			{
+																				if (Player_Data->Tolerance == 0)
+																				{
+																					Player_Data->Shots_Fired = (Player_Data->Shots_Fired + 1) % Bruteforce_Angles_Count;
+
+																					Player_Data->Tolerance = Interface_Bruteforce_Tolerance.Integer;
+																				}
+																				else
+																				{
+																					Player_Data->Tolerance -= 1;
+																				}
+																			}
+																		}
+																		else
+																		{
+																			if (Player_Data->Memorized == 0)
+																			{
+																				goto Bruteforce_Label;
+																			}
+
+																			Player_Data->Memorized -= 1;
+																		}
+
+																		using Get_Primary_Ammo_Capacity_Type = __int32(__thiscall**)(void* Weapon);
+
+																		Primary_Ammo_Capacity_Snapshot = (*Get_Primary_Ammo_Capacity_Type(*(unsigned __int32*)Weapon + 1000))(Weapon) - 1;
+																	}
 																}
+
+																goto Found_Target_Label;
 															}
 														}
 
@@ -602,9 +644,9 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 														goto Traverse_Sorted_Target_List_Label;
 
-														Found_Optimal_Target_Label:
+														Found_Target_Label:
 														{
-
+															User_Command->Buttons |= 1;
 														}
 													}
 												}
@@ -613,62 +655,9 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 												{
 													Shot_Time = Global_Variables->Current_Time;
 
-													Recent_Player_Data_Number = 0;
-
 													Send_Packet = (Interface_Alternative.Integer != 0) * 2;
 
 													In_Attack = 1;
-											
-													if (Optimal_Target != nullptr)
-													{
-														User_Command->Tick_Number = Optimal_Target_Tick_Number;
-
-														Byte_Manager::Copy_Bytes(0, User_Command->Angles, sizeof(Aim_Angles), Aim_Angles);
-
-														if (Interface_Bruteforce.Integer == 1)
-														{
-															__int32 Optimal_Target_Number = *(__int32*)((unsigned __int32)Optimal_Target + 80) - 1;
-
-															Player_Data_Structure* Player_Data = &Players_Data[Optimal_Target_Number];
-
-															if (Player_Data->Priority != -2)
-															{
-																Recent_Player_Data_Number = Optimal_Target_Number + 64;
-
-																using Get_Primary_Ammo_Capacity_Type = __int32(__thiscall**)(void* Weapon);
-															
-																Primary_Ammo_Capacity_Snapshot = (*Get_Primary_Ammo_Capacity_Type(*(unsigned __int32*)Weapon + 1000))(Weapon) - 1;
-
-																Byte_Manager::Copy_Bytes(0, &Previous_Recent_Player_Data, sizeof(Previous_Recent_Player_Data), Player_Data);
-
-																if (Interface_Bruteforce_Memory.Integer == 0)
-																{
-																	Bruteforce_Label:
-																	{
-																		if (Player_Data->Tolerance == 0)
-																		{
-																			Player_Data->Shots_Fired = (Player_Data->Shots_Fired + 1) % Bruteforce_Angles_Count;
-
-																			Player_Data->Tolerance = Interface_Bruteforce_Tolerance.Integer;
-																		}
-																		else
-																		{
-																			Player_Data->Tolerance -= 1;
-																		}
-																	}
-																}
-																else
-																{
-																	if (Player_Data->Memorized == 0)
-																	{
-																		goto Bruteforce_Label;
-																	}
-
-																	Player_Data->Memorized -= 1;
-																}
-															}
-														}
-													}
 
 													float Forward[3];
 
@@ -861,13 +850,13 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			{
 				User_Command->Angles[0] = Interface_Angle_X.Floating_Point;
 
-				float* Optimal_Target_Origin = (float*)((unsigned __int32)Sorted_Target_List.at(0).Target + 668);
+				float* Target_Origin = (float*)((unsigned __int32)Sorted_Target_List.at(0).Target + 668);
 				
 				float Direction[3] =
 				{
-					Optimal_Target_Origin[0] - Local_Player_Origin[0],
+					Target_Origin[0] - Local_Player_Origin[0],
 
-					Optimal_Target_Origin[1] - Local_Player_Origin[1],
+					Target_Origin[1] - Local_Player_Origin[1],
 
 					0
 				};

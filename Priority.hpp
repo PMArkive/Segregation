@@ -32,31 +32,26 @@ Player_Data_Structure Players_Data[64];
 
 void Get_Priorities()
 {
-	__int32 Maximum_Clients = (*(Global_Variables_Structure**)607726732)->Maximum_Clients;
+	__int32 Entity_Number = 1;
 
-	if (Maximum_Clients != 0)
+	Traverse_Entity_List_Label:
 	{
-		__int32 Entity_Number = 1;
+		using Get_Client_Name_Type = void(__thiscall*)(void* Engine, __int32 Number, char* Name);
 
-		Traverse_Entity_List_Label:
+		char Name[132];
+
+		Get_Client_Name_Type(537018208)((void*)540435380, Entity_Number, Name);
+
+		if (Name[0] != 0)
 		{
-			using Get_Client_Name_Type = void(__thiscall*)(void* Engine, __int32 Number, char* Name);
+			wprintf(L"[ ? ] \"%hs\" %i %i\n", Name, Entity_Number, Players_Data[Entity_Number - 1].Priority);
+		}
 
-			char Name[132];
+		if (Entity_Number != (*(Global_Variables_Structure**)607726732)->Maximum_Clients)
+		{
+			Entity_Number += 1;
 
-			Get_Client_Name_Type(537018208)((void*)540435380, Entity_Number, Name);
-
-			if (Name[0] != 0)
-			{
-				wprintf(L"[ ? ] \"%hs\" %i %i\n", Name, Entity_Number, Players_Data[Entity_Number - 1].Priority);
-			}
-
-			if (Entity_Number != Maximum_Clients)
-			{
-				Entity_Number += 1;
-
-				goto Traverse_Entity_List_Label;
-			}
+			goto Traverse_Entity_List_Label;
 		}
 	}
 }

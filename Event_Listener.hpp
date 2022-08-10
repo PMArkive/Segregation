@@ -48,42 +48,36 @@ void __stdcall Event_Processor(void* Event)
 					{
 						if (Killer_Number == Local_Player_Number)
 						{
-							if (Interface_Bruteforce.Integer == 1)
+							if (Victim_Number == Recent_Player_Data_Number - 63)
 							{
-								if (Victim_Number == Recent_Player_Data_Number - 63)
-								{
-									Player_Data_Structure* Player_Data = &Players_Data[Victim_Number - 1];
+								Player_Data_Structure* Player_Data = &Players_Data[Victim_Number - 1];
 
-									if (Player_Data->Priority != -2)
+								if (Name[7] == 'h')
+								{
+									if (Player_Data->Memorized == 0)
 									{
-										if (Name[7] == 'h')
+										if (Player_Data->Tolerance == Interface_Bruteforce_Tolerance.Integer)
 										{
-											if (Player_Data->Memorized == 0)
-											{
-												if (Player_Data->Tolerance == Interface_Bruteforce_Tolerance.Integer)
-												{
-													Player_Data->Shots_Fired = ((Player_Data->Shots_Fired - 1) % Bruteforce_Angles_Count + Bruteforce_Angles_Count) % Bruteforce_Angles_Count;
-												}
-												else
-												{
-													Player_Data->Tolerance = Interface_Bruteforce_Tolerance.Integer;
-												}
-											}
+											Player_Data->Shots_Fired = ((Player_Data->Shots_Fired - 1) % Bruteforce_Angles_Count + Bruteforce_Angles_Count) % Bruteforce_Angles_Count;
 										}
 										else
 										{
-											if (Interface_Bruteforce_Memory.Integer == 1)
-											{
-												if (Player_Data->Memorized == 0)
-												{
-													Player_Data->Tolerance = 0;
-
-													Player_Data->Memorized_Y = Bruteforce_Angles[Player_Data->Shots_Fired];
-												}
-
-												Player_Data->Memorized = Primary_Ammo_Capacity_Snapshot;
-											}
+											Player_Data->Tolerance = Interface_Bruteforce_Tolerance.Integer;
 										}
+									}
+								}
+								else
+								{
+									if (Interface_Bruteforce_Memory.Integer == 1)
+									{
+										if (Player_Data->Memorized == 0)
+										{
+											Player_Data->Tolerance = 0;
+
+											Player_Data->Memorized_Y = Bruteforce_Angles[Player_Data->Shots_Fired];
+										}
+
+										Player_Data->Memorized = Primary_Ammo_Capacity_Snapshot;
 									}
 								}
 							}
