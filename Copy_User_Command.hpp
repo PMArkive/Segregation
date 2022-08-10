@@ -414,7 +414,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 												Get_Eye_Position_Type(604058320)(Local_Player, Local_Player_Eye_Position);
 
-												using Get_Weapon_Information_Type = void* (__thiscall*)(void* Weapon);
+												using Get_Weapon_Information_Type = void*(__thiscall*)(void* Weapon);
 
 												float Weapon_Range = *(float*)((unsigned __int32)Get_Weapon_Information_Type(604037872)(Weapon) + 2020);
 
