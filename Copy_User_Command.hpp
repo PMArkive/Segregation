@@ -543,22 +543,22 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 															float Hitbox_Minimum[3] =
 															{
-																Bounding_Box_Minimum[0] * Bones[14][0][0] + Bounding_Box_Minimum[1] * Bones[14][0][1] + Bounding_Box_Minimum[2] * Bones[14][0][2] + Bones[14][0][3],
+																Bones[14][0][0] * Bounding_Box_Minimum[0] + Bones[14][0][1] * Bounding_Box_Minimum[1] + Bones[14][0][2] * Bounding_Box_Minimum[2] + Bones[14][0][3],
 
-																Bounding_Box_Minimum[0] * Bones[14][1][0] + Bounding_Box_Minimum[1] * Bones[14][1][1] + Bounding_Box_Minimum[2] * Bones[14][1][2] + Bones[14][1][3],
+																Bones[14][1][0] * Bounding_Box_Minimum[0] + Bones[14][1][1] * Bounding_Box_Minimum[1] + Bones[14][1][2] * Bounding_Box_Minimum[2] + Bones[14][1][3],
 
-																Bounding_Box_Minimum[0] * Bones[14][2][0] + Bounding_Box_Minimum[1] * Bones[14][2][1] + Bounding_Box_Minimum[2] * Bones[14][2][2] + Bones[14][2][3]
+																Bones[14][2][0] * Bounding_Box_Minimum[0] + Bones[14][2][1] * Bounding_Box_Minimum[1] + Bones[14][2][2] * Bounding_Box_Minimum[2] + Bones[14][2][3]
 															};
 
 															float* Bounding_Box_Maximum = (float*)((unsigned __int32)Hitbox_Set + 848);
 
 															float Hitbox_Maximum[3] =
 															{
-																Bounding_Box_Maximum[0] * Bones[14][0][0] + Bounding_Box_Maximum[1] * Bones[14][0][1] + Bounding_Box_Maximum[2] * Bones[14][0][2] + Bones[14][0][3],
+																Bones[14][0][0] * Bounding_Box_Maximum[0] + Bones[14][0][1] * Bounding_Box_Maximum[1] + Bones[14][0][2] * Bounding_Box_Maximum[2] + Bones[14][0][3],
 
-																Bounding_Box_Maximum[0] * Bones[14][1][0] + Bounding_Box_Maximum[1] * Bones[14][1][1] + Bounding_Box_Maximum[2] * Bones[14][1][2] + Bones[14][1][3],
+																Bones[14][1][0] * Bounding_Box_Maximum[0] + Bones[14][1][1] * Bounding_Box_Maximum[1] + Bones[14][1][2] * Bounding_Box_Maximum[2] + Bones[14][1][3],
 
-																Bounding_Box_Maximum[0] * Bones[14][2][0] + Bounding_Box_Maximum[1] * Bones[14][2][1] + Bounding_Box_Maximum[2] * Bones[14][2][2] + Bones[14][2][3]
+																Bones[14][2][0] * Bounding_Box_Maximum[0] + Bones[14][2][1] * Bounding_Box_Maximum[1] + Bones[14][2][2] * Bounding_Box_Maximum[2] + Bones[14][2][3]
 															};
 
 															float Optimal_Target_Origin[3] =
