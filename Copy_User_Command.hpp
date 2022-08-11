@@ -308,13 +308,9 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		float Total_Latency = Get_Latency_Type(537919008)(Network_Channel, 0) + Get_Latency_Type(537919008)(Network_Channel, 1);
 
-		float Interpolation_Ratio = std::clamp(*(float*)607906336, *(float*)542242312, *(float*)542242072);
+		float Interpolation_Time = max(*(float*)541928632, std::clamp(*(float*)607906336, *(float*)542242312, *(float*)542242072) / std::clamp(*(__int32*)540495212, *(__int32*)542221268, *(__int32*)542221412));
 
-		__int32 Update_Rate = std::clamp(*(__int32*)540495212, *(__int32*)542221268, *(__int32*)542221412);
-
-		float Interpolation_Time = max(*(float*)541928632, Interpolation_Ratio / Update_Rate);
-
-		float Corrected_Interpolation_Time = std::clamp(Total_Latency + Interpolation_Time, 0.f, 1.f);
+		float Corrected_Total_Latency = std::clamp(Total_Latency + Interpolation_Time, 0.f, 1.f);
 
 		Global_Variables_Structure* Global_Variables = *(Global_Variables_Structure**)607726732;
 
@@ -351,7 +347,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 							{
 								__int32 Entity_Tick_Number = (*(float*)((unsigned __int32)Entity + 104) + Interpolation_Time) / Global_Variables->Interval_Per_Tick + 0.5f;
 
-								if (Absolute(Corrected_Interpolation_Time - (__int32)(Global_Variables->Tick_Number + Total_Latency / Global_Variables->Interval_Per_Tick + 0.5f - Entity_Tick_Number) * Global_Variables->Interval_Per_Tick) <= 0.2f)
+								if (Absolute(Corrected_Total_Latency - (__int32)(Global_Variables->Tick_Number + Total_Latency / Global_Variables->Interval_Per_Tick + 0.5f - Entity_Tick_Number) * Global_Variables->Interval_Per_Tick) <= 0.2f)
 								{
 									float* Entity_Origin = (float*)((unsigned __int32)Entity + 668);
 
@@ -592,6 +588,8 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 																User_Command->Angles[1] = Arc_Tangent_2(Direction[0], Direction[1]) * 180 / 3.1415927f;
 
+																User_Command->Buttons |= 1;
+
 																if (Interface_Bruteforce.Integer == 1)
 																{
 																	__int32 Target_Number = *(__int32*)((unsigned __int32)Target.Target + 80) - 1;
@@ -646,7 +644,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 														Found_Target_Label:
 														{
-															User_Command->Buttons |= 1;
+
 														}
 													}
 												}
