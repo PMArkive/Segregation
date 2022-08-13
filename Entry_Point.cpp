@@ -154,13 +154,13 @@ __int32 __stdcall DllMain(void* This_Module_Location, unsigned __int32 Call_Reas
 
 				*(void**)Event_Listener = Event_Listener_Table;
 
-				using Add_Listener_Type = __int8(__thiscall*)(void* Game_Event_Manager, void* Listener, char* Event, __int8 Unknown_Parameter);
+				using Add_Listener_Type = __int8(__thiscall*)(void* Game_Event_Manager, void* Listener, char* Event, void* Unknown_Parameter);
 
-				Add_Listener_Type(537586416)((void*)540812808, Event_Listener, (char*)"player_hurt", 0);
+				Add_Listener_Type(537586416)((void*)540812808, Event_Listener, (char*)"player_hurt", nullptr);
 
-				Add_Listener_Type(537586416)((void*)540812808, Event_Listener, (char*)"player_death", 0);
+				Add_Listener_Type(537586416)((void*)540812808, Event_Listener, (char*)"player_death", nullptr);
 
-				Add_Listener_Type(537586416)((void*)540812808, Event_Listener, (char*)"bullet_impact", 0);
+				Add_Listener_Type(537586416)((void*)540812808, Event_Listener, (char*)"bullet_impact", nullptr);
 
 				Redirection_Manager::Redirect_Function(Original_Write_Events_Caller_Location, 2, (void*)537582208, 1, (void*)Redirected_Write_Events);
 
