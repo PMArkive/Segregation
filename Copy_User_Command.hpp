@@ -302,7 +302,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		__int32 Team_Number = *(__int32*)((unsigned __int32)Local_Player + 144);
 
-		using Get_Latency_Type = float(__thiscall*)(void* Network_Channel, __int32 Flow_Type);
+		using Get_Latency_Type = float(__thiscall*)(void* Network_Channel, __int32 Type);
 
 		void* Network_Channel = *(void**)540608912;
 
