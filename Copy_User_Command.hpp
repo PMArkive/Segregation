@@ -723,62 +723,40 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 														Rotations[Calculation_Number][0][1] = Directions[Calculation_Number][1];
 
 														Rotations[Calculation_Number][0][2] = Directions[Calculation_Number][2];
-
-														if (Directions[Calculation_Number][0] + Directions[Calculation_Number][1] + Directions[Calculation_Number][2] == 1)
+														
+														float Direction[3] =
 														{
-															Rotations[Calculation_Number][1][0] = 0;
+															0,
 
-															Rotations[Calculation_Number][1][1] = 1;
+															0,
 
-															Rotations[Calculation_Number][1][2] = 0;
+															0
+														};
 
-															Rotations[Calculation_Number][2][0] = 0;
+														unsigned __int8 Direction_Number = Absolute(Directions[Calculation_Number][0]) >= Absolute(Directions[Calculation_Number][1]);
 
-															Rotations[Calculation_Number][2][1] = 0;
-
-															Rotations[Calculation_Number][2][2] = 1;
-														}
-														else
+														if (Absolute(Directions[Calculation_Number][Direction_Number]) >= Absolute(Directions[Calculation_Number][2]))
 														{
-															float Direction[3] =
-															{
-																0,
-
-																0,
-
-																0
-															};
-
-															unsigned __int8 Direction_Number = 0;
-
-															if (Absolute(Directions[Calculation_Number][Direction_Number]) >= Absolute(Directions[Calculation_Number][1]))
-															{
-																Direction_Number = 1;
-															}
-
-															if (Absolute(Directions[Calculation_Number][Direction_Number]) >= Absolute(Directions[Calculation_Number][2]))
-															{
-																Direction_Number = 2;
-															}
-
-															Direction[Direction_Number] = 1;
-
-															Rotations[Calculation_Number][1][0] = Directions[Calculation_Number][1] * Direction[2] - Directions[Calculation_Number][2] * Direction[1];
-
-															Rotations[Calculation_Number][1][1] = Directions[Calculation_Number][2] * Direction[0] - Directions[Calculation_Number][0] * Direction[2];
-
-															Rotations[Calculation_Number][1][2] = Directions[Calculation_Number][0] * Direction[1] - Directions[Calculation_Number][1] * Direction[0];
-
-															Vector_Normalize(Rotations[Calculation_Number][1]);
-
-															Rotations[Calculation_Number][2][0] = Directions[Calculation_Number][1] * Rotations[Calculation_Number][1][2] - Directions[Calculation_Number][2] * Rotations[Calculation_Number][1][1];
-
-															Rotations[Calculation_Number][2][1] = Directions[Calculation_Number][2] * Rotations[Calculation_Number][1][0] - Directions[Calculation_Number][0] * Rotations[Calculation_Number][1][2];
-
-															Rotations[Calculation_Number][2][2] = Directions[Calculation_Number][0] * Rotations[Calculation_Number][1][1] - Directions[Calculation_Number][1] * Rotations[Calculation_Number][1][0];
-
-															Vector_Normalize(Rotations[Calculation_Number][2]);
+															Direction_Number = 2;
 														}
+
+														Direction[Direction_Number] = 1;
+
+														Rotations[Calculation_Number][1][0] = Directions[Calculation_Number][1] * Direction[2] - Directions[Calculation_Number][2] * Direction[1];
+
+														Rotations[Calculation_Number][1][1] = Directions[Calculation_Number][2] * Direction[0] - Directions[Calculation_Number][0] * Direction[2];
+
+														Rotations[Calculation_Number][1][2] = Directions[Calculation_Number][0] * Direction[1] - Directions[Calculation_Number][1] * Direction[0];
+
+														Vector_Normalize(Rotations[Calculation_Number][1]);
+
+														Rotations[Calculation_Number][2][0] = Directions[Calculation_Number][1] * Rotations[Calculation_Number][1][2] - Directions[Calculation_Number][2] * Rotations[Calculation_Number][1][1];
+
+														Rotations[Calculation_Number][2][1] = Directions[Calculation_Number][2] * Rotations[Calculation_Number][1][0] - Directions[Calculation_Number][0] * Rotations[Calculation_Number][1][2];
+
+														Rotations[Calculation_Number][2][2] = Directions[Calculation_Number][0] * Rotations[Calculation_Number][1][1] - Directions[Calculation_Number][1] * Rotations[Calculation_Number][1][0];
+
+														Vector_Normalize(Rotations[Calculation_Number][2]);
 
 														if (Calculation_Number != 1)
 														{
