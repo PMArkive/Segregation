@@ -12,13 +12,6 @@ float Arc_Tangent_2(float X, float Y)
 	return X;
 }
 
-float Vector_Normalize(float* Vector)
-{
-	using Vector_Normalize_Type = float(__thiscall*)(float* Vector);
-
-	return Vector_Normalize_Type(606378096)(Vector);
-}
-
 float Square_Root(float X)
 {
 	asm("fsqrt" : "+t"(X));
@@ -31,6 +24,13 @@ void Angle_Vectors(float* Angles, float* Forward, float* Right, float* Up)
 	using Angle_Vectors_Type = void(__cdecl*)(float* Angles, float* Forward, float* Right, float* Up);
 
 	Angle_Vectors_Type(606384752)(Angles, Forward, Right, Up);
+}
+
+float Vector_Normalize(float* Vector)
+{
+	using Vector_Normalize_Type = float(__thiscall*)(float* Vector);
+
+	return Vector_Normalize_Type(606378096)(Vector);
 }
 
 Player_Data_Structure Previous_Recent_Player_Data;
@@ -80,16 +80,9 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 			Previous_Move_Angle_Y = Move_Angles[1];
 
-			float Velocity[3] =
-			{
-				*(float*)((unsigned __int32)Local_Player + 224),
+			float* Velocity = (float*)((unsigned __int32)Local_Player + 224);
 
-				*(float*)((unsigned __int32)Local_Player + 228),
-
-				0
-			};
-
-			if (Absolute(Difference) < Arc_Tangent_2(Vector_Normalize(Velocity), 30) * 180 / 3.1415927f)
+			if (Absolute(Difference) < Arc_Tangent_2(Square_Root(__builtin_powf(Velocity[0], 2) + __builtin_powf(Velocity[1], 2)), 30) * 180 / 3.1415927f)
 			{
 				float Strafe_Angle = __builtin_remainderf(Move_Angles[1] - Arc_Tangent_2(Velocity[0], Velocity[1]) * 180 / 3.1415927f, 360);
 
@@ -142,16 +135,12 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		Vector_Normalize(Desired_Move_Right);
 
-		float Desired_Move[3] =
+		float Desired_Move[2] =
 		{
 			Desired_Move_Forward[0] * User_Command->Move[0] + Desired_Move_Right[0] * User_Command->Move[1],
 
-			Desired_Move_Forward[1] * User_Command->Move[0] + Desired_Move_Right[1] * User_Command->Move[1],
-
-			0
+			Desired_Move_Forward[1] * User_Command->Move[0] + Desired_Move_Right[1] * User_Command->Move[1]
 		};
-
-		float Desired_Move_Magnitude = Vector_Normalize(Desired_Move);
 
 		auto Correct_Movement = [&]() -> void
 		{
@@ -169,7 +158,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 			Vector_Normalize(Move_Right);
 
-			float Divider = (Move_Forward[0] * Move_Right[1] - Move_Right[0] * Move_Forward[1]) / Desired_Move_Magnitude;
+			float Divider = Move_Forward[0] * Move_Right[1] - Move_Right[0] * Move_Forward[1];
 
 			User_Command->Move[0] = (__int16)((Desired_Move[0] * Move_Right[1] - Move_Right[0] * Desired_Move[1]) / Divider);
 
@@ -345,9 +334,9 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 						{
 							if (*(__int8*)((unsigned __int32)Entity + 320) == 0)
 							{
-								__int32 Entity_Tick_Number = (*(float*)((unsigned __int32)Entity + 104) + Interpolation_Time) / Global_Variables->Interval_Per_Tick + 0.5f;
+								__int32 Tick_Number = (*(float*)((unsigned __int32)Entity + 104) + Interpolation_Time) / Global_Variables->Interval_Per_Tick + 0.5f;
 
-								if (Absolute(Corrected_Total_Latency - (__int32)(Global_Variables->Tick_Number + Total_Latency / Global_Variables->Interval_Per_Tick + 0.5f - Entity_Tick_Number) * Global_Variables->Interval_Per_Tick) <= 0.2f)
+								if (Absolute(Corrected_Total_Latency - (__int32)(Global_Variables->Tick_Number + Total_Latency / Global_Variables->Interval_Per_Tick + 0.5f - Tick_Number) * Global_Variables->Interval_Per_Tick) <= 0.2f)
 								{
 									float* Entity_Origin = (float*)((unsigned __int32)Entity + 668);
 
@@ -359,7 +348,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 										Entity,
 
-										Entity_Tick_Number
+										Tick_Number
 									};
 
 									Sorted_Target_List.push_back(Target);
@@ -451,7 +440,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 														if (Setup_Bones_Type(604209888)((void*)((unsigned __int32)Target.Target + 4), Bones, 128, 524032, Global_Variables->Current_Time) == 1)
 														{
-															auto Trace_Ray = [&](float* Direction) -> __int8
+															auto Trace_Ray = [&](float Direction[3]) -> __int8
 															{
 																struct Ray_Structure
 																{
@@ -486,13 +475,15 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 																Ray_Structure Ray;
 
+																Vector_Normalize(Direction);
+
 																float End[3]
 																{
-																	Local_Player_Eye_Position[0] + Direction[0] * Weapon_Range,
+																	Local_Player_Eye_Position[0] + Weapon_Range * Direction[0],
 
-																	Local_Player_Eye_Position[1] + Direction[1] * Weapon_Range,
+																	Local_Player_Eye_Position[1] + Weapon_Range * Direction[1],
 
-																	Local_Player_Eye_Position[2] + Direction[2] * Weapon_Range
+																	Local_Player_Eye_Position[2] + Weapon_Range * Direction[2]
 																};
 
 																Initialize_Ray_Type(537380224)(&Ray, Local_Player_Eye_Position, End);
@@ -578,8 +569,6 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 																Target_Origin[2] - Local_Player_Eye_Position[2]
 															};
 
-															Vector_Normalize(Direction);
-
 															if (Trace_Ray(Direction) == 1)
 															{
 																User_Command->Tick_Number = Target.Tick_Number;
@@ -599,6 +588,10 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 																	if (Player_Data->Priority != -2)
 																	{
 																		Recent_Player_Data_Number = Target_Number + 64;
+
+																		using Get_Primary_Ammo_Capacity_Type = __int32(__thiscall**)(void* Weapon);
+
+																		Primary_Ammo_Capacity_Snapshot = (*Get_Primary_Ammo_Capacity_Type(*(unsigned __int32*)Weapon + 1000))(Weapon) - 1;
 
 																		Byte_Manager::Copy_Bytes(0, &Previous_Recent_Player_Data, sizeof(Previous_Recent_Player_Data), Player_Data);
 
@@ -627,10 +620,6 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 																			Player_Data->Memorized -= 1;
 																		}
-
-																		using Get_Primary_Ammo_Capacity_Type = __int32(__thiscall**)(void* Weapon);
-
-																		Primary_Ammo_Capacity_Snapshot = (*Get_Primary_Ammo_Capacity_Type(*(unsigned __int32*)Weapon + 1000))(Weapon) - 1;
 																	}
 																}
 
@@ -651,11 +640,9 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 												if ((User_Command->Buttons & 1) == 1)
 												{
-													Shot_Time = Global_Variables->Current_Time;
+													float Rotations[2][3][3];
 
-													Send_Packet = (Interface_Alternative.Integer != 0) * 2;
-
-													In_Attack = 1;
+													unsigned __int8 Calculation_Number = 0;
 
 													float Forward[3];
 
@@ -708,13 +695,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 														}
 													};
 
-													Vector_Normalize(Directions[0]);
-
 													Weapon_Spread = 0;
-
-													float Rotations[2][3][3];
-
-													unsigned __int8 Calculation_Number = 0;
 
 													Calculate_Rotation_Label:
 													{
@@ -723,6 +704,8 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 														Rotations[Calculation_Number][0][1] = Directions[Calculation_Number][1];
 
 														Rotations[Calculation_Number][0][2] = Directions[Calculation_Number][2];
+
+														Vector_Normalize(Rotations[Calculation_Number][0]);
 
 														Rotations[Calculation_Number][1][0] = Directions[Calculation_Number][1] - Directions[Calculation_Number][2];
 
@@ -800,6 +783,12 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 													};
 
 													User_Command->Angles[2] = Arc_Tangent_2(Rotated_Forward[0] * (Rotated_Forward[0] * Rotated_Up[2] - Rotated_Forward[2] * Rotated_Up[0]) - Rotated_Forward[1] * (Rotated_Forward[2] * Rotated_Up[1] - Rotated_Forward[1] * Rotated_Up[2]), Rotated_Forward[1] * Rotated_Up[0] - Rotated_Forward[0] * Rotated_Up[1]) * 180 / 3.1415927f - Recoil[2] * 2;
+
+													In_Attack = 1;
+
+													Send_Packet = (Interface_Alternative.Integer != 0) * 2;
+
+													Shot_Time = Global_Variables->Current_Time;
 												}
 											}
 										}
@@ -835,16 +824,12 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 				float* Target_Origin = (float*)((unsigned __int32)Sorted_Target_List.at(0).Target + 668);
 				
-				float Direction[3] =
+				float Direction[2] =
 				{
 					Target_Origin[0] - Local_Player_Origin[0],
 
-					Target_Origin[1] - Local_Player_Origin[1],
-
-					0
+					Target_Origin[1] - Local_Player_Origin[1]
 				};
-
-				Vector_Normalize(Direction);
 
 				if (Send_Packet == 0)
 				{
