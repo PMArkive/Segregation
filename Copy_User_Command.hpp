@@ -424,13 +424,11 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 												float Weapon_Range = *(float*)((unsigned __int32)Get_Weapon_Information_Type(604037872)(Weapon) + 2020);
 
+												Recent_Player_Data_Number = 0;
+
 												Traverse_Sorted_Target_List_Label:
 												{
-													if (Target_Number == Sorted_Target_List.size())
-													{
-														Recent_Player_Data_Number = 0;
-													}
-													else
+													if (Target_Number != Sorted_Target_List.size())
 													{
 														Target = Sorted_Target_List.at(Target_Number);
 
