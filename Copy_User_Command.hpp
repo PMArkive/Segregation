@@ -1,38 +1,3 @@
-float Absolute(float X)
-{
-	asm("fabs" : "+t"(X));
-
-	return X;
-}
-
-float Arc_Tangent_2(float X, float Y)
-{
-	asm("fpatan" : "+t"(X) : "u"(Y) : "st(1)");
-
-	return X;
-}
-
-float Square_Root(float X)
-{
-	asm("fsqrt" : "+t"(X));
-
-	return X;
-}
-
-void Angle_Vectors(float* Angles, float* Forward, float* Right, float* Up)
-{
-	using Angle_Vectors_Type = void(__cdecl*)(float* Angles, float* Forward, float* Right, float* Up);
-
-	Angle_Vectors_Type(606384752)(Angles, Forward, Right, Up);
-}
-
-float Vector_Normalize(float* Vector)
-{
-	using Vector_Normalize_Type = float(__thiscall*)(float* Vector);
-
-	return Vector_Normalize_Type(606378096)(Vector);
-}
-
 Player_Data_Structure Previous_Recent_Player_Data;
 
 void* Original_Copy_User_Command_Caller_Location;
@@ -52,6 +17,13 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 	if (*(__int8*)((unsigned __int32)Local_Player + 135) == 0)
 	{
+		auto Angle_Vectors = [](float* Angles, float* Forward, float* Right, float* Up) -> void
+		{
+			using Angle_Vectors_Type = void(__cdecl*)(float* Angles, float* Forward, float* Right, float* Up);
+
+			Angle_Vectors_Type(606384752)(Angles, Forward, Right, Up);
+		};
+
 		float Move_Angles[3] =
 		{
 			User_Command->Angles[0],
@@ -82,9 +54,9 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 			float* Velocity = (float*)((unsigned __int32)Local_Player + 224);
 
-			if (Absolute(Difference) < Arc_Tangent_2(Square_Root(__builtin_powf(Velocity[0], 2) + __builtin_powf(Velocity[1], 2)), 30) * 180 / 3.1415927f)
+			if (__builtin_fabsf(Difference) < __builtin_atan2f(30, __builtin_hypotf(Velocity[0], Velocity[1])) * 180 / 3.1415927f)
 			{
-				float Strafe_Angle = __builtin_remainderf(Move_Angles[1] - Arc_Tangent_2(Velocity[0], Velocity[1]) * 180 / 3.1415927f, 360);
+				float Strafe_Angle = __builtin_remainderf(Move_Angles[1] - __builtin_atan2f(Velocity[1], Velocity[0]) * 180 / 3.1415927f, 360);
 
 				if (__builtin_signbitf(Strafe_Angle) == 0)
 				{
@@ -119,6 +91,13 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			User_Command->Move[0],
 
 			User_Command->Move[1]
+		};
+
+		auto Vector_Normalize = [](float* Vector) -> float
+		{
+			using Vector_Normalize_Type = float(__thiscall*)(float* Vector);
+
+			return Vector_Normalize_Type(606378096)(Vector);
 		};
 
 		float Desired_Move_Forward[3];
@@ -336,7 +315,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 							{
 								__int32 Tick_Number = (*(float*)((unsigned __int32)Entity + 104) + Interpolation_Time) / Global_Variables->Interval_Per_Tick + 0.5f;
 
-								if (Absolute(Corrected_Total_Latency - (__int32)(Global_Variables->Tick_Number + Total_Latency / Global_Variables->Interval_Per_Tick + 0.5f - Tick_Number) * Global_Variables->Interval_Per_Tick) <= 0.2f)
+								if (__builtin_fdimf(Corrected_Total_Latency, (__int32)(Global_Variables->Tick_Number + Total_Latency / Global_Variables->Interval_Per_Tick + 0.5f - Tick_Number) * Global_Variables->Interval_Per_Tick) <= 0.2f)
 								{
 									float* Entity_Origin = (float*)((unsigned __int32)Entity + 668);
 
@@ -344,7 +323,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 									{
 										Player_Data->Priority == -2 ? (__int8)0 : Player_Data->Priority,
 
-										Square_Root(__builtin_powf(Local_Player_Origin[0] - Entity_Origin[0], 2) + __builtin_powf(Local_Player_Origin[1] - Entity_Origin[1], 2) + __builtin_powf(Local_Player_Origin[2] - Entity_Origin[2], 2)),
+										__builtin_sqrtf(__builtin_powf(Local_Player_Origin[0] - Entity_Origin[0], 2) + __builtin_powf(Local_Player_Origin[1] - Entity_Origin[1], 2) + __builtin_powf(Local_Player_Origin[2] - Entity_Origin[2], 2)),
 
 										Entity,
 
@@ -381,7 +360,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		__int8 In_Attack = 0;
 
-		if (Absolute(Global_Variables->Current_Time - Shot_Time) > 0.5f)
+		if (__builtin_fdimf(Global_Variables->Current_Time, Shot_Time) > 0.5f)
 		{
 			if (Shot_Time == 0)
 			{
@@ -477,11 +456,11 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 																float End[3]
 																{
-																	Local_Player_Eye_Position[0] + Weapon_Range * Direction[0],
+																	Local_Player_Eye_Position[0] + Direction[0] * Weapon_Range,
 
-																	Local_Player_Eye_Position[1] + Weapon_Range * Direction[1],
+																	Local_Player_Eye_Position[1] + Direction[1] * Weapon_Range,
 
-																	Local_Player_Eye_Position[2] + Weapon_Range * Direction[2]
+																	Local_Player_Eye_Position[2] + Direction[2] * Weapon_Range
 																};
 
 																Initialize_Ray_Type(537380224)(&Ray, Local_Player_Eye_Position, End);
@@ -571,9 +550,9 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 															{
 																User_Command->Tick_Number = Target.Tick_Number;
 
-																User_Command->Angles[0] = Arc_Tangent_2(Square_Root(__builtin_powf(Direction[0], 2) + __builtin_powf(Direction[1], 2)), -Direction[2]) * 180 / 3.1415927f;
+																User_Command->Angles[0] = __builtin_atan2f(-Direction[2], __builtin_hypotf(Direction[0], Direction[1])) * 180 / 3.1415927f;
 
-																User_Command->Angles[1] = Arc_Tangent_2(Direction[0], Direction[1]) * 180 / 3.1415927f;
+																User_Command->Angles[1] = __builtin_atan2f(Direction[1], Direction[0]) * 180 / 3.1415927f;
 
 																User_Command->Buttons |= 1;
 
@@ -767,9 +746,9 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 													float* Recoil = (float*)((unsigned __int32)Local_Player + 2992);
 
-													User_Command->Angles[0] = Arc_Tangent_2(Square_Root(__builtin_powf(Rotated_Forward[0], 2) + __builtin_powf(Rotated_Forward[1], 2)), -Rotated_Forward[2]) * 180 / 3.1415927f - Recoil[0] * 2;
+													User_Command->Angles[0] = __builtin_atan2f(-Rotated_Forward[2], __builtin_hypotf(Rotated_Forward[0], Rotated_Forward[1])) * 180 / 3.1415927f - Recoil[0] * 2;
 												
-													User_Command->Angles[1] = Arc_Tangent_2(Rotated_Forward[0], Rotated_Forward[1]) * 180 / 3.1415927f - Recoil[1] * 2;
+													User_Command->Angles[1] = __builtin_atan2f(Rotated_Forward[1], Rotated_Forward[0]) * 180 / 3.1415927f - Recoil[1] * 2;
 
 													float Rotated_Up[3] =
 													{
@@ -780,7 +759,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 														Up[0] * Rotation[2][0] + Up[1] * Rotation[2][1] + Up[2] * Rotation[2][2]
 													};
 
-													User_Command->Angles[2] = Arc_Tangent_2(Rotated_Forward[0] * (Rotated_Forward[0] * Rotated_Up[2] - Rotated_Forward[2] * Rotated_Up[0]) - Rotated_Forward[1] * (Rotated_Forward[2] * Rotated_Up[1] - Rotated_Forward[1] * Rotated_Up[2]), Rotated_Forward[1] * Rotated_Up[0] - Rotated_Forward[0] * Rotated_Up[1]) * 180 / 3.1415927f - Recoil[2] * 2;
+													User_Command->Angles[2] = __builtin_atan2f(Rotated_Forward[1] * Rotated_Up[0] - Rotated_Forward[0] * Rotated_Up[1], Rotated_Forward[0] * (Rotated_Forward[0] * Rotated_Up[2] - Rotated_Forward[2] * Rotated_Up[0]) - Rotated_Forward[1] * (Rotated_Forward[2] * Rotated_Up[1] - Rotated_Forward[1] * Rotated_Up[2])) * 180 / 3.1415927f - Recoil[2] * 2;
 
 													In_Attack = 1;
 
@@ -833,16 +812,16 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 				{
 					if ((User_Command->Command_Number % 2) == 0)
 					{
-						User_Command->Angles[1] = Arc_Tangent_2(Direction[0], Direction[1]) * 180 / 3.1415927f + Interface_First_Choked_Angle_Y.Floating_Point;
+						User_Command->Angles[1] = __builtin_atan2f(Direction[1], Direction[0]) * 180 / 3.1415927f + Interface_First_Choked_Angle_Y.Floating_Point;
 					}
 					else
 					{
-						User_Command->Angles[1] = Arc_Tangent_2(Direction[0], Direction[1]) * 180 / 3.1415927f + Interface_Second_Choked_Angle_Y.Floating_Point;
+						User_Command->Angles[1] = __builtin_atan2f(Direction[1], Direction[0]) * 180 / 3.1415927f + Interface_Second_Choked_Angle_Y.Floating_Point;
 					}
 				}
 				else
 				{
-					User_Command->Angles[1] = Arc_Tangent_2(Direction[0], Direction[1]) * 180 / 3.1415927f + Interface_Angle_Y.Floating_Point;
+					User_Command->Angles[1] = __builtin_atan2f(Direction[1], Direction[0]) * 180 / 3.1415927f + Interface_Angle_Y.Floating_Point;
 				}
 			}
 		}

@@ -47,7 +47,7 @@ void Get_Priorities()
 			wprintf(L"[ ? ] \"%hs\" %i %i\n", Name, Entity_Number, Players_Data[Entity_Number - 1].Priority);
 		}
 
-		if (Entity_Number != (*(Global_Variables_Structure**)607726732)->Maximum_Clients)
+		if (Entity_Number < (*(Global_Variables_Structure**)607726732)->Maximum_Clients)
 		{
 			Entity_Number += 1;
 
