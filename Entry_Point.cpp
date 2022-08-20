@@ -304,6 +304,8 @@ __int32 __stdcall DllMain(void* This_Module_Location, unsigned __int32 Call_Reas
 
 			wprintf(L"[ + ] Materials\n");
 			{
+				Byte_Manager::Set_Bytes(1, (void*)537873811, 1, 255);
+
 				Redirection_Manager::Redirect_Function(Original_Precache_Caller_Location, 5, (void*)((unsigned __int32)GetModuleHandleW(L"MaterialSystem.dll") + 21984), 1, (void*)Redirected_Precache);
 
 				Byte_Manager::Set_Bytes(1, (void*)605809168, 1, 195);

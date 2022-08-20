@@ -93,13 +93,6 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			User_Command->Move[1]
 		};
 
-		auto Vector_Normalize = [](float* Vector) -> float
-		{
-			using Vector_Normalize_Type = float(__thiscall*)(float* Vector);
-
-			return Vector_Normalize_Type(606378096)(Vector);
-		};
-
 		float Desired_Move_Forward[3];
 
 		float Desired_Move_Right[3];
@@ -107,6 +100,13 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 		Angle_Vectors(Move_Angles, Desired_Move_Forward, Desired_Move_Right, nullptr);
 
 		Desired_Move_Forward[2] = 0;
+
+		auto Vector_Normalize = [](float* Vector) -> float
+		{
+			using Vector_Normalize_Type = float(__thiscall*)(float* Vector);
+
+			return Vector_Normalize_Type(606378096)(Vector);
+		};
 
 		Vector_Normalize(Desired_Move_Forward);
 
