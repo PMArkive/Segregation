@@ -684,7 +684,13 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 														Vector_Normalize(Rotations[Calculation_Number][0]);
 
-														if (Calculation_Number == 1)
+														if (Calculation_Number == 0)
+														{
+															Calculation_Number += 1;
+
+															goto Calculate_Rotation_Label;
+														}
+														else
 														{
 															Rotations[Calculation_Number][1][0] = 0;
 
@@ -701,13 +707,6 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 															Rotations[Calculation_Number][2][2] = Rotations[Calculation_Number][1][1] * Directions[Calculation_Number][0];
 
 															Vector_Normalize(Rotations[Calculation_Number][2]);
-														}
-
-														if (Calculation_Number != 1)
-														{
-															Calculation_Number += 1;
-
-															goto Calculate_Rotation_Label;
 														}
 													}
 
