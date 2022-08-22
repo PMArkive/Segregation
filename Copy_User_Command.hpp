@@ -656,19 +656,19 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 													float Directions[2][3] =
 													{
 														{
-															Forward[0] + Random_X * Weapon_Spread * Right[0] + Random_Y * Weapon_Spread * Up[1],
-
-															Forward[1] + Random_X * Weapon_Spread * Right[1] + Random_Y * Weapon_Spread * Up[1],
-
-															Forward[2] + Random_X * Weapon_Spread * Right[2] + Random_Y * Weapon_Spread * Up[2]
-														},
-
-														{
 															Forward[0],
 
 															Forward[1],
 
 															Forward[2]
+														},
+
+														{
+															Forward[0] + Random_X * Weapon_Spread * Right[0] + Random_Y * Weapon_Spread * Up[1],
+
+															Forward[1] + Random_X * Weapon_Spread * Right[1] + Random_Y * Weapon_Spread * Up[1],
+
+															Forward[2] + Random_X * Weapon_Spread * Right[2] + Random_Y * Weapon_Spread * Up[2]
 														}
 													};
 
@@ -684,7 +684,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 														Vector_Normalize(Rotations[Calculation_Number][0]);
 
-														if (Calculation_Number == 0)
+														if (Calculation_Number == 1)
 														{
 															Rotations[Calculation_Number][1][0] = 0;
 
@@ -702,18 +702,6 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 															Vector_Normalize(Rotations[Calculation_Number][2]);
 														}
-														else
-														{
-															Rotations[Calculation_Number][1][1] = 1;
-
-															Rotations[Calculation_Number][1][2] = 0;
-
-															Rotations[Calculation_Number][2][0] = 0;
-
-															Rotations[Calculation_Number][2][1] = 0;
-
-															Rotations[Calculation_Number][2][2] = 1;
-														}
 
 														if (Calculation_Number != 1)
 														{
@@ -726,27 +714,27 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 													float Rotation[3][3] =
 													{
 														{
-															Rotations[0][0][0] * Rotations[1][0][0] + Rotations[0][2][0] * Rotations[1][2][0],
+															Rotations[0][0][0] * Rotations[1][0][0],
 
-															Rotations[0][0][1] * Rotations[1][0][0] + Rotations[0][2][1] * Rotations[1][2][0],
+															Rotations[0][0][0] * Rotations[1][0][1],
 
-															Rotations[0][0][2] * Rotations[1][0][0] + Rotations[0][2][2] * Rotations[1][2][0]
+															Rotations[0][0][0] * Rotations[1][0][2]
 														},
 
 														{
-															Rotations[0][0][0] * Rotations[1][0][1] + Rotations[0][2][0] * Rotations[1][2][1],
+															Rotations[0][0][1] * Rotations[1][0][0],
 
-															Rotations[0][0][1] * Rotations[1][0][1] + Rotations[0][1][1] * Rotations[1][1][1] + Rotations[0][2][1] * Rotations[1][2][1],
+															Rotations[0][0][1] * Rotations[1][0][1] + Rotations[1][1][1],
 
-															Rotations[0][0][2] * Rotations[1][0][1] + Rotations[0][1][2] * Rotations[1][1][1] + Rotations[0][2][2] * Rotations[1][2][1]
+															Rotations[0][0][1] * Rotations[1][0][2] + Rotations[1][1][2]
 														},
 
 														{
-															Rotations[0][0][0] * Rotations[1][0][2] + Rotations[0][2][0] * Rotations[1][2][2],
+															Rotations[0][0][2] * Rotations[1][0][0] + Rotations[1][2][0],
 
-															Rotations[0][0][1] * Rotations[1][0][2] + Rotations[0][1][1] * Rotations[1][1][2] + Rotations[0][2][1] * Rotations[1][2][2],
+															Rotations[0][0][2] * Rotations[1][0][1] + Rotations[1][2][1],
 
-															Rotations[0][0][2] * Rotations[1][0][2] + Rotations[0][1][2] * Rotations[1][1][2] + Rotations[0][2][2] * Rotations[1][2][2]
+															Rotations[0][0][2] * Rotations[1][0][2] + Rotations[1][2][2]
 														}
 													};
 
