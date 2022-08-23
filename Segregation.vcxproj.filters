@@ -31,9 +31,6 @@
     <ClInclude Include="Frame_Stage_Notify.hpp">
       <Filter>Header++</Filter>
     </ClInclude>
-    <ClInclude Include="Run_Prediction.hpp">
-      <Filter>Header++</Filter>
-    </ClInclude>
     <ClInclude Include="Send_Move.hpp">
       <Filter>Header++</Filter>
     </ClInclude>

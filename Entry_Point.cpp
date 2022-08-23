@@ -28,8 +28,6 @@
 
 #include "Converge_Angles.hpp"
 
-#include "Run_Prediction.hpp"
-
 #include "Run_Simulation.hpp"
 
 #include "Setup_Move.hpp"
@@ -200,7 +198,7 @@ __int32 __stdcall DllMain(void* This_Module_Location, unsigned __int32 Call_Reas
 
 			wprintf(L"[ + ] Prediction\n");
 			{
-				Redirection_Manager::Redirect_Function(1, (void*)537158848, (void*)Redirected_Run_Prediction);
+				Byte_Manager::Set_Bytes(1, (void*)537158868, 5, 144);
 
 				Byte_Manager::Set_Bytes(1, (void*)605209595, 1, 235);
 
