@@ -15,7 +15,7 @@ struct Global_Variables_Structure
 	float Interval_Per_Tick;
 };
 
-struct Player_Data_Structure
+struct __attribute__((packed)) Player_Data_Structure
 {
 	__int8 Priority;
 
