@@ -419,7 +419,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 														{
 															auto Trace_Ray = [&](float Direction[3]) -> __int8
 															{
-																struct Ray_Structure
+																struct alignas(4) Ray_Structure
 																{
 																	__int8 Additional_Bytes[50];
 																};
