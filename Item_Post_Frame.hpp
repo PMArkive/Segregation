@@ -17,7 +17,7 @@ void __thiscall Redirected_Item_Post_Frame(void* Reserved)
 
 		(decltype(&Redirected_Item_Post_Frame)(Original_Weapon_Item_Post_Frame_Caller_Location))(Reserved);
 
-		if (Is_First_Command_Predicted == 1)
+		if (*(__int8*)(*(unsigned __int32*)540494880 + 9) == 0)
 		{
 			*(float*)((unsigned __int32)Reserved + 1888) = Accuracy;
 		}
