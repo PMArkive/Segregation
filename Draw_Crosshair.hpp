@@ -94,5 +94,5 @@ void Redirected_Draw_Crosshair()
 
 	Uber_Alles(255, Screen_Width, Screen_Height);
 
-	Rotation_Angle = __builtin_remainderf(Rotation_Angle - ((*(Global_Variables_Structure**)607726732)->Absolute_Frame_Time * Interface_Uber_Alles_Speed.Integer), 360);
+	Rotation_Angle = __builtin_remainderf(Rotation_Angle - ((*(Global_Variables_Structure**)607726732)->Frame_Time * Interface_Uber_Alles_Speed.Integer), 360);
 }

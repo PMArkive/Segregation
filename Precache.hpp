@@ -16,19 +16,19 @@ void __thiscall Redirected_Precache(void* Material)
 
 			using Color_Modulate_Type = void(__thiscall**)(void* Material, float Red, float Green, float Blue);
 
-			if (*(unsigned __int16*)Group == 'oW')
+			if (*(unsigned __int16*)Group == 'kS')
 			{
-				using Alpha_Modulate_Type = void(__thiscall**)(void* Material, float Alpha);
-
-				(*Alpha_Modulate_Type(*(unsigned __int32*)Material + 116))(Material, 0.25f);
-
-				(*Color_Modulate_Type(*(unsigned __int32*)Material + 120))(Material, 1, 0.5f, 0.5f);
+				(*Color_Modulate_Type(*(unsigned __int32*)Material + 120))(Material, 0, 0, 0);
 			}
 			else
 			{
-				if (*(unsigned __int16*)Group == 'kS')
+				if (*(unsigned __int16*)Group == 'oW')
 				{
-					(*Color_Modulate_Type(*(unsigned __int32*)Material + 120))(Material, 0, 0, 0);
+					using Alpha_Modulate_Type = void(__thiscall**)(void* Material, float Alpha);
+
+					(*Alpha_Modulate_Type(*(unsigned __int32*)Material + 116))(Material, 0.25f);
+
+					(*Color_Modulate_Type(*(unsigned __int32*)Material + 120))(Material, 1.0f, 0.5f, 0.5f);
 				}
 			}
 
