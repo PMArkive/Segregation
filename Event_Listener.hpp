@@ -114,12 +114,7 @@ void __stdcall Event_Processor(void* Event)
 		}
 		else
 		{
-			__int32 Shooter_Number = Identifier_To_Number_Type(537020000)((void*)540435380, Get_Integer_Type(537579136)(Event, (char*)"userid", nullptr));
-
-			if (Shooter_Number == Local_Player_Number)
-			{
-				Shot_Time = 0;
-			}
+			Shot_Time *= Identifier_To_Number_Type(537020000)((void*)540435380, Get_Integer_Type(537579136)(Event, (char*)"userid", nullptr)) != Local_Player_Number;
 		}
 	}
 }
