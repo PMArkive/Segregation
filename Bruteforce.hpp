@@ -21,7 +21,12 @@ void Bruteforce_Reset_Tolerance()
 
 	Traverse_Players_Data_Label:
 	{
-		Players_Data[Entity_Number].Tolerance = Interface_Bruteforce_Tolerance.Integer;
+		Player_Data_Structure* Player_Data = &Players_Data[Entity_Number];
+
+		if (Player_Data->Memorized == 0)
+		{
+			Player_Data->Tolerance = Interface_Bruteforce_Tolerance.Integer;
+		}
 
 		Entity_Number += 1;
 
