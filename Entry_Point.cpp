@@ -83,7 +83,7 @@ __int32 __stdcall DllMain(void* This_Module_Location, unsigned __int32 Call_Reas
 			Console_Font_Information.FontFamily = FF_DONTCARE;
 
 			Console_Font_Information.FontWeight = FW_NORMAL;
-			
+
 			wcscpy(Console_Font_Information.FaceName, L"Terminal");
 
 			SetCurrentConsoleFontEx(Standard_Output_Handle, 0, &Console_Font_Information);
@@ -113,7 +113,7 @@ __int32 __stdcall DllMain(void* This_Module_Location, unsigned __int32 Call_Reas
 
 			FillConsoleOutputAttribute(Standard_Output_Handle, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY | BACKGROUND_RED, Console_Screen_Buffer_Information.dwSize.X * Console_Screen_Buffer_Information.dwSize.Y, Top_Left, &Characters_Written_Count);
 
-			wprintf(L"[ + ] Delimit Interface\n");
+			_putws(L"[ + ] Delimit Interface");
 			{
 				unsigned __int8 Cheat_Flag_Bytes[4] =
 				{
@@ -133,12 +133,12 @@ __int32 __stdcall DllMain(void* This_Module_Location, unsigned __int32 Call_Reas
 				Byte_Manager::Set_Bytes(1, (void*)537349277, 1, 235);
 			}
 
-			wprintf(L"[ + ] Extend Interface\n");
+			_putws(L"[ + ] Extend Interface");
 			{
 				Implement_Extended_Interface();
 			}
 
-			wprintf(L"[ + ] Events\n");
+			_putws(L"[ + ] Events");
 			{
 				Redirection_Manager::Redirect_Function(Original_Frame_Stage_Notify_Caller_Location, 1, (void*)604538592, 1, (void*)Redirected_Frame_Stage_Notify);
 
@@ -165,12 +165,12 @@ __int32 __stdcall DllMain(void* This_Module_Location, unsigned __int32 Call_Reas
 				Redirection_Manager::Redirect_Function(Original_Shutdown_Caller_Location, 0, (void*)537926128, 1, (void*)Redirected_Shutdown);
 			}
 
-			wprintf(L"[ + ] Interpolation\n");
+			_putws(L"[ + ] Interpolation");
 			{
 				Redirection_Manager::Redirect_Function(Original_Interpolate_Caller_Location, 0, (void*)604201536, 1, (void*)Redirected_Interpolate);
 			}
 
-			wprintf(L"[ + ] Animations\n");
+			_putws(L"[ + ] Animations");
 			{
 				unsigned __int8 Maintain_Sequence_Transitions_Bytes[3] =
 				{
@@ -196,7 +196,7 @@ __int32 __stdcall DllMain(void* This_Module_Location, unsigned __int32 Call_Reas
 				Redirection_Manager::Redirect_Function(Original_Converge_Angles_Caller_Location, 3, (void*)604019936, 1, (void*)Redirected_Converge_Angles);
 			}
 
-			wprintf(L"[ + ] Prediction\n");
+			_putws(L"[ + ] Prediction");
 			{
 				Byte_Manager::Set_Bytes(1, (void*)537158868, 5, 144);
 
@@ -215,19 +215,19 @@ __int32 __stdcall DllMain(void* This_Module_Location, unsigned __int32 Call_Reas
 				Redirection_Manager::Redirect_Function(Original_Weapon_Spread_Caller_Location, 1, (void*)605949248, 1, (void*)Redirected_Weapon_Spread);
 			}
 
-			wprintf(L"[ + ] Input\n");
+			_putws(L"[ + ] Input");
 			{
 				Byte_Manager::Set_Bytes(1, (void*)604993824, 3, 144);
 
 				Redirection_Manager::Redirect_Function(Original_Copy_User_Command_Caller_Location, 0, (void*)604850464, 1, (void*)Redirected_Copy_User_Command);
 			}
 
-			wprintf(L"[ + ] Network\n");
+			_putws(L"[ + ] Network");
 			{
 				Redirection_Manager::Redirect_Function(1, (void*)537142224, (void*)Redirected_Send_Move);
 			}
 
-			wprintf(L"[ + ] View Effects\n");
+			_putws(L"[ + ] View Effects");
 			{
 				unsigned __int8 Apply_View_Effects_Bytes[30] =
 				{
@@ -295,12 +295,12 @@ __int32 __stdcall DllMain(void* This_Module_Location, unsigned __int32 Call_Reas
 				Byte_Manager::Copy_Bytes(1, (void*)604082899, sizeof(Apply_View_Effects_Bytes), Apply_View_Effects_Bytes);
 			}
 
-			wprintf(L"[ + ] Crosshair\n");
+			_putws(L"[ + ] Crosshair");
 			{
 				Redirection_Manager::Redirect_Function(1, (void*)605951488, (void*)Redirected_Draw_Crosshair);
 			}
 
-			wprintf(L"[ + ] Materials\n");
+			_putws(L"[ + ] Materials");
 			{
 				Byte_Manager::Set_Bytes(1, (void*)537873811, 1, 255);
 

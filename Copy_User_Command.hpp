@@ -356,7 +356,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 					}
 				}
 			}
-		
+
 			if (Entity_Number != Global_Variables->Maximum_Clients)
 			{
 				Entity_Number += 1;
@@ -374,7 +374,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 			return X.Distance < Y.Distance;
 		};
-	
+
 		std::sort(Sorted_Target_List.begin(), Sorted_Target_List.end(), Target_List_Sort);
 
 		__int8 In_Attack = 0;
@@ -766,7 +766,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 													float* Recoil = (float*)((unsigned __int32)Local_Player + 2992);
 
 													User_Command->Angles[0] = __builtin_atan2f(-Rotated_Forward[2], __builtin_hypotf(Rotated_Forward[0], Rotated_Forward[1])) * 180 / 3.1415927f - Recoil[0] * 2;
-												
+
 													User_Command->Angles[1] = __builtin_atan2f(Rotated_Forward[1], Rotated_Forward[0]) * 180 / 3.1415927f - Recoil[1] * 2;
 
 													float Rotated_Up[3] =
@@ -819,7 +819,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 				User_Command->Angles[0] = Interface_Angle_X.Floating_Point;
 
 				float* Target_Origin = (float*)((unsigned __int32)Sorted_Target_List.at(0).Target + 668);
-				
+
 				float Direction[2] =
 				{
 					Target_Origin[0] - Local_Player_Origin[0],
