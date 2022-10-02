@@ -567,7 +567,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 																Bones[14][1][0] * Hitbox_Center[0] + Bones[14][1][1] * Hitbox_Center[1] + Bones[14][1][2] * Hitbox_Center[2] + Bones[14][1][3],
 
-																*(float*)Hitbox_Z_Extremes[0] + (*(float*)Hitbox_Z_Extremes[1] - *(float*)Hitbox_Z_Extremes[0]) * Interface_Aim_Height.Floating_Point + Bones[14][2][3]
+																Hitbox_Z_Extremes[0][0] + (Hitbox_Z_Extremes[0][1] - Hitbox_Z_Extremes[0][0]) * Interface_Aim_Height.Floating_Point + Bones[14][2][3]
 															};
 
 															float Direction[3] =
