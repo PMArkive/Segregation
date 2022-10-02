@@ -525,35 +525,49 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 															void* Hitbox_Set = (void*)((unsigned __int32)Studio_Header + *(__int32*)((unsigned __int32)Studio_Header + 176));
 
-															float* Bounding_Box_Minimum = (float*)((unsigned __int32)Hitbox_Set + 836);
+															float* Hitbox_Minimum = (float*)((unsigned __int32)Hitbox_Set + 836);
 
-															float Hitbox_Minimum[3] =
-															{
-																Bones[14][0][0] * Bounding_Box_Minimum[0] + Bones[14][0][1] * Bounding_Box_Minimum[1] + Bones[14][0][2] * Bounding_Box_Minimum[2] + Bones[14][0][3],
+															float* Hitbox_Maximum = (float*)((unsigned __int32)Hitbox_Set + 848);
 
-																Bones[14][1][0] * Bounding_Box_Minimum[0] + Bones[14][1][1] * Bounding_Box_Minimum[1] + Bones[14][1][2] * Bounding_Box_Minimum[2] + Bones[14][1][3],
-
-																Bones[14][2][0] * Bounding_Box_Minimum[0] + Bones[14][2][1] * Bounding_Box_Minimum[1] + Bones[14][2][2] * Bounding_Box_Minimum[2] + Bones[14][2][3]
-															};
-
-															float* Bounding_Box_Maximum = (float*)((unsigned __int32)Hitbox_Set + 848);
-
-															float Hitbox_Maximum[3] =
-															{
-																Bones[14][0][0] * Bounding_Box_Maximum[0] + Bones[14][0][1] * Bounding_Box_Maximum[1] + Bones[14][0][2] * Bounding_Box_Maximum[2] + Bones[14][0][3],
-
-																Bones[14][1][0] * Bounding_Box_Maximum[0] + Bones[14][1][1] * Bounding_Box_Maximum[1] + Bones[14][1][2] * Bounding_Box_Maximum[2] + Bones[14][1][3],
-
-																Bones[14][2][0] * Bounding_Box_Maximum[0] + Bones[14][2][1] * Bounding_Box_Maximum[1] + Bones[14][2][2] * Bounding_Box_Maximum[2] + Bones[14][2][3]
-															};
-
-															float Target_Origin[3] =
+															float Hitbox_Center[3]
 															{
 																(Hitbox_Minimum[0] + Hitbox_Maximum[0]) / 2,
 
 																(Hitbox_Minimum[1] + Hitbox_Maximum[1]) / 2,
 
-																Hitbox_Minimum[2] + (Hitbox_Maximum[2] - Hitbox_Minimum[2]) * Interface_Aim_Height.Floating_Point
+																(Hitbox_Minimum[2] + Hitbox_Maximum[2]) / 2
+															};
+
+															float Hitbox_Z_Vertices[8]
+															{
+																Bones[14][2][0] * Hitbox_Minimum[0] + Bones[14][2][1] * Hitbox_Minimum[1] + Bones[14][2][2] * Hitbox_Minimum[2],
+
+																Bones[14][2][0] * Hitbox_Maximum[0] + Bones[14][2][1] * Hitbox_Minimum[1] + Bones[14][2][2] * Hitbox_Minimum[2],
+
+																Bones[14][2][0] * Hitbox_Minimum[0] + Bones[14][2][1] * Hitbox_Maximum[1] + Bones[14][2][2] * Hitbox_Minimum[2],
+
+																Bones[14][2][0] * Hitbox_Minimum[0] + Bones[14][2][1] * Hitbox_Minimum[1] + Bones[14][2][2] * Hitbox_Maximum[2],
+
+																Bones[14][2][0] * Hitbox_Maximum[0] + Bones[14][2][1] * Hitbox_Maximum[1] + Bones[14][2][2] * Hitbox_Minimum[2],
+
+																Bones[14][2][0] * Hitbox_Maximum[0] + Bones[14][2][1] * Hitbox_Minimum[1] + Bones[14][2][2] * Hitbox_Maximum[2],
+
+																Bones[14][2][0] * Hitbox_Minimum[0] + Bones[14][2][1] * Hitbox_Maximum[1] + Bones[14][2][2] * Hitbox_Maximum[2],
+
+																Bones[14][2][0] * Hitbox_Maximum[0] + Bones[14][2][1] * Hitbox_Maximum[1] + Bones[14][2][2] * Hitbox_Maximum[2]
+															};
+
+															float* Hitbox_Z_Extremes[2];
+
+															std::tie(Hitbox_Z_Extremes[0], Hitbox_Z_Extremes[1]) = std::minmax_element(Hitbox_Z_Vertices, &Hitbox_Z_Vertices[sizeof(Hitbox_Z_Vertices) / sizeof(float)]);
+
+															float Target_Origin[3] =
+															{
+																Bones[14][0][0] * Hitbox_Center[0] + Bones[14][0][1] * Hitbox_Center[1] + Bones[14][0][2] * Hitbox_Center[2] + Bones[14][0][3],
+
+																Bones[14][1][0] * Hitbox_Center[0] + Bones[14][1][1] * Hitbox_Center[1] + Bones[14][1][2] * Hitbox_Center[2] + Bones[14][1][3],
+
+																*(float*)Hitbox_Z_Extremes[0] + (*(float*)Hitbox_Z_Extremes[1] - *(float*)Hitbox_Z_Extremes[0]) * Interface_Aim_Height.Floating_Point + Bones[14][2][3]
 															};
 
 															float Direction[3] =
@@ -721,7 +735,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 														if (Calculation_Number != 1)
 														{
-															Calculation_Number += 1;
+															Calculation_Number = 1;
 
 															goto Calculate_Rotation_Label;
 														}
