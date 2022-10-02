@@ -229,70 +229,7 @@ __int32 __stdcall DllMain(void* This_Module_Location, unsigned __int32 Call_Reas
 
 			_putws(L"[ + ] View Effects");
 			{
-				unsigned __int8 Apply_View_Effects_Bytes[30] =
-				{
-					7,
-
-					144,
-
-					144,
-
-					144,
-
-					144,
-
-					144,
-
-					144,
-
-					217,
-
-					31,
-
-					217,
-
-					71,
-
-					4,
-
-					144,
-
-					144,
-
-					144,
-
-					144,
-
-					144,
-
-					144,
-
-					217,
-
-					95,
-
-					4,
-
-					217,
-
-					71,
-
-					8,
-
-					144,
-
-					144,
-
-					144,
-
-					144,
-
-					144,
-
-					144
-				};
-
-				Byte_Manager::Copy_Bytes(1, (void*)604082899, sizeof(Apply_View_Effects_Bytes), Apply_View_Effects_Bytes);
+				Byte_Manager::Set_Bytes(1, (void*)604082898, 34, 144);
 			}
 
 			_putws(L"[ + ] Crosshair");
