@@ -365,7 +365,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			}
 		}
 
-		auto Target_List_Sort = [](Target_Structure X, Target_Structure Y) -> __int8
+		auto Target_List_Sort = [](Target_Structure& X, Target_Structure& Y) -> __int8
 		{
 			if (X.Priority > Y.Priority)
 			{
@@ -559,7 +559,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 															float* Hitbox_Z_Extremes[2];
 
-															std::tie(Hitbox_Z_Extremes[0], Hitbox_Z_Extremes[1]) = std::minmax_element(Hitbox_Z_Vertices, &Hitbox_Z_Vertices[sizeof(Hitbox_Z_Vertices) / sizeof(float)]);
+															std::tie(Hitbox_Z_Extremes[0], Hitbox_Z_Extremes[1]) = std::minmax_element(Hitbox_Z_Vertices, &Hitbox_Z_Vertices[sizeof(Hitbox_Z_Vertices) / sizeof(Hitbox_Z_Vertices[0])]);
 
 															float Target_Origin[3] =
 															{

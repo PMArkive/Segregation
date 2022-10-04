@@ -68,7 +68,7 @@ void Bruteforce_Set_Angles(Interface_Structure* Console_Variable)
 {
 	Bruteforce_Angles_Count = 1;
 
-	Bruteforce_Angles = (float*)realloc(Bruteforce_Angles, Bruteforce_Angles_Count * sizeof(float));
+	Bruteforce_Angles = (float*)realloc(Bruteforce_Angles, Bruteforce_Angles_Count * sizeof(Bruteforce_Angles[0]));
 
 	Bruteforce_Angles[Bruteforce_Angles_Count - 1] = atof(Console_Variable->String);
 
@@ -80,7 +80,7 @@ void Bruteforce_Set_Angles(Interface_Structure* Console_Variable)
 		{
 			Bruteforce_Angles_Count += 1;
 
-			Bruteforce_Angles = (float*)realloc(Bruteforce_Angles, Bruteforce_Angles_Count * sizeof(float));
+			Bruteforce_Angles = (float*)realloc(Bruteforce_Angles, Bruteforce_Angles_Count * sizeof(Bruteforce_Angles[0]));
 
 			String = (char*)((unsigned __int32)String + 1);
 
