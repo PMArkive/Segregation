@@ -152,7 +152,7 @@ __int32 __stdcall DllMain(void* This_Module_Location, unsigned __int32 Call_Reas
 
 				*(void**)Event_Listener = Event_Listener_Table;
 
-				using Add_Listener_Type = __int8(__thiscall*)(void* Game_Event_Manager, void* Listener, char* Event, void* Unknown_Parameter);
+				using Add_Listener_Type = __int8(__thiscall*)(void* Event_Manager, void* Listener, char* Event, void* Unknown_Parameter);
 
 				Add_Listener_Type(537586416)((void*)540812808, Event_Listener, (char*)"player_hurt", nullptr);
 
