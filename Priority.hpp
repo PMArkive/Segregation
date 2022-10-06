@@ -34,11 +34,11 @@ void Get_Priorities()
 
 	Traverse_Entity_List_Label:
 	{
-		using Get_Client_Name_Type = void(__thiscall*)(void* Engine, __int32 Number, char* Name);
+		using Get_Name_Type = void(__thiscall*)(void* Engine, __int32 Number, char* Name);
 
 		char Name[132];
 
-		Get_Client_Name_Type(537018208)((void*)540435380, Entity_Number, Name);
+		Get_Name_Type(537018208)((void*)540435380, Entity_Number, Name);
 
 		if (Name[0] != 0)
 		{
