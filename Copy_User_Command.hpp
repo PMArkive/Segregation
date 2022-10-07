@@ -365,7 +365,14 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			}
 		}
 
-		auto Target_List_Sort = [](Target_Structure& X, Target_Structure& Y) -> __int8
+		auto Target_List_Sort_Prepare = [](Target_Structure& X, Target_Structure& Y) -> __int8
+		{
+			return X.Priority < Y.Priority;
+		};
+
+		std::sort(Sorted_Target_List.begin(), Sorted_Target_List.end(), Target_List_Sort_Prepare);
+
+		auto Target_List_Sort_Finish = [](Target_Structure& X, Target_Structure& Y) -> __int8
 		{
 			if (X.Priority > Y.Priority)
 			{
@@ -375,7 +382,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 			return X.Distance < Y.Distance;
 		};
 
-		std::sort(Sorted_Target_List.begin(), Sorted_Target_List.end(), Target_List_Sort);
+		std::sort(Sorted_Target_List.begin(), Sorted_Target_List.end(), Target_List_Sort_Finish);
 
 		__int8 In_Attack = 0;
 
