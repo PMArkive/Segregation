@@ -46,7 +46,7 @@ void Redirected_Send_Move()
 
 	__int32 Next_Command_Number = *(__int32*)540627868 + Choked_Commands + 2;
 
-	__int32 To_Command_Number = Next_Command_Number - (Commands_Queue + Backup_Commands);
+	__int32 To_Command_Number = Next_Command_Number - Commands_Queue - Backup_Commands;
 
 	Write_Command_Label:
 	{
