@@ -38,7 +38,7 @@ void Redirected_Send_Move()
 
 	__int32 Extra_Commands_Queue = Choked_Commands + 1 - Commands_Queue;
 
-	__int32 Backup_Commands = std::clamp(Extra_Commands_Queue, 0, 7);
+	__int32 Backup_Commands = min(Extra_Commands_Queue, 7);
 
 	*(__int32*)((unsigned __int32)&Message + 16) = Backup_Commands;
 
