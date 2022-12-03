@@ -386,7 +386,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		__int8 In_Attack = 0;
 
-		if (__builtin_fdimf(Global_Variables->Current_Time, Shot_Time) > 0.5f)
+		if (__builtin_fabsf(Global_Variables->Current_Time - Shot_Time) > 0.5f)
 		{
 			if (Shot_Time == 0)
 			{
