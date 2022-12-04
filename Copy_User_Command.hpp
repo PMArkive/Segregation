@@ -334,7 +334,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 							{
 								__int32 Tick_Number = (*(float*)((unsigned __int32)Entity + 104) + Interpolation_Time) / Global_Variables->Interval_Per_Tick + 0.5f;
 
-								if (__builtin_fdimf(Corrected_Total_Latency, (__int32)(Global_Variables->Tick_Number + (Interface_Alternative.Integer == 0) + Total_Latency / Global_Variables->Interval_Per_Tick + 0.5f - Tick_Number) * Global_Variables->Interval_Per_Tick) <= 0.2f)
+								if (__builtin_fabsf(Corrected_Total_Latency - (__int32)(Global_Variables->Tick_Number + (Interface_Alternative.Integer == 0) + Total_Latency / Global_Variables->Interval_Per_Tick + 0.5f - Tick_Number) * Global_Variables->Interval_Per_Tick) <= 0.2f)
 								{
 									float* Entity_Origin = (float*)((unsigned __int32)Entity + 668);
 
