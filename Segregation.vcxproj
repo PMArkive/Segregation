@@ -96,7 +96,6 @@
     <ClInclude Include="Setup_Move.hpp" />
     <ClInclude Include="Shutdown.hpp" />
     <ClInclude Include="Update_Animation.hpp" />
-    <ClInclude Include="Run_Simulation.hpp" />
     <ClInclude Include="Send_Move.hpp" />
     <ClInclude Include="Sounds.hpp" />
     <ClInclude Include="Weapon_Spread.hpp" />

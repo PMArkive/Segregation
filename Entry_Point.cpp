@@ -28,8 +28,6 @@
 
 #include "Converge_Angles.hpp"
 
-#include "Run_Simulation.hpp"
-
 #include "Setup_Move.hpp"
 
 #include <algorithm>
@@ -205,8 +203,6 @@ __int32 __stdcall DllMain(void* This_Module_Location, unsigned __int32 Call_Reas
 				Byte_Manager::Set_Bytes(1, (void*)537158868, 5, 144);
 
 				Byte_Manager::Set_Bytes(1, (void*)605209595, 1, 235);
-
-				Redirection_Manager::Redirect_Function(Original_Run_Simulation_Caller_Location, 0, (void*)605206096, 1, (void*)Redirected_Run_Simulation);
 
 				Redirection_Manager::Redirect_Function(Original_Setup_Move_Caller_Location, 0, (void*)605206752, 1, (void*)Redirected_Setup_Move);
 

@@ -165,6 +165,8 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 		Correct_Movement();
 
+		float Friction = *(float*)((unsigned __int32)Local_Player + 3936);
+
 		float Local_Player_Previous_Origin[3];
 
 		float* Local_Player_Origin = (float*)((unsigned __int32)Local_Player + 668);
@@ -179,6 +181,8 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 		using Run_Command_Type = void(__thiscall*)(void* Prediction, void* Local_Player, User_Command_Structure* User_Command, void* Move_Helper);
 
 		Run_Command_Type(605207600)(Prediction, Local_Player, User_Command, (void*)607735532);
+
+		*(float*)((unsigned __int32)Local_Player + 3936) = Friction;
 
 		Shot_Time *= -1;
 
