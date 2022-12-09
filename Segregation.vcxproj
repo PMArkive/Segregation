@@ -86,6 +86,7 @@
     <ClInclude Include="Converge_Angles.hpp" />
     <ClInclude Include="Draw_Crosshair.hpp" />
     <ClInclude Include="Event_Listener.hpp" />
+    <ClInclude Include="Finish_Move.hpp" />
     <ClInclude Include="Interpolate.hpp" />
     <ClInclude Include="Precache.hpp" />
     <ClInclude Include="Copy_User_Command.hpp" />

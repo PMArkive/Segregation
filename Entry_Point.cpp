@@ -32,6 +32,10 @@
 
 #include "Setup_Move.hpp"
 
+#include <algorithm>
+
+#include "Finish_Move.hpp"
+
 #include "Item_Post_Frame.hpp"
 
 #include "Weapon_Spread.hpp"
@@ -205,6 +209,8 @@ __int32 __stdcall DllMain(void* This_Module_Location, unsigned __int32 Call_Reas
 				Redirection_Manager::Redirect_Function(Original_Run_Simulation_Caller_Location, 0, (void*)605206096, 1, (void*)Redirected_Run_Simulation);
 
 				Redirection_Manager::Redirect_Function(Original_Setup_Move_Caller_Location, 0, (void*)605206752, 1, (void*)Redirected_Setup_Move);
+
+				Redirection_Manager::Redirect_Function(Original_Finish_Move_Caller_Location, 1, (void*)605207376, 1, (void*)Redirected_Finish_Move);
 
 				Byte_Manager::Set_Bytes(1, (void*)605954536, 9, 144);
 
