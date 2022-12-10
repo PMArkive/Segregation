@@ -12,7 +12,7 @@ void __stdcall Event_Processor(void* Event)
 	{
 		using Get_Name_Type = char*(__thiscall*)(void* Event);
 
-		char* Name = Get_Name_Type((unsigned __int32)537579280)(Event);
+		char* Name = Get_Name_Type(537579280)(Event);
 
 		using Identifier_To_Number_Type = __int32(__thiscall*)(void* Engine, __int32 Identifier);
 

@@ -532,7 +532,7 @@ void __thiscall Redirected_Copy_User_Command(void* Unknown_Parameter, User_Comma
 
 															using Get_Studio_Header_Type = void*(__thiscall*)(void* Entity);
 
-															void* Studio_Header = *(void**)Get_Studio_Header_Type((unsigned __int32)604188448)(Target.Target);
+															void* Studio_Header = *(void**)Get_Studio_Header_Type(604188448)(Target.Target);
 
 															void* Hitbox_Set = (void*)((unsigned __int32)Studio_Header + *(__int32*)((unsigned __int32)Studio_Header + 176));
 
