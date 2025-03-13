@@ -251,7 +251,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 					if (Predicted_Choked_Commands < Interface_Maximum_Choked_Commands.Integer)
 					{
-						Predicted_Send_Packet = __builtin_powf(Local_Networked_Origin[0] - Local_Previous_Origin[0], 2.f) + __builtin_powf(Local_Networked_Origin[1] - Local_Previous_Origin[1], 2.f) + __builtin_powf(Local_Networked_Origin[2] - Local_Previous_Origin[2], 2.f) > 4096.f;
+						Predicted_Send_Packet = __builtin_powf(Local_Networked_Origin[0] - Local_Origin[0], 2.f) + __builtin_powf(Local_Networked_Origin[1] - Local_Origin[1], 2.f) + __builtin_powf(Local_Networked_Origin[2] - Local_Origin[2], 2.f) > 4096.f;
 					}
 				}
 			}
@@ -266,7 +266,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 				if (Send_Packet == 0)
 				{
-					Predicted_Send_Packet = __builtin_powf(Local_Networked_Origin[0] - Local_Previous_Origin[0], 2.f) + __builtin_powf(Local_Networked_Origin[1] - Local_Previous_Origin[1], 2.f) + __builtin_powf(Local_Networked_Origin[2] - Local_Previous_Origin[2], 2.f) > 4096.f;
+					Predicted_Send_Packet = __builtin_powf(Local_Networked_Origin[0] - Local_Origin[0], 2.f) + __builtin_powf(Local_Networked_Origin[1] - Local_Origin[1], 2.f) + __builtin_powf(Local_Networked_Origin[2] - Local_Origin[2], 2.f) > 4096.f;
 
 					if (Predicted_Choked_Commands == Interface_Maximum_Choked_Commands.Integer)
 					{
@@ -298,7 +298,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 					goto Send_Packet_Label;
 				}
 
-				if (__builtin_powf(Local_Networked_Origin[0] - Local_Previous_Origin[0], 2.f) + __builtin_powf(Local_Networked_Origin[1] - Local_Previous_Origin[1], 2.f) + __builtin_powf(Local_Networked_Origin[2] - Local_Previous_Origin[2], 2.f) > 4096.f)
+				if (__builtin_powf(Local_Networked_Origin[0] - Local_Origin[0], 2.f) + __builtin_powf(Local_Networked_Origin[1] - Local_Origin[1], 2.f) + __builtin_powf(Local_Networked_Origin[2] - Local_Origin[2], 2.f) > 4096.f)
 				{
 					goto Send_Packet_Label;
 				}
@@ -370,6 +370,11 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 									__builtin_powf(Local_Origin[0] - Entity_Origin[0], 2.f) + __builtin_powf(Local_Origin[1] - Entity_Origin[1], 2.f) + __builtin_powf(Local_Origin[2] - Entity_Origin[2], 2.f)
 								};
+
+								if (Interface_Target_On_Simulation.Integer != 0)
+								{
+									Target.Valid *= Player_Data->Simulated;
+								}
 
 								Sorted_Target_List.push_back(Target);
 							}
