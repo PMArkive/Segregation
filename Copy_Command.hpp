@@ -379,6 +379,11 @@ void Copy_Command(void* Unknown_Parameter, Command_Structure* Command, void* Sta
 									__builtin_powf(Local_Origin[0] - Entity_Origin[0], 2.f) + __builtin_powf(Local_Origin[1] - Entity_Origin[1], 2.f) + __builtin_powf(Local_Origin[2] - Entity_Origin[2], 2.f)
 								};
 
+								if (Interface_Target_On_Simulation.Integer != 0)
+								{
+									Target.Valid *= Player_Data->Simulated;
+								}
+
 								Sorted_Target_List.push_back(Target);
 							}
 						}
