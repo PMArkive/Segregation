@@ -58,7 +58,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 		if ((Command->Buttons & 2) + Move_Type == 4)
 		{
-			Command->Move[0] = 0;
+			Command->Move[0] = 0.f;
 
 			if (*(void**)((unsigned __int32)Local_Player + 332) == INVALID_HANDLE_VALUE)
 			{
@@ -465,30 +465,23 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 			}
 		}
 
-		auto Target_List_Sort_Prepare = [](Target_Structure& X, Target_Structure& Y) -> __int8
+		auto Target_List_Sort = [](Target_Structure& X, Target_Structure& Y) -> __int8
 		{
-			return X.Priority < Y.Priority;
-		};
-
-		std::sort(Sorted_Target_List.begin(), Sorted_Target_List.end(), Target_List_Sort_Prepare);
-
-		auto Target_List_Sort_Finish = [](Target_Structure& X, Target_Structure& Y) -> __int8
-		{
-			if (X.Priority > Y.Priority)
+			if (X.Priority == Y.Priority)
 			{
-				return 1;
+				return X.Distance < Y.Distance;
 			}
 
-			return X.Distance < Y.Distance;
+			return X.Priority > Y.Priority;
 		};
 
-		std::sort(Sorted_Target_List.begin(), Sorted_Target_List.end(), Target_List_Sort_Finish);
+		std::sort(Sorted_Target_List.begin(), Sorted_Target_List.end(), Target_List_Sort);
 
 		__int8 In_Attack = 0;
 
 		if (__builtin_fabsf(Global_Variables->Current_Time - Shot_Time) > 0.5f)
 		{
-			if (Shot_Time == 0)
+			if (Shot_Time == 0.f)
 			{
 				Passed_Shot_Time_Check_Label:
 				{
@@ -538,7 +531,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 
 															if (Redirected_Setup_Bones((void*)((unsigned __int32)Target->Self + 4), Bones, sizeof(Bones) / sizeof(Bones[0]), 1048320, Global_Variables->Current_Time) == 1)
 															{
-																auto Perform_Trace = [&](float* Eye_Position, float Direction[3]) -> __int8
+																auto Perform_Trace = [&](float* Eye_Position, float* Direction) -> __int8
 																{
 																	struct alignas(16) Ray_Structure
 																	{
@@ -731,7 +724,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 																					{
 																						Player_Data->Shots_Fired = (Player_Data->Shots_Fired + 1) % Bruteforce_Angles_Count;
 
-																						Player_Data->Switch_X += (Player_Data->Shots_Fired == 0);
+																						Player_Data->Switch_X += Player_Data->Shots_Fired == 0;
 
 																						Player_Data->Tolerance = Interface_Bruteforce_Tolerance.Get_Integer();
 																					}
@@ -794,7 +787,7 @@ void __thiscall Redirected_Copy_Command(void* Unknown_Parameter, Command_Structu
 			}
 			else
 			{
-				Shot_Time = 0;
+				Shot_Time = 0.f;
 
 				if (Recent_Player_Data_Number == 0)
 				{
